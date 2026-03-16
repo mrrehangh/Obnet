@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Products — Obnet</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- SHARED NAV -->
+<nav id="navbar">
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-icon">⬡</div>
+    Obnet
+  </a>
+  <div class="nav-center">
+    <a id="nav-home" href="index.html">Home</a>
+    <a id="nav-about" href="about.html">About</a>
+    <a id="nav-products" href="products.html">Products</a>
+    <a id="nav-dokshield" href="dokshield.html">DokShield</a>
+    <a id="nav-earlyaccess" href="earlyaccess.html">Early Access</a>
+    <a id="nav-contact" href="contact.html">Contact</a>
+  </div>
+  <div class="nav-right">
+    <button class="nav-contact-btn" onclick="showPage('contact')">Get in Touch</button>
+    <button class="nav-cta-btn" onclick="showPage('dokshield')" style="display:flex;align-items:center;gap:8px;"><img src="dokshield-logo.png" alt="DokShield" style="height:20px;vertical-align:middle;filter:brightness(1.1);"> <span style="font-size:13px;">→</span></button>
+  </div>
+</nav>
+
+<!-- PAGE CONTENT -->
+<div class="page active" id="page-products">
+
+  <!-- HERO -->
+  <div class="hero" style="min-height:auto;padding-bottom:60px;">
+    <div class="hero-eyebrow">Obnet Product Suite</div>
+    <h1 class="hero-headline" style="font-size:clamp(48px,7vw,90px);">
+      <span class="word1">What We</span>
+      <span class="word2">Build.</span>
+    </h1>
+    <p class="hero-sub">We build focused, opinionated software for industries where reliability and security are not optional. Each product solves one problem — and solves it completely.</p>
+  </div>
+
+  <!-- PRODUCTS LIST -->
+  <div class="product-showcase" style="padding-top:0;">
+
+    <!-- DokShield -->
+    <div class="product-big-card reveal" style="margin-bottom:24px;">
+      <div>
+        <div class="product-kicker">
+          <span class="product-num">Product 01</span>
+          <span class="live-badge">In Development</span>
+        </div>
+        <img src="dokshield-logo.png" alt="DokShield" style="height:36px;display:block;margin-bottom:12px;">
+        <p class="product-sub">A comprehensive, multi-tenant security operations management platform built specifically for data centres. DokShield covers the full operational lifecycle — from shift activity reporting and patrol management to incident tracking, visitor control, and compliance auditing — across 18 deeply integrated modules.</p>
+        <p class="product-sub" style="margin-top:-12px;">Designed for enterprise-grade security operations teams, DokShield replaces fragmented spreadsheets, paper logs, and generic tools with a single, purpose-built platform that speaks the language of data centre security.</p>
+        <div class="feature-pills">
+          <span class="feature-pill">18 Operational Modules</span>
+          <span class="feature-pill">Multi-Tenant SaaS</span>
+          <span class="feature-pill">JWT Authentication</span>
+          <span class="feature-pill">Real-Time Dashboards</span>
+          <span class="feature-pill">Shift Activity Reports</span>
+          <span class="feature-pill">Incident Management</span>
+          <span class="feature-pill">Patrol Tracking</span>
+          <span class="feature-pill">Visitor Control</span>
+          <span class="feature-pill">Audit & Compliance</span>
+          <span class="feature-pill">RBAC Access Control</span>
+        </div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;">
+          <button class="btn-primary" onclick="window.location.href='dokshield.html#dok-modules'">Full Product Details →</button>
+          <button class="btn-outline" onclick="showPage('earlyaccess')">Request Early Access</button>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="background:var(--ink);border-radius:14px;padding:32px;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#555;margin-bottom:20px;">Module Coverage</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">🛡 Security SAR</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">🏢 Data Hall</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">🚶 Patrols</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">⚠️ Incidents</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">👤 Visitors</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">📊 Dashboard</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">🎫 Ticketing</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">🔑 IAM</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">📋 Audit Logs</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">🔄 Handover</div>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:#444;margin-top:16px;text-align:center;">+ 8 more modules</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted2);margin-bottom:12px;">Target Launch</div>
+          <div style="font-size:22px;font-weight:800;color:var(--ink);">Q3 2026</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-top:4px;">Early access available now</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coming Soon -->
+    <div class="coming-card reveal delay-1">
+      <div class="coming-text">
+        <h4>Product 02 — Coming Soon</h4>
+        <p>Something new is taking shape in the Obnet lab. We're applying the same precision and security-first approach to the next problem worth solving. Announcement coming when it's ready.</p>
+      </div>
+      <div class="coming-num">02</div>
+    </div>
+  </div>
+
+  <div class="cta-band">
+    <h3 class="reveal">Interested in <span>DokShield?</span></h3>
+    <p class="reveal delay-1">Join the early access list and be among the first to deploy DokShield in your data centre operations.</p>
+    <div class="cta-btn-group reveal delay-2">
+      <button class="btn-primary" onclick="window.location.href='dokshield.html#dok-modules'">Full Product Details</button>
+      <button class="btn-outline" onclick="showPage('earlyaccess')">Request Early Access</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- SHARED FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand-col">
+      <div class="footer-logo">
+        <div class="footer-logo-icon">⬡</div>
+        Obnet
+      </div>
+      <p>Building precise, reliable software tools for developers and businesses who take their data seriously.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h5>Products</h5>
+      <a href="products.html">All Products</a>
+      <a href="dokshield.html">DokShield</a>
+      <a href="dokshield.html">Features</a>
+      <a href="dokshield.html">Pricing</a>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <a href="mailto:hello@obnet.org">hello@obnet.org</a>
+      <a href="mailto:services@obnet.org">services@obnet.org</a>
+      <a href="mailto:partners@obnet.org">partners@obnet.org</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Obnet. All rights reserved.</p>
+    <div style="display:flex;gap:20px;">
+      <a href="#" onclick="showPrivacy()">Privacy Policy</a>
+      <a href="#" onclick="showTerms()">Terms of Service</a>
+    </div>
+    <p>Built with precision. <span style="color:var(--accent);">✦</span></p>
+  </div>
+</footer>
+
+<!-- SHARED MODALS -->
+<div id="modal-privacy" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9000;overflow-y:auto;">
+  <div style="background:#fff;max-width:700px;margin:60px auto;border-radius:16px;padding:48px;position:relative;">
+    <button onclick="document.getElementById('modal-privacy').style.display='none'" style="position:absolute;top:20px;right:24px;background:none;border:none;font-size:22px;cursor:pointer;color:#888;">✕</button>
+    <h2 style="font-size:28px;font-weight:800;margin-bottom:24px;">Privacy Policy</h2>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Last updated: March 2026</strong></p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;">Obnet ("we", "us", or "our") operates obnet.org and the DokShield platform. This policy explains how we collect, use, and protect your information.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Information We Collect:</strong> We collect information you provide directly to us, such as your name, email address, and company when you contact us or request access to DokShield.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>How We Use It:</strong> We use your information solely to respond to your enquiries and provide access to our products. We do not sell or share your data with third parties.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Data Security:</strong> We implement industry-standard security measures to protect your personal information.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Contact:</strong> For privacy-related enquiries, contact us at <a href="mailto:hello@obnet.org">hello@obnet.org</a></p>
+    <p style="font-family:'DM Mono',monospace;font-size:11px;color:#aaa;margin-top:24px;">This policy will be updated as the platform develops. We will notify users of material changes.</p>
+  </div>
+</div>
+<div id="modal-terms" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9000;overflow-y:auto;">
+  <div style="background:#fff;max-width:700px;margin:60px auto;border-radius:16px;padding:48px;position:relative;">
+    <button onclick="document.getElementById('modal-terms').style.display='none'" style="position:absolute;top:20px;right:24px;background:none;border:none;font-size:22px;cursor:pointer;color:#888;">✕</button>
+    <h2 style="font-size:28px;font-weight:800;margin-bottom:24px;">Terms of Service</h2>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Last updated: March 2026</strong></p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;">By accessing obnet.org or using DokShield, you agree to these terms. If you do not agree, please do not use our services.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Use of Services:</strong> You agree to use our services only for lawful purposes and in accordance with these terms.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Intellectual Property:</strong> All content, branding, and software on this site is the property of Obnet and may not be reproduced without permission.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Disclaimer:</strong> DokShield is currently in development. Features and pricing are subject to change. We are not liable for any damages arising from use of early access versions.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Contact:</strong> For terms-related enquiries, contact us at <a href="mailto:hello@obnet.org">hello@obnet.org</a></p>
+    <p style="font-family:'DM Mono',monospace;font-size:11px;color:#aaa;margin-top:24px;">These terms will be updated as the platform develops. Continued use of the service constitutes acceptance of updated terms.</p>
+  </div>
+</div>
+
+<script>const CURRENT_PAGE = 'products';</script>
+<script src="main.js"></script>
+</body>
+</html>

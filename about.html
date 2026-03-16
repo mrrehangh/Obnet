@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Obnet</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- SHARED NAV -->
+<nav id="navbar">
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-icon">⬡</div>
+    Obnet
+  </a>
+  <div class="nav-center">
+    <a id="nav-home" href="index.html">Home</a>
+    <a id="nav-about" href="about.html">About</a>
+    <a id="nav-products" href="products.html">Products</a>
+    <a id="nav-dokshield" href="dokshield.html">DokShield</a>
+    <a id="nav-earlyaccess" href="earlyaccess.html">Early Access</a>
+    <a id="nav-contact" href="contact.html">Contact</a>
+  </div>
+  <div class="nav-right">
+    <button class="nav-contact-btn" onclick="showPage('contact')">Get in Touch</button>
+    <button class="nav-cta-btn" onclick="showPage('dokshield')" style="display:flex;align-items:center;gap:8px;"><img src="dokshield-logo.png" alt="DokShield" style="height:20px;vertical-align:middle;filter:brightness(1.1);"> <span style="font-size:13px;">→</span></button>
+  </div>
+</nav>
+
+<!-- PAGE CONTENT -->
+<div class="page active" id="page-about">
+
+  <!-- HERO -->
+  <div class="about-hero-wrap">
+    <div class="about-hero">
+      <div class="about-hero-left">
+        <div class="section-kicker">About Obnet</div>
+        <h2>We Build<br>Software That<br><span>Matters.</span></h2>
+        <p class="about-hero-intro">Obnet is an independent software company founded on a simple principle — software should solve real problems, respect the people who use it, and be built to last. No shortcuts. No compromise.</p>
+        <div style="margin-top:32px;display:flex;gap:14px;flex-wrap:wrap;">
+          <button class="btn-primary" onclick="showPage('products')">Our Products →</button>
+          <button class="btn-outline" onclick="showPage('contact')">Get in Touch</button>
+        </div>
+      </div>
+      <div class="about-hero-right">
+        <p>Obnet was founded in 2024 with a clear and focused mission: to build software tools that are precise, reliable, and built with integrity. We're an independent organization — fully self-funded — which means our only obligation is to the people who use our products.</p>
+        <p>Our name, Obnet, is short for <em>Object Network</em> — a reflection of our technical philosophy that software is best understood as a suite of networked objects in continuous process loops. It's not just a name. It's how we think about every system we build.</p>
+        <p>We operate without venture capital pressure, without growth-at-all-costs mandates. Every product starts with a real problem, undergoes a careful and considered design process, and ships only when it meets our own high bar for quality.</p>
+        <div class="about-highlight-box">
+          <p><strong>Our commitment:</strong> We build for the long term. That means clean architectures, documented systems, and software that grows with its users — not software they grow out of.</p>
+        </div>
+        <div class="about-quick-facts">
+          <div class="about-fact">
+            <div class="about-fact-label">Founded</div>
+            <div class="about-fact-value">2024</div>
+          </div>
+          <div class="about-fact">
+            <div class="about-fact-label">Structure</div>
+            <div class="about-fact-value">Independent</div>
+          </div>
+          <div class="about-fact">
+            <div class="about-fact-label">First Product</div>
+            <div class="about-fact-value"><span>DokShield</span></div>
+          </div>
+          <div class="about-fact">
+            <div class="about-fact-label">Domain</div>
+            <div class="about-fact-value">obnet.org</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-box reveal">
+      <div class="stat-num">2024</div>
+      <div class="stat-label">Year Founded</div>
+    </div>
+    <div class="stat-box reveal delay-1">
+      <div class="stat-num">1</div>
+      <div class="stat-label">Product in Development</div>
+    </div>
+    <div class="stat-box reveal delay-2">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Self-Funded & Independent</div>
+    </div>
+    <div class="stat-box reveal delay-3">
+      <div class="stat-num">18</div>
+      <div class="stat-label">Modules in DokShield</div>
+    </div>
+  </div>
+
+  <!-- MISSION STATEMENT -->
+  <div class="mission-band">
+    <div class="mission-inner">
+      <div class="mission-quote reveal">
+        "Software is a suite of networked objects in continuous process loops — and every object deserves to be built <em>right.</em>"
+      </div>
+      <div class="mission-right">
+        <div class="mission-body reveal">
+          <p>This is the philosophy behind the Obnet name — Object Network. It's not just a brand. It's how we think about software architecture, system design, and the responsibility that comes with building tools that real people depend on every day.</p>
+          <p>We believe precision is not a luxury. Security is not an afterthought. And software that genuinely helps people is always worth the extra effort to get right.</p>
+        </div>
+        <div class="principle-row reveal delay-2">
+          <div class="principle-item">
+            <div class="principle-icon">🎯</div>
+            <div class="principle-text">
+              <h5>Precision Over Speed</h5>
+              <p>We ship when it's right — not when it's rushed.</p>
+            </div>
+          </div>
+          <div class="principle-item">
+            <div class="principle-icon">🔐</div>
+            <div class="principle-text">
+              <h5>Security by Default</h5>
+              <p>Not a feature — a foundational principle in everything we build.</p>
+            </div>
+          </div>
+          <div class="principle-item">
+            <div class="principle-icon">🌱</div>
+            <div class="principle-text">
+              <h5>Built to Last</h5>
+              <p>Software that grows with you — not software you grow out of.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CORE VALUES -->
+  <div class="values-section">
+    <div class="section-kicker reveal">What We Stand For</div>
+    <div class="section-title reveal delay-1">Our Core <span>Values</span></div>
+    <div class="values-grid" style="margin-top:48px;">
+      <div class="value-card reveal delay-1" data-n="01">
+        <div class="value-icon-wrap">🎯</div>
+        <h4>Precision First</h4>
+        <p>Every feature we ship is deliberate. We'd rather do fewer things exceptionally well than scatter our focus across a dozen half-finished ideas. Quality is never negotiable at Obnet.</p>
+      </div>
+      <div class="value-card reveal delay-2" data-n="02">
+        <div class="value-icon-wrap">🔐</div>
+        <h4>Security by Default</h4>
+        <p>Security isn't something we bolt on at the end. It's woven into every architectural decision, every API design, every interface. Your data deserves the highest standard of care.</p>
+      </div>
+      <div class="value-card reveal delay-3" data-n="03">
+        <div class="value-icon-wrap">⚡</div>
+        <h4>Built to Scale</h4>
+        <p>We design systems that grow with our users — from a single operator to an enterprise deployment — without requiring painful migrations or costly rewrites. Good foundations matter.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STORY & TIMELINE -->
+  <div class="story-section">
+    <div class="story-inner">
+      <div class="story-left reveal">
+        <div class="section-kicker">Our Journey</div>
+        <h3>How We Got <span>Here</span></h3>
+        <p>Obnet began with a simple observation: the most critical operational environments — data centres, security operations, compliance-heavy industries — were still being managed with tools that weren't built for them.</p>
+        <p>We decided to change that. One product at a time.</p>
+      </div>
+      <div class="timeline reveal delay-2">
+        <div class="tl-item active">
+          <div class="tl-date">Q4 2024 — Foundation</div>
+          <div class="tl-title">Obnet is Born</div>
+          <div class="tl-body">The company is founded with a clear mission: build precise, reliable, security-first software for teams who can't afford to take risks with their operations. Domain acquired, infrastructure planned, architecture defined.</div>
+        </div>
+        <div class="tl-item active">
+          <div class="tl-date">Q4 2024 — Research & Design</div>
+          <div class="tl-title">DokShield Concept & Design</div>
+          <div class="tl-body">After deep research into data centre security operations management — speaking with operators, security officers, and compliance teams — the DokShield concept is defined. A 73-table, 18-module platform designed from the ground up for real operations environments.</div>
+        </div>
+        <div class="tl-item active">
+          <div class="tl-date">Q1 2026 — Development</div>
+          <div class="tl-title">DokShield Active Development</div>
+          <div class="tl-body">Full-stack development underway. React + TypeScript frontend, Node.js + Express backend, SQL Server database. The platform is being built module by module, with the Auth and Dashboard foundations in place.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Q3 2026 — Target</div>
+          <div class="tl-title">DokShield MVP Launch</div>
+          <div class="tl-body">DokShield targets its first production deployment, initially with Securitas as the pilot client. Early access partners will be first to onboard and will receive founding pricing as a thank-you for their support.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">2027 — Growth</div>
+          <div class="tl-title">Second Product & Expansion</div>
+          <div class="tl-body">With DokShield stable and growing, Obnet turns its attention to the next problem worth solving in the operational software space. Details to be announced.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHILOSOPHY -->
+  <div class="philosophy-section">
+    <div class="section-kicker reveal">How We Think</div>
+    <div class="section-title reveal delay-1">Our <span>Philosophy</span></div>
+    <div class="philosophy-grid">
+      <div class="phil-card reveal delay-1">
+        <h4><span>🧱</span> Start With the Problem</h4>
+        <p>We don't build features for the sake of features. Every line of code traces back to a real pain point that real people actually have. If we can't articulate the problem clearly, we don't build the solution.</p>
+      </div>
+      <div class="phil-card reveal delay-2">
+        <h4><span>🔍</span> Obsess Over Details</h4>
+        <p>The difference between good software and great software lives in the details — the error messages, the edge cases, the loading states. We sweat the small stuff because our users notice it even when they don't say so.</p>
+      </div>
+      <div class="phil-card reveal delay-3">
+        <h4><span>🤝</span> Users Over Metrics</h4>
+        <p>We're not chasing a user count or a growth rate. We're trying to build tools that genuinely help people do their work better and safer. A hundred satisfied users is worth more to us than a thousand indifferent ones.</p>
+      </div>
+      <div class="phil-card reveal delay-4">
+        <h4><span>🏗️</span> Long-Term Architecture</h4>
+        <p>We make choices that make sense in five years, not just five months. Clean APIs, documented codebases, systems designed to be maintained and extended — not just shipped and forgotten.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TECH STACK -->
+  <div class="tech-band">
+    <div class="tech-inner">
+      <div class="section-kicker reveal">Technology</div>
+      <div class="section-title reveal delay-1" style="font-size:28px;margin-top:8px;">How We <span>Build</span></div>
+      <p style="font-family:'DM Mono',monospace;font-size:13px;color:var(--muted);margin-top:16px;max-width:600px;" class="reveal delay-2">Our stack is chosen for reliability, security, and longevity — not trends. Every technology choice has a reason behind it.</p>
+      <div class="tech-grid reveal delay-3" style="margin-top:32px;">
+        <span class="tech-tag">React + TypeScript</span>
+        <span class="tech-tag">Node.js + Express</span>
+        <span class="tech-tag">SQL Server (MSSQL)</span>
+        <span class="tech-tag">JWT Authentication</span>
+        <span class="tech-tag">REST API First</span>
+        <span class="tech-tag">Role-Based Access Control</span>
+        <span class="tech-tag">Zero Trust Security</span>
+        <span class="tech-tag">Immutable Audit Logs</span>
+        <span class="tech-tag">Multi-Tenant Architecture</span>
+        <span class="tech-tag">AES-256 Encryption</span>
+        <span class="tech-tag">SAML 2.0 / OAuth2</span>
+        <span class="tech-tag">Tailwind CSS</span>
+        <span class="tech-tag">Vite</span>
+        <span class="tech-tag">CI/CD Pipelines</span>
+        <span class="tech-tag">Jest Testing</span>
+        <span class="tech-tag">SOC 2 Aligned</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-band">
+    <h3 class="reveal">Want to work <span>together?</span></h3>
+    <p class="reveal delay-1">Whether you're a potential client, a partner, or just want to follow our journey — we'd love to hear from you.</p>
+    <div class="cta-btn-group reveal delay-2">
+      <button class="btn-primary" onclick="showPage('contact')">Get in Touch</button>
+      <button class="btn-outline" onclick="showPage('products')">See Our Products</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- SHARED FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand-col">
+      <div class="footer-logo">
+        <div class="footer-logo-icon">⬡</div>
+        Obnet
+      </div>
+      <p>Building precise, reliable software tools for developers and businesses who take their data seriously.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h5>Products</h5>
+      <a href="products.html">All Products</a>
+      <a href="dokshield.html">DokShield</a>
+      <a href="dokshield.html">Features</a>
+      <a href="dokshield.html">Pricing</a>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <a href="mailto:hello@obnet.org">hello@obnet.org</a>
+      <a href="mailto:services@obnet.org">services@obnet.org</a>
+      <a href="mailto:partners@obnet.org">partners@obnet.org</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Obnet. All rights reserved.</p>
+    <div style="display:flex;gap:20px;">
+      <a href="#" onclick="showPrivacy()">Privacy Policy</a>
+      <a href="#" onclick="showTerms()">Terms of Service</a>
+    </div>
+    <p>Built with precision. <span style="color:var(--accent);">✦</span></p>
+  </div>
+</footer>
+
+<!-- SHARED MODALS -->
+<div id="modal-privacy" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9000;overflow-y:auto;">
+  <div style="background:#fff;max-width:700px;margin:60px auto;border-radius:16px;padding:48px;position:relative;">
+    <button onclick="document.getElementById('modal-privacy').style.display='none'" style="position:absolute;top:20px;right:24px;background:none;border:none;font-size:22px;cursor:pointer;color:#888;">✕</button>
+    <h2 style="font-size:28px;font-weight:800;margin-bottom:24px;">Privacy Policy</h2>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Last updated: March 2026</strong></p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;">Obnet ("we", "us", or "our") operates obnet.org and the DokShield platform. This policy explains how we collect, use, and protect your information.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Information We Collect:</strong> We collect information you provide directly to us, such as your name, email address, and company when you contact us or request access to DokShield.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>How We Use It:</strong> We use your information solely to respond to your enquiries and provide access to our products. We do not sell or share your data with third parties.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Data Security:</strong> We implement industry-standard security measures to protect your personal information.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Contact:</strong> For privacy-related enquiries, contact us at <a href="mailto:hello@obnet.org">hello@obnet.org</a></p>
+    <p style="font-family:'DM Mono',monospace;font-size:11px;color:#aaa;margin-top:24px;">This policy will be updated as the platform develops. We will notify users of material changes.</p>
+  </div>
+</div>
+<div id="modal-terms" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9000;overflow-y:auto;">
+  <div style="background:#fff;max-width:700px;margin:60px auto;border-radius:16px;padding:48px;position:relative;">
+    <button onclick="document.getElementById('modal-terms').style.display='none'" style="position:absolute;top:20px;right:24px;background:none;border:none;font-size:22px;cursor:pointer;color:#888;">✕</button>
+    <h2 style="font-size:28px;font-weight:800;margin-bottom:24px;">Terms of Service</h2>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Last updated: March 2026</strong></p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;">By accessing obnet.org or using DokShield, you agree to these terms. If you do not agree, please do not use our services.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Use of Services:</strong> You agree to use our services only for lawful purposes and in accordance with these terms.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Intellectual Property:</strong> All content, branding, and software on this site is the property of Obnet and may not be reproduced without permission.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Disclaimer:</strong> DokShield is currently in development. Features and pricing are subject to change. We are not liable for any damages arising from use of early access versions.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Contact:</strong> For terms-related enquiries, contact us at <a href="mailto:hello@obnet.org">hello@obnet.org</a></p>
+    <p style="font-family:'DM Mono',monospace;font-size:11px;color:#aaa;margin-top:24px;">These terms will be updated as the platform develops. Continued use of the service constitutes acceptance of updated terms.</p>
+  </div>
+</div>
+
+<script>const CURRENT_PAGE = 'about';</script>
+<script src="main.js"></script>
+</body>
+</html>

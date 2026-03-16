@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Obnet</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- SHARED NAV -->
+<nav id="navbar">
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-icon">⬡</div>
+    Obnet
+  </a>
+  <div class="nav-center">
+    <a id="nav-home" href="index.html">Home</a>
+    <a id="nav-about" href="about.html">About</a>
+    <a id="nav-products" href="products.html">Products</a>
+    <a id="nav-dokshield" href="dokshield.html">DokShield</a>
+    <a id="nav-earlyaccess" href="earlyaccess.html">Early Access</a>
+    <a id="nav-contact" href="contact.html">Contact</a>
+  </div>
+  <div class="nav-right">
+    <button class="nav-contact-btn" onclick="showPage('contact')">Get in Touch</button>
+    <button class="nav-cta-btn" onclick="showPage('dokshield')" style="display:flex;align-items:center;gap:8px;"><img src="dokshield-logo.png" alt="DokShield" style="height:20px;vertical-align:middle;filter:brightness(1.1);"> <span style="font-size:13px;">→</span></button>
+  </div>
+</nav>
+
+<!-- PAGE CONTENT -->
+<div class="page active" id="page-contact">
+
+  <div class="contact-hero">
+    <div>
+      <div class="section-kicker">Contact</div>
+      <h2>Let's <span>Talk.</span></h2>
+      <p>Whether you're interested in DokShield, want to explore a partnership, or just have a question — we're a real team who reads every message.</p>
+      <p style="margin-top:16px;">We typically respond within one business day.</p>
+    </div>
+    <div class="contact-details-card">
+      <div class="contact-detail-item">
+        <div class="contact-detail-icon">✉️</div>
+        <div>
+          <div class="contact-detail-label">General Enquiries</div>
+          <div class="contact-detail-value"><a href="mailto:hello@obnet.org">hello@obnet.org</a></div>
+        </div>
+      </div>
+      <div class="contact-detail-item">
+        <div class="contact-detail-icon">🛡</div>
+        <div>
+          <div class="contact-detail-label">DokShield Support</div>
+          <div class="contact-detail-value"><a href="mailto:services@obnet.org">services@obnet.org</a></div>
+        </div>
+      </div>
+      <div class="contact-detail-item">
+        <div class="contact-detail-icon">🤝</div>
+        <div>
+          <div class="contact-detail-label">Partnerships</div>
+          <div class="contact-detail-value"><a href="mailto:partners@obnet.org">partners@obnet.org</a></div>
+        </div>
+      </div>
+      <div class="contact-detail-item">
+        <div class="contact-detail-icon">🌐</div>
+        <div>
+          <div class="contact-detail-label">Website</div>
+          <div class="contact-detail-value"><a href="#">www.obnet.org</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-form-section">
+    <div class="form-wrap reveal">
+      <div class="form-title">Send Us a Message</div>
+      <div class="form-sub">Fill in the form and we'll get back to you within one business day.</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input class="form-input" type="text" placeholder="John">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input class="form-input" type="text" placeholder="Smith">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input class="form-input" type="email" placeholder="john@company.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Company (Optional)</label>
+          <input class="form-input" type="text" placeholder="Acme Corp">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Subject</label>
+          <select class="form-select">
+            <option value="">Select a topic...</option>
+            <option>DokShield Early Access</option>
+            <option>DokShield Support</option>
+            <option>Partnership Enquiry</option>
+            <option>General Question</option>
+            <option>Press / Media</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Message</label>
+          <textarea class="form-textarea" placeholder="Tell us what's on your mind..."></textarea>
+        </div>
+      </div>
+      <button class="form-submit" onclick="handleFormSubmit(this)">Send Message →</button>
+      <div class="form-note">We respect your privacy. Your information is never shared with third parties.</div>
+    </div>
+
+    <div class="faq-wrap reveal delay-2">
+      <div class="faq-title">Common Questions</div>
+      <div class="faq-item open" onclick="toggleFaq(this)">
+        <div class="faq-q">When will DokShield launch? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">DokShield is currently in active development with early access available now. We're targeting a full public launch in Q3 2026. Early access users will be first to know — and will receive founding member pricing.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Is Obnet VC-funded? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">No — Obnet is fully independent and self-funded. This means we answer only to our users, not investors. Our roadmap is shaped entirely by real user feedback.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Can I integrate DokShield with my existing tools? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Yes. DokShield is built API-first, making integration straightforward. It supports SAML 2.0 and OAuth2 for SSO, and provides webhooks for real-time event notifications into your existing systems.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Do you offer an on-premise option? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">On-premise deployment is available on the Enterprise plan. If you have specific infrastructure requirements, get in touch and we'll discuss what's possible for your organization.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">How is pricing structured? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">DokShield will offer a free Starter tier, a Professional plan at ~$29/month, and custom Enterprise pricing. Early access users will receive a permanent discount as a thank-you for supporting us early.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Are you open to partnerships? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Absolutely. If you're a technology provider, consultant, or reseller who sees a fit with our products, we'd love to hear from you. Email us at <a href="mailto:partners@obnet.org">partners@obnet.org</a>.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Social -->
+  <div class="social-band">
+    <div class="social-inner">
+      <div class="social-text">
+        <h4>Follow Our Journey</h4>
+        <p>We share updates, insights, and progress as we build in the open.</p>
+      </div>
+      <div class="social-links">
+        <a class="social-link" href="https://linkedin.com/company/obnet" title="LinkedIn" target="_blank" rel="noopener">💼</a>
+        <a class="social-link" href="https://x.com/obnet_org" title="X / Twitter" target="_blank" rel="noopener">𝕏</a>
+        <a class="social-link" href="https://github.com/mrrehangh" title="GitHub" target="_blank" rel="noopener">⌥</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SHARED FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand-col">
+      <div class="footer-logo">
+        <div class="footer-logo-icon">⬡</div>
+        Obnet
+      </div>
+      <p>Building precise, reliable software tools for developers and businesses who take their data seriously.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h5>Products</h5>
+      <a href="products.html">All Products</a>
+      <a href="dokshield.html">DokShield</a>
+      <a href="dokshield.html">Features</a>
+      <a href="dokshield.html">Pricing</a>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <a href="mailto:hello@obnet.org">hello@obnet.org</a>
+      <a href="mailto:services@obnet.org">services@obnet.org</a>
+      <a href="mailto:partners@obnet.org">partners@obnet.org</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Obnet. All rights reserved.</p>
+    <div style="display:flex;gap:20px;">
+      <a href="#" onclick="showPrivacy()">Privacy Policy</a>
+      <a href="#" onclick="showTerms()">Terms of Service</a>
+    </div>
+    <p>Built with precision. <span style="color:var(--accent);">✦</span></p>
+  </div>
+</footer>
+
+<!-- SHARED MODALS -->
+<div id="modal-privacy" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9000;overflow-y:auto;">
+  <div style="background:#fff;max-width:700px;margin:60px auto;border-radius:16px;padding:48px;position:relative;">
+    <button onclick="document.getElementById('modal-privacy').style.display='none'" style="position:absolute;top:20px;right:24px;background:none;border:none;font-size:22px;cursor:pointer;color:#888;">✕</button>
+    <h2 style="font-size:28px;font-weight:800;margin-bottom:24px;">Privacy Policy</h2>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Last updated: March 2026</strong></p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;">Obnet ("we", "us", or "our") operates obnet.org and the DokShield platform. This policy explains how we collect, use, and protect your information.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Information We Collect:</strong> We collect information you provide directly to us, such as your name, email address, and company when you contact us or request access to DokShield.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>How We Use It:</strong> We use your information solely to respond to your enquiries and provide access to our products. We do not sell or share your data with third parties.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Data Security:</strong> We implement industry-standard security measures to protect your personal information.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Contact:</strong> For privacy-related enquiries, contact us at <a href="mailto:hello@obnet.org">hello@obnet.org</a></p>
+    <p style="font-family:'DM Mono',monospace;font-size:11px;color:#aaa;margin-top:24px;">This policy will be updated as the platform develops. We will notify users of material changes.</p>
+  </div>
+</div>
+<div id="modal-terms" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9000;overflow-y:auto;">
+  <div style="background:#fff;max-width:700px;margin:60px auto;border-radius:16px;padding:48px;position:relative;">
+    <button onclick="document.getElementById('modal-terms').style.display='none'" style="position:absolute;top:20px;right:24px;background:none;border:none;font-size:22px;cursor:pointer;color:#888;">✕</button>
+    <h2 style="font-size:28px;font-weight:800;margin-bottom:24px;">Terms of Service</h2>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Last updated: March 2026</strong></p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;">By accessing obnet.org or using DokShield, you agree to these terms. If you do not agree, please do not use our services.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Use of Services:</strong> You agree to use our services only for lawful purposes and in accordance with these terms.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Intellectual Property:</strong> All content, branding, and software on this site is the property of Obnet and may not be reproduced without permission.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Disclaimer:</strong> DokShield is currently in development. Features and pricing are subject to change. We are not liable for any damages arising from use of early access versions.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Contact:</strong> For terms-related enquiries, contact us at <a href="mailto:hello@obnet.org">hello@obnet.org</a></p>
+    <p style="font-family:'DM Mono',monospace;font-size:11px;color:#aaa;margin-top:24px;">These terms will be updated as the platform develops. Continued use of the service constitutes acceptance of updated terms.</p>
+  </div>
+</div>
+
+<script>const CURRENT_PAGE = 'contact';</script>
+<script src="main.js"></script>
+</body>
+</html>

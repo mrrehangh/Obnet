@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DokShield — Obnet</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- SHARED NAV -->
+<nav id="navbar">
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-icon">⬡</div>
+    Obnet
+  </a>
+  <div class="nav-center">
+    <a id="nav-home" href="index.html">Home</a>
+    <a id="nav-about" href="about.html">About</a>
+    <a id="nav-products" href="products.html">Products</a>
+    <a id="nav-dokshield" href="dokshield.html">DokShield</a>
+    <a id="nav-earlyaccess" href="earlyaccess.html">Early Access</a>
+    <a id="nav-contact" href="contact.html">Contact</a>
+  </div>
+  <div class="nav-right">
+    <button class="nav-contact-btn" onclick="showPage('contact')">Get in Touch</button>
+    <button class="nav-cta-btn" onclick="showPage('dokshield')" style="display:flex;align-items:center;gap:8px;"><img src="dokshield-logo.png" alt="DokShield" style="height:20px;vertical-align:middle;filter:brightness(1.1);"> <span style="font-size:13px;">→</span></button>
+  </div>
+</nav>
+
+<!-- PAGE CONTENT -->
+<div class="page active" id="page-dokshield">
+
+  <!-- HERO -->
+  <div class="dok-hero">
+    <div class="dok-hero-grid">
+      <div>
+        <h1 style="font-size:clamp(48px,7vw,76px);font-weight:800;letter-spacing:-0.04em;line-height:0.95;color:var(--ink);margin-bottom:10px;font-family:'Syne',sans-serif;">DokShield</h1>
+        <div class="dok-product-of" style="margin-bottom:18px;">A product by Obnet</div>
+        <a href="#compliance-map-section"
+           style="display:inline-flex;align-items:center;gap:9px;
+                  background:linear-gradient(135deg,#2563eb,#1d4ed8);
+                  color:#ffffff;text-decoration:none;
+                  font-family:'DM Mono',monospace;font-size:11px;
+                  letter-spacing:0.1em;text-transform:uppercase;font-weight:600;
+                  padding:10px 20px;border-radius:5px;margin-bottom:24px;
+                  border:1px solid rgba(96,165,250,0.35);
+                  box-shadow:0 4px 16px rgba(37,99,235,0.35);
+                  transition:all 0.25s;"
+           onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(37,99,235,0.55)'"
+           onmouseout="this.style.transform='';this.style.boxShadow='0 4px 16px rgba(37,99,235,0.35)'">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.854 4.756L14 5.382L11 8.306L11.708 12.5L8 10.527L4.292 12.5L5 8.306L2 5.382L6.146 4.756L8 1Z" fill="currentColor"/></svg>
+          View SaaS Compliance Map
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <p class="tagline">The complete security operations management platform for data centres. Built for the teams who guard the world's most critical infrastructure — 24 hours a day, 7 days a week.</p>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="showPage('earlyaccess')">Request Early Access</button>
+          <button class="btn-outline" onclick="document.getElementById('dok-how').scrollIntoView({behavior:'smooth'})">How it Works ↓</button>
+        </div>
+        <div style="margin-top:20px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted2);">
+          Targeting Q3 2026 launch · Early access available now
+        </div>
+      </div>
+      <div class="terminal-wrap">
+        <div class="terminal-top">
+          <div class="t-btn" style="background:#ff5f57"></div>
+          <div class="t-btn" style="background:#ffbd2e"></div>
+          <div class="t-btn" style="background:#28c840"></div>
+          <span>dokshield — operations dashboard</span>
+        </div>
+        <div class="terminal-body">
+          <div class="t-c"># Officer shift login</div>
+          <div class="t-cmd">$ dokshield login --dc MEL-20 --colo F01C04</div>
+          <div class="t-ok">✓ Identity verified — AUS125431 / G. Liam</div>
+          <div class="t-ok">✓ Shift session started — SID-88219</div>
+          <div>&nbsp;</div>
+          <div class="t-c"># Log a patrol checkpoint</div>
+          <div class="t-cmd">$ dokshield patrol --zone B2 --status clear</div>
+          <div class="t-ok">✓ Checkpoint logged — 14:32 AEST</div>
+          <div class="t-info">→ TKT-00041 auto-generated for anomaly</div>
+          <div>&nbsp;</div>
+          <div class="t-c"># Handover intelligence summary</div>
+          <div class="t-cmd">$ dokshield handover --generate</div>
+          <div class="t-ok">✓ Shift summary compiled</div>
+          <div class="t-cmd">$ <span class="t-blink">_</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE PROBLEM -->
+  <div style="background:var(--ink);border-top:1px solid #1a1a1a;border-bottom:1px solid #1a1a1a;padding:80px 48px;">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div class="section-kicker reveal" style="color:#555;">The Problem</div>
+      <div class="section-title reveal delay-1" style="color:#fff;margin-bottom:40px;">Data Centre Security Operations<br><span style="color:#555;">Are Still Running on Paper.</span></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="reveal delay-2">
+        <div style="background:#111;border:1px solid #222;border-radius:12px;padding:28px;">
+          <div style="font-size:28px;margin-bottom:16px;">📋</div>
+          <h4 style="color:#f0f4ff;font-size:15px;font-weight:700;margin-bottom:10px;">Fragmented Tools</h4>
+          <p style="font-family:'DM Mono',monospace;font-size:12px;color:#8ca0bf;line-height:1.8;">Shift reports in Word, incidents in email, patrol logs on paper, visitor records in Excel. No single source of truth. No real-time visibility.</p>
+        </div>
+        <div style="background:#111;border:1px solid #222;border-radius:12px;padding:28px;">
+          <div style="font-size:28px;margin-bottom:16px;">⚠️</div>
+          <h4 style="color:#f0f4ff;font-size:15px;font-weight:700;margin-bottom:10px;">Compliance Risk</h4>
+          <p style="font-family:'DM Mono',monospace;font-size:12px;color:#8ca0bf;line-height:1.8;">Manual logs are error-prone, incomplete, and difficult to audit. When something goes wrong, the paper trail rarely tells the full story.</p>
+        </div>
+        <div style="background:#111;border:1px solid #222;border-radius:12px;padding:28px;">
+          <div style="font-size:28px;margin-bottom:16px;">🔄</div>
+          <h4 style="color:#f0f4ff;font-size:15px;font-weight:700;margin-bottom:10px;">Broken Handovers</h4>
+          <p style="font-family:'DM Mono',monospace;font-size:12px;color:#8ca0bf;line-height:1.8;">Critical information is lost between shifts. The incoming team starts blind. Issues from the previous shift go unresolved for hours.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE SOLUTION — 18 MODULES -->
+  <div class="features-section" id="dok-modules" style="padding-top:100px;padding-bottom:80px;">
+    <div class="features-header">
+      <div class="section-kicker reveal">The Solution</div>
+      <div class="section-title reveal delay-1">Build Your Platform <span>from 18 Modules.</span></div>
+      <p style="font-family:'DM Mono',monospace;font-size:13px;color:var(--muted);margin-top:16px;max-width:680px;line-height:1.9;" class="reveal delay-2">DokShield is a modular platform — choose only the modules your operation needs and pay only for what you use. Every module is purpose-built, deeply integrated, and designed to be used by real security teams on real shifts. Start with the essentials, expand as you grow.</p>
+      <div class="compliance-banner reveal delay-3">
+        <div class="compliance-banner-inner">
+          <div class="compliance-eyebrow">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1L8.854 4.756L13 5.382L10 8.306L10.708 12.5L7 10.527L3.292 12.5L4 8.306L1 5.382L5.146 4.756L7 1Z" fill="currentColor"/></svg>
+            Enterprise Compliance — Built In, Not Bolted On
+          </div>
+          <div class="compliance-headline">DokShield is designed from the ground up to meet the world's most demanding security and privacy frameworks.</div>
+          <div class="compliance-frameworks">
+
+            <div class="compliance-framework cf-frame-soc2"
+              onclick="toggleCF(this)"
+              data-label="SOC 2 Type II"
+              data-color="#93c5fd"
+              data-what="SOC 2 Type II is an independent audit standard by the AICPA that evaluates whether a service organisation's security controls operate effectively over a sustained period — typically 12 months. It covers five Trust Service Criteria: Security, Availability, Processing Integrity, Confidentiality, and Privacy."
+              data-impl="DokShield maps every SOC 2 control to immutable audit logs, role-based access, continuous monitoring, and automated evidence collection — ready for your annual audit without manual preparation.">
+              <div class="cf-badge cf-soc2">SOC 2 Type II</div>
+              <div class="cf-desc cf-short">Immutable audit trails, role-based access control, continuous monitoring, and evidence collection — every control mapped and ready for your annual audit.</div>
+              <div class="cf-desc-panel"></div>
+            </div>
+
+            <div class="compliance-framework cf-frame-iso"
+              onclick="toggleCF(this)"
+              data-label="ISO 27001:2022"
+              data-color="#6ee7b7"
+              data-what="ISO 27001 is the internationally recognised standard for Information Security Management Systems (ISMS). The 2022 edition defines 93 controls across four domains — Organisational, People, Physical, and Technological — and requires an independent audit by an accredited body."
+              data-impl="DokShield's architecture is built around a documented ISMS with risk-based controls, Annex A alignment across all 93 categories, and the change management and access control evidence required for certification and ongoing surveillance audits.">
+              <div class="cf-badge cf-iso">ISO 27001:2022</div>
+              <div class="cf-desc cf-short">Information security management built into the architecture. Risk-based controls, documented ISMS, and Annex A alignment across all 93 control categories.</div>
+              <div class="cf-desc-panel"></div>
+            </div>
+
+            <div class="compliance-framework cf-frame-gdpr"
+              onclick="toggleCF(this)"
+              data-label="GDPR"
+              data-color="#c4b5fd"
+              data-what="The General Data Protection Regulation applies to any organisation processing personal data of EU residents — regardless of where the organisation is based. Violations can result in fines of up to €20 million or 4% of global annual turnover."
+              data-impl="DokShield implements privacy by design, lawful basis tracking, right to erasure, data subject request (DSR) handling within 30 days, consent management, and 72-hour breach notification workflows — all built into the platform, not added later.">
+              <div class="cf-badge cf-gdpr">GDPR</div>
+              <div class="cf-desc cf-short">Privacy by design, right to erasure, data subject request handling, consent management, and cross-border data transfer controls — all built in.</div>
+              <div class="cf-desc-panel"></div>
+            </div>
+
+            <div class="compliance-framework cf-frame-apa"
+              onclick="toggleCF(this)"
+              data-label="AU Privacy Act"
+              data-color="#fcd34d"
+              data-what="The Privacy Act 1988 (Cth), strengthened by the Privacy and Other Legislation Amendment Act 2024, governs how Australian organisations collect, use, and store personal information through 13 Australian Privacy Principles. Penalties reach AUD 3.3 million per company."
+              data-impl="DokShield uses a one-database-per-country architecture that satisfies APP 8 data sovereignty by design. Technical and organisational measures, OAIC-ready breach response, and automated retention enforcement are built in from day one.">
+              <div class="cf-badge cf-apa">AU Privacy Act</div>
+              <div class="cf-desc cf-short">Aligned with the Privacy and Other Legislation Amendment Act 2024. Technical and organisational measures, APP 8 data sovereignty, and OAIC-ready breach response.</div>
+              <div class="cf-desc-panel"></div>
+            </div>
+
+          </div>
+          <div class="compliance-footer-row">
+            <div class="compliance-footer-item">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M4.5 7L6.5 9L9.5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Data sovereignty by architecture — your data never leaves its country
+            </div>
+            <div class="compliance-footer-item">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M4.5 7L6.5 9L9.5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              One dedicated database per country — no shared infrastructure
+            </div>
+            <div class="compliance-footer-item">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M4.5 7L6.5 9L9.5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              AES-256-GCM encryption at rest · TLS 1.2+ in transit
+            </div>
+            <div class="compliance-footer-item">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M4.5 7L6.5 9L9.5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Audit logs immutable by design — not just by policy
+            </div>
+          </div>
+
+          <!-- Full Compliance Map Link -->
+          <div style="margin-top:32px;padding-top:28px;border-top:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+            <div>
+              <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#4a7cdc;margin-bottom:6px;">Full Architecture Report</div>
+              <div style="font-size:15px;font-weight:700;color:#ffffff;letter-spacing:-0.01em;">161 tables · 18 modules · 197 findings resolved · 0 open</div>
+            </div>
+            <a href="#compliance-map-section"
+               style="display:inline-flex;align-items:center;gap:10px;
+                      background:linear-gradient(135deg,#2563eb,#1d4ed8);
+                      color:#ffffff;text-decoration:none;
+                      font-family:'DM Mono',monospace;font-size:12px;
+                      letter-spacing:0.1em;text-transform:uppercase;font-weight:600;
+                      padding:14px 28px;border-radius:6px;
+                      border:1px solid rgba(96,165,250,0.35);
+                      box-shadow:0 4px 20px rgba(37,99,235,0.45),0 0 0 1px rgba(37,99,235,0.2);
+                      transition:all 0.25s;white-space:nowrap;"
+               onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 32px rgba(37,99,235,0.6),0 0 0 1px rgba(37,99,235,0.3)'"
+               onmouseout="this.style.transform='';this.style.boxShadow='0 4px 20px rgba(37,99,235,0.45),0 0 0 1px rgba(37,99,235,0.2)'">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.854 4.756L14 5.382L11 8.306L11.708 12.5L8 10.527L4.292 12.5L5 8.306L2 5.382L6.146 4.756L8 1Z" fill="currentColor"/></svg>
+              View Full SaaS Compliance Map
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="features-big-grid">
+      <div class="feat-card reveal delay-1">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h7M7 16h5"/></svg></div>
+        <h4>Shift Activity Reports (SAR)</h4>
+        <p>Structured digital shift reports for both Security Officers and Screening Supervisors. Every shift captured, timestamped, and searchable. No more lost handover notes.</p>
+      </div>
+      <div class="feat-card reveal delay-2">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <h4>Data Hall Occupancy</h4>
+        <p>Real-time occupancy management for data halls and colos. Track who is present, when they entered, and when they left — with full audit history.</p>
+      </div>
+      <div class="feat-card reveal delay-3">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg></div>
+        <h4>Patrols Management</h4>
+        <p>Schedule, track, and verify patrol routes across the facility. Checkpoint logging with timestamp and officer ID. Deviation alerts for missed checkpoints.</p>
+      </div>
+      <div class="feat-card reveal delay-1">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <h4>Incidents Management</h4>
+        <p>Log, escalate, and resolve incidents with a full audit trail. Severity classification, response tracking, and compliance-ready incident reports at the click of a button.</p>
+      </div>
+      <div class="feat-card reveal delay-2">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <h4>Visitor Management</h4>
+        <p>Complete visitor lifecycle management — pre-registration, arrival, escort assignment, access zone control, and departure logging. Full compliance trail for every visit.</p>
+      </div>
+      <div class="feat-card reveal delay-3">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 110-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 100-5C13 2 12 7 12 7z"/></svg></div>
+        <h4>Issue Resolution &amp; Ticketing</h4>
+        <p>A built-in ticketing system (IRTS) for managing operational issues from creation to resolution. Auto-generated ticket numbers, assignment, priority, and status tracking.</p>
+      </div>
+      <div class="feat-card reveal delay-1">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+        <h4>Identity &amp; Access Management</h4>
+        <p>Role-based access control across all modules. Define permissions by role, assign officers to data centres and colos, and maintain a full access history.</p>
+      </div>
+      <div class="feat-card reveal delay-2">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h4>Access Control &amp; DCAT</h4>
+        <p>Manage physical access control and DCAT compliance across the facility. Integrated with the visitor and occupancy modules for a unified access picture.</p>
+      </div>
+      <div class="feat-card reveal delay-3">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <h4>Dashboard &amp; Reports</h4>
+        <p>Real-time operational dashboards for managers and supervisors. Customisable reports for compliance, shift performance, incident trends, and occupancy analytics.</p>
+      </div>
+      <div class="feat-card reveal delay-1">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <h4>Audit &amp; System Logs</h4>
+        <p>Immutable system-wide audit logs capturing every action taken within DokShield. WHO did WHAT, WHEN, and from WHERE — always available for compliance review.</p>
+      </div>
+      <div class="feat-card reveal delay-2">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+        <h4>Supervisor Audit &amp; QA</h4>
+        <p>Quality assurance tools for supervisors to review officer activity, validate patrol completions, and assess shift performance against defined standards.</p>
+      </div>
+      <div class="feat-card reveal delay-3">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
+        <h4>Shift Handover Intelligence</h4>
+        <p>Intelligent shift handover summaries that automatically compile open incidents, unresolved tickets, patrol status, and critical notes for the incoming team.</p>
+      </div>
+      <div class="feat-card reveal delay-1">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></div>
+        <h4>Contractor &amp; Vendor Management</h4>
+        <p>Complete lifecycle management for contractors and vendors — onboarding, access approval, work permit tracking, and departure verification.</p>
+      </div>
+      <div class="feat-card reveal delay-2">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2.2"/></svg></div>
+        <h4>Emergency &amp; Drill Management</h4>
+        <p>Plan, execute, and document emergency drills and real emergency responses. Evacuation tracking, response time logging, and post-event compliance reporting.</p>
+      </div>
+      <div class="feat-card reveal delay-3">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+        <h4>Training &amp; Evaluation</h4>
+        <p>Track officer training records, certifications, and competency evaluations. Ensure your team meets compliance requirements at all times with automated alerts for expiring certifications.</p>
+      </div>
+      <div class="feat-card reveal delay-1">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/><rect x="10" y="3" width="4" height="4" rx="1"/></svg></div>
+        <h4>Data Centre Management</h4>
+        <p>Central configuration and management of all data centre assets, zones, colos, and facilities within the platform. The master record for all operational data.</p>
+      </div>
+      <div class="feat-card reveal delay-2">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <h4>Billing Access</h4>
+        <p>Manage client billing access and subscription tiers across the multi-tenant platform. Role-restricted billing visibility with full audit trail.</p>
+      </div>
+      <div class="feat-card reveal delay-3">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h6"/><circle cx="16" cy="15" r="2"/><path d="M18 15h2"/></svg></div>
+        <h4>Screening Supervisor SAR</h4>
+        <p>Dedicated shift activity reporting for Screening Supervisors — structured, compliant, and integrated with the broader shift handover and audit modules.</p>
+      </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how-section" id="dok-how">
+    <div class="how-inner">
+      <div class="section-kicker reveal">How It Works</div>
+      <div class="section-title reveal delay-1">Designed for Real <span>Operational Environments</span></div>
+      <div class="steps-grid">
+        <div class="step-card reveal delay-1">
+          <div class="step-num">01</div>
+          <h4>Authenticate</h4>
+          <p>Officers log in by selecting their data centre and colo, then authenticating with their S/O ID. Every session is tied to a specific location and shift.</p>
+        </div>
+        <div class="step-card reveal delay-2">
+          <div class="step-num">02</div>
+          <h4>Operate</h4>
+          <p>Access any of the 18 modules from a clean, unified dashboard. Log patrols, manage visitors, raise incidents, and submit shift reports — all in one place.</p>
+        </div>
+        <div class="step-card reveal delay-3">
+          <div class="step-num">03</div>
+          <h4>Review</h4>
+          <p>Supervisors and managers get real-time visibility into all operational activity. Dashboards, reports, and audit logs are always current and always accessible.</p>
+        </div>
+        <div class="step-card reveal delay-4">
+          <div class="step-num">04</div>
+          <h4>Hand Over</h4>
+          <p>At shift end, DokShield compiles an intelligent handover summary. The incoming team starts fully informed. Nothing is lost between shifts ever again.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <div class="pricing-section">
+    <div class="section-kicker reveal">Pricing</div>
+    <div class="section-title reveal delay-1">Simple, <span>Transparent</span> Plans</div>
+    <p class="section-body reveal delay-2" style="margin-top:12px;max-width:560px;">Pricing is indicative and will be confirmed at launch. Early access partners receive founding member pricing as a thank-you for supporting us early.</p>
+    <div class="pricing-grid">
+      <div class="price-card reveal delay-1">
+        <div class="price-plan">Starter</div>
+        <div class="price-amount">Free <span>/ forever</span></div>
+        <div class="price-desc">For small teams evaluating the platform.</div>
+        <div class="price-divider"></div>
+        <div class="price-feature">1 Data Centre</div>
+        <div class="price-feature">Up to 5 Officers</div>
+        <div class="price-feature">Core modules only</div>
+        <div class="price-feature">30-day audit log</div>
+        <div class="price-feature">REST API access</div>
+        <button class="btn-outline" style="width:100%;margin-top:28px;" onclick="showPage('earlyaccess')">Get Started Free</button>
+      </div>
+      <div class="price-card featured reveal delay-2">
+        <div class="price-plan">Professional</div>
+        <div class="price-amount">$49 <span>/ month</span></div>
+        <div class="price-desc">For operational security teams with full compliance needs.</div>
+        <div class="price-divider"></div>
+        <div class="price-feature">Up to 3 Data Centres</div>
+        <div class="price-feature">Unlimited Officers</div>
+        <div class="price-feature">All 18 Modules</div>
+        <div class="price-feature">Full RBAC controls</div>
+        <div class="price-feature">90-day audit log</div>
+        <div class="price-feature">Priority support</div>
+        <button class="btn-primary" style="width:100%;margin-top:28px;" onclick="showPage('earlyaccess')">Request Early Access</button>
+      </div>
+      <div class="price-card reveal delay-3">
+        <div class="price-plan">Enterprise</div>
+        <div class="price-amount">Custom</div>
+        <div class="price-desc">For large organisations with complex multi-site requirements.</div>
+        <div class="price-divider"></div>
+        <div class="price-feature">Unlimited Data Centres</div>
+        <div class="price-feature">Unlimited Officers</div>
+        <div class="price-feature">All 18 Modules</div>
+        <div class="price-feature">Custom SLA</div>
+        <div class="price-feature">Dedicated support</div>
+        <div class="price-feature">On-premise option</div>
+        <button class="btn-outline" style="width:100%;margin-top:28px;" onclick="showPage('earlyaccess')">Contact Sales</button>
+      </div>
+    </div>
+    <p class="price-note reveal">Pricing is indicative — exact plans confirmed at launch. Early access partners receive founding member pricing.</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       COMPLIANCE ARCHITECTURE MAP
+  ══════════════════════════════════════════════════ -->
+  <div id="compliance-map-section" style="padding: 100px 48px; border-top: 1px solid var(--border); background: var(--ink);">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div class="section-kicker reveal" style="color:#4a7cdc;">Compliance Architecture</div>
+      <div class="section-title reveal delay-1" style="color:#fff; margin-bottom: 16px;">
+        SaaS <span style="color:#555;">Compliance Map</span>
+      </div>
+      <p style="font-family:'DM Mono',monospace; font-size:13px; color:#8898b8; line-height:1.9; max-width:640px; margin-bottom:40px;" class="reveal delay-2">
+        A full audit of DokShield's database architecture against SOC 2 Type II, ISO 27001:2022, GDPR, and the Australian Privacy Act — 161 tables, 18 modules, 4 frameworks. 197 findings resolved. Zero open.
+      </p>
+      <div class="reveal delay-3" style="border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 24px 80px rgba(0,0,0,0.5);">
+        <iframe
+          src="DokShield_ComplianceMap.html"
+          id="compliance-iframe"
+          title="DokShield Compliance Map"
+          scrolling="no"
+          style="width:100%; border:none; display:block; min-height:600px;"
+          onload="this.style.height=(this.contentWindow.document.body.scrollHeight+48)+'px'">
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-band">
+    <h3 class="reveal">Ready to modernise your <span>security operations?</span></h3>
+    <p class="reveal delay-1">DokShield is in active development and targeting Q3 2026 launch. Join the early access list today.</p>
+    <div class="cta-btn-group reveal delay-2">
+      <button class="btn-primary" onclick="showPage('earlyaccess')">Join the Waitlist</button>
+      <button class="btn-outline" onclick="showPage('about')">About Obnet</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- SHARED FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand-col">
+      <div class="footer-logo">
+        <div class="footer-logo-icon">⬡</div>
+        Obnet
+      </div>
+      <p>Building precise, reliable software tools for developers and businesses who take their data seriously.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h5>Products</h5>
+      <a href="products.html">All Products</a>
+      <a href="dokshield.html">DokShield</a>
+      <a href="dokshield.html">Features</a>
+      <a href="dokshield.html">Pricing</a>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <a href="mailto:hello@obnet.org">hello@obnet.org</a>
+      <a href="mailto:services@obnet.org">services@obnet.org</a>
+      <a href="mailto:partners@obnet.org">partners@obnet.org</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Obnet. All rights reserved.</p>
+    <div style="display:flex;gap:20px;">
+      <a href="#" onclick="showPrivacy()">Privacy Policy</a>
+      <a href="#" onclick="showTerms()">Terms of Service</a>
+    </div>
+    <p>Built with precision. <span style="color:var(--accent);">✦</span></p>
+  </div>
+</footer>
+
+<!-- SHARED MODALS -->
+<div id="modal-privacy" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9000;overflow-y:auto;">
+  <div style="background:#fff;max-width:700px;margin:60px auto;border-radius:16px;padding:48px;position:relative;">
+    <button onclick="document.getElementById('modal-privacy').style.display='none'" style="position:absolute;top:20px;right:24px;background:none;border:none;font-size:22px;cursor:pointer;color:#888;">✕</button>
+    <h2 style="font-size:28px;font-weight:800;margin-bottom:24px;">Privacy Policy</h2>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Last updated: March 2026</strong></p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;">Obnet ("we", "us", or "our") operates obnet.org and the DokShield platform. This policy explains how we collect, use, and protect your information.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Information We Collect:</strong> We collect information you provide directly to us, such as your name, email address, and company when you contact us or request access to DokShield.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>How We Use It:</strong> We use your information solely to respond to your enquiries and provide access to our products. We do not sell or share your data with third parties.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Data Security:</strong> We implement industry-standard security measures to protect your personal information.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Contact:</strong> For privacy-related enquiries, contact us at <a href="mailto:hello@obnet.org">hello@obnet.org</a></p>
+    <p style="font-family:'DM Mono',monospace;font-size:11px;color:#aaa;margin-top:24px;">This policy will be updated as the platform develops. We will notify users of material changes.</p>
+  </div>
+</div>
+<div id="modal-terms" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9000;overflow-y:auto;">
+  <div style="background:#fff;max-width:700px;margin:60px auto;border-radius:16px;padding:48px;position:relative;">
+    <button onclick="document.getElementById('modal-terms').style.display='none'" style="position:absolute;top:20px;right:24px;background:none;border:none;font-size:22px;cursor:pointer;color:#888;">✕</button>
+    <h2 style="font-size:28px;font-weight:800;margin-bottom:24px;">Terms of Service</h2>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Last updated: March 2026</strong></p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;">By accessing obnet.org or using DokShield, you agree to these terms. If you do not agree, please do not use our services.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Use of Services:</strong> You agree to use our services only for lawful purposes and in accordance with these terms.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Intellectual Property:</strong> All content, branding, and software on this site is the property of Obnet and may not be reproduced without permission.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Disclaimer:</strong> DokShield is currently in development. Features and pricing are subject to change. We are not liable for any damages arising from use of early access versions.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Contact:</strong> For terms-related enquiries, contact us at <a href="mailto:hello@obnet.org">hello@obnet.org</a></p>
+    <p style="font-family:'DM Mono',monospace;font-size:11px;color:#aaa;margin-top:24px;">These terms will be updated as the platform develops. Continued use of the service constitutes acceptance of updated terms.</p>
+  </div>
+</div>
+
+<script>const CURRENT_PAGE = 'dokshield';</script>
+<script src="main.js"></script>
+</body>
+</html>

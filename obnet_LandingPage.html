@@ -1,0 +1,2934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Obnet — Building Tomorrow's Software</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════
+   ROOT & RESET — LIGHT THEME
+═══════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #ffffff;
+  --bg2:       #f8f9fa;
+  --surface:   #f2f4f6;
+  --surface2:  #eaecef;
+  --border:    #e0e3e8;
+  --border2:   #c8cdd5;
+  --accent:    #2563eb;
+  --accent-dim: rgba(37,99,235,0.07);
+  --accent-glow: rgba(37,99,235,0.18);
+  --green:     #16a34a;
+  --green-dim: rgba(22,163,74,0.08);
+  --amber:     #b45309;
+  --text:      #0d0d0d;
+  --text2:     #2a3040;
+  --muted:     #4b5563;
+  --muted2:    #8898aa;
+  --card:      #ffffff;
+  --card2:     #f6f7f9;
+  --ink:       #0f1117;
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom cursor — universally visible on any background */
+.cursor {
+  width: 12px; height: 12px;
+  background: #ffffff;
+  border-radius: 50%;
+  position: fixed; pointer-events: none;
+  z-index: 9999; transform: translate(-50%, -50%);
+  transition: width 0.18s ease, height 0.18s ease;
+  mix-blend-mode: difference;
+}
+
+.cursor-ring {
+  width: 38px; height: 38px;
+  border: 2px solid rgba(255,255,255,0.85);
+  border-radius: 50%; position: fixed;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: width 0.22s ease, height 0.22s ease;
+  mix-blend-mode: difference;
+}
+
+/* Subtle dot grid background */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none; z-index: 0;
+}
+
+/* ═══════════════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 500; height: 68px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px;
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid var(--border);
+  transition: all 0.3s;
+}
+
+nav.scrolled {
+  box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+}
+
+.nav-logo {
+  font-size: 17px; font-weight: 800;
+  letter-spacing: 0.01em; cursor: pointer;
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none; color: var(--text);
+}
+
+.nav-logo-icon {
+  width: 30px; height: 30px;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+
+.nav-logo span { color: var(--muted); }
+
+.nav-center {
+  display: flex; align-items: center; gap: 2px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 40px; padding: 4px;
+}
+
+.nav-center a {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none; cursor: pointer;
+  padding: 8px 18px; border-radius: 36px;
+  transition: color 0.2s, background 0.2s;
+  border: none; background: none;
+}
+
+.nav-center a:hover { color: var(--text); background: rgba(0,0,0,0.04); }
+.nav-center a.active { color: var(--ink); background: #ffffff; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
+.nav-right { display: flex; align-items: center; gap: 12px; }
+
+.nav-contact-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  background: transparent; color: var(--muted);
+  border: 1px solid var(--border2); padding: 9px 18px; border-radius: 4px;
+  cursor: pointer; transition: color 0.2s, border-color 0.2s;
+}
+
+.nav-contact-btn:hover { color: var(--text); border-color: var(--ink); }
+
+.nav-cta-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  background: var(--ink); color: #ffffff;
+  border: none; padding: 10px 20px; border-radius: 4px;
+  cursor: pointer; transition: opacity 0.2s, transform 0.2s;
+  font-weight: 500;
+}
+
+.nav-cta-btn:hover { opacity: 0.82; transform: translateY(-1px); }
+
+/* ═══════════════════════════════════════════════════════
+   PAGE SYSTEM
+═══════════════════════════════════════════════════════ */
+.page { display: none; padding-top: 68px; min-height: 100vh; position: relative; z-index: 2; }
+/* page.active handled by override block below */
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   HOME — HERO
+═══════════════════════════════════════════════════════ */
+.hero {
+  min-height: calc(100vh - 68px);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 100px 48px 80px;
+  max-width: 1200px; margin: 0 auto; position: relative;
+}
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 32px; width: fit-content;
+  animation: slideIn 0.7s 0.1s ease both;
+}
+
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: ''; width: 24px; height: 1px; background: var(--muted2);
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.hero-headline {
+  font-size: clamp(56px, 9vw, 110px);
+  font-weight: 800; line-height: 0.92;
+  letter-spacing: -0.04em; margin-bottom: 36px;
+  animation: heroFade 0.8s 0.2s ease both;
+}
+
+@keyframes heroFade {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-headline .word1 { display: block; color: var(--ink); }
+.hero-headline .word2 { display: block; color: var(--muted); }
+.hero-headline .word3 {
+  display: block;
+  -webkit-text-stroke: 1.5px rgba(0,0,0,0.18);
+  color: transparent;
+}
+
+.hero-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px; line-height: 1.9; color: var(--muted);
+  max-width: 480px; margin-bottom: 48px;
+  animation: heroFade 0.8s 0.35s ease both;
+}
+
+.hero-actions {
+  display: flex; gap: 16px; align-items: center;
+  animation: heroFade 0.8s 0.5s ease both;
+}
+
+.btn-primary {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  background: var(--ink); color: #ffffff;
+  border: none; padding: 16px 32px; border-radius: 3px;
+  cursor: pointer; transition: all 0.25s;
+  font-weight: 500; text-decoration: none; display: inline-block;
+  position: relative; overflow: hidden;
+}
+
+.btn-primary:hover { opacity: 0.82; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
+
+.btn-outline {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  background: transparent; color: var(--text2);
+  border: 1.5px solid var(--border2); padding: 16px 32px; border-radius: 3px;
+  cursor: pointer; transition: all 0.25s; text-decoration: none; display: inline-block;
+}
+
+.btn-outline:hover { color: var(--ink); border-color: var(--ink); background: var(--accent-dim); }
+
+/* Hero floating cards */
+.hero-float {
+  position: absolute; right: 48px; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 14px;
+  animation: heroFade 0.8s 0.6s ease both;
+}
+
+.float-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 10px; padding: 18px 22px;
+  min-width: 210px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.float-card:hover { transform: translateX(-4px); box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+
+.float-card-label {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted2); margin-bottom: 6px;
+}
+
+.float-card-value { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; color: var(--ink); }
+.float-card-value.green { color: var(--green); }
+.float-card-value.amber { color: var(--amber); }
+
+/* ═══════════════════════════════════════════════════════
+   MARQUEE
+═══════════════════════════════════════════════════════ */
+.marquee-strip {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  padding: 16px 0; overflow: hidden; position: relative; z-index: 2;
+}
+
+.marquee-track {
+  display: flex; animation: marquee 30s linear infinite; width: max-content;
+}
+
+.marquee-item {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--muted); padding: 0 44px;
+  display: flex; align-items: center; gap: 12px; white-space: nowrap;
+}
+
+.marquee-item span { color: var(--muted2); }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   SECTIONS COMMON
+═══════════════════════════════════════════════════════ */
+.section { padding: 120px 48px; max-width: 1200px; margin: 0 auto; }
+
+.section-kicker {
+  display: flex; align-items: center; gap: 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 20px;
+}
+
+.section-kicker::before { content: ''; width: 20px; height: 1px; background: var(--muted2); }
+
+.section-title {
+  font-size: clamp(32px, 4.5vw, 52px);
+  font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; color: var(--ink);
+}
+
+.section-title span { color: var(--muted); }
+
+.section-body {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px; line-height: 1.9; color: var(--muted);
+}
+
+/* ═══════════════════════════════════════════════════════
+   HOME — PRODUCTS
+═══════════════════════════════════════════════════════ */
+.product-showcase { padding: 100px 48px; max-width: 1200px; margin: 0 auto; }
+
+.product-big-card {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 20px; padding: 60px;
+  display: grid; grid-template-columns: 1.1fr 1fr;
+  gap: 72px; align-items: center;
+  position: relative; overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+.product-big-card:hover {
+  border-color: var(--border2);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.09);
+}
+
+.product-big-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--ink);
+}
+
+.product-kicker { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+
+.product-num {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.15em; color: var(--muted);
+}
+
+.live-badge {
+  display: flex; align-items: center; gap: 6px;
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--green); background: var(--green-dim);
+  border: 1px solid rgba(22,163,74,0.2);
+  padding: 4px 12px; border-radius: 20px;
+}
+
+.live-badge::before {
+  content: ''; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--green); animation: blink 2s infinite;
+}
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.product-big-card h3 {
+  font-size: 52px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 14px; line-height: 1;
+}
+
+.product-big-card .product-sub {
+  font-family: 'DM Mono', monospace; font-size: 13px; color: var(--muted); line-height: 1.8; margin-bottom: 28px;
+}
+
+.feature-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+
+.feature-pill {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  padding: 6px 14px; border-radius: 20px;
+  border: 1px solid var(--border); color: var(--text2);
+  background: #ffffff; transition: all 0.2s;
+}
+
+.feature-pill:hover { border-color: var(--ink); color: var(--ink); background: var(--accent-dim); }
+
+/* Terminal */
+.terminal-wrap {
+  background: #111111;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+.terminal-top {
+  background: #1c1c1c; border-bottom: 1px solid #2a2a2a;
+  padding: 12px 16px; display: flex; align-items: center; gap: 8px;
+}
+
+.t-btn { width: 11px; height: 11px; border-radius: 50%; }
+
+.terminal-top span {
+  font-family: 'DM Mono', monospace; font-size: 11px; color: #555; margin-left: 6px;
+}
+
+.terminal-body { padding: 28px; font-family: 'DM Mono', monospace; font-size: 12px; line-height: 2.1; }
+
+.t-c  { color: #444; }
+.t-p  { color: #f0a050; }
+.t-cmd{ color: #cccccc; }
+.t-ok { color: #4ec94e; }
+.t-info{ color: #50c8f0; }
+.t-warn{ color: #f0a050; }
+.t-blink{ animation: blink 1.2s step-end infinite; color: #ccc; }
+
+/* Coming soon */
+.coming-card {
+  margin-top: 20px;
+  border: 1.5px dashed var(--border2);
+  border-radius: 16px; padding: 44px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--surface);
+}
+
+.coming-text h4 { font-size: 22px; font-weight: 800; color: var(--muted2); margin-bottom: 8px; }
+.coming-text p { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted2); }
+.coming-num { font-size: 64px; font-weight: 800; color: var(--border2); letter-spacing: -0.05em; }
+
+/* ═══════════════════════════════════════════════════════
+   HOME — MISSION
+═══════════════════════════════════════════════════════ */
+.mission-band {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--ink);
+  padding: 120px 48px;
+  position: relative; overflow: hidden;
+}
+
+.mission-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1.2fr;
+  gap: 100px; align-items: center;
+}
+
+.mission-quote {
+  font-size: clamp(24px, 3.2vw, 36px);
+  font-weight: 800; line-height: 1.25; letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.mission-quote em { font-style: normal; color: #a0a0a0; }
+
+.mission-body {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px; color: #b0b8c8; line-height: 1.9; margin-bottom: 36px;
+}
+
+.mission-body p + p { margin-top: 16px; }
+
+.principle-row { display: flex; flex-direction: column; gap: 14px; }
+
+.principle-item {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 16px; border-radius: 8px;
+  border: 1px solid #2a2a2a;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.principle-item:hover { border-color: #3a3a3a; background: rgba(255,255,255,0.04); }
+
+.principle-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(255,255,255,0.07); border: 1px solid #333;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+
+.principle-text h5 { font-size: 13px; font-weight: 700; color: #f0f0f0; margin-bottom: 3px; }
+.principle-text p { font-family: 'DM Mono', monospace; font-size: 11px; color: #8898aa; line-height: 1.7; }
+
+/* ═══════════════════════════════════════════════════════
+   ABOUT PAGE
+═══════════════════════════════════════════════════════ */
+.about-hero-wrap { border-bottom: 1px solid var(--border); }
+
+.about-hero {
+  padding: 100px 48px 80px;
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: start;
+}
+
+.about-hero-left h2 {
+  font-size: clamp(44px, 6vw, 76px);
+  font-weight: 800; letter-spacing: -0.04em; line-height: 0.95;
+  margin-bottom: 24px; margin-top: 16px; color: var(--ink);
+}
+
+.about-hero-left h2 span { color: var(--muted); }
+
+.about-hero-left .about-hero-intro {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px; color: var(--muted); line-height: 1.9;
+}
+
+.about-hero-right { padding-top: 16px; display: flex; flex-direction: column; gap: 18px; }
+
+.about-hero-right p {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px; color: var(--muted); line-height: 1.9;
+}
+
+.about-highlight-box {
+  background: var(--ink);
+  border-radius: 10px; padding: 24px 28px; margin-top: 4px;
+}
+
+.about-highlight-box p {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px; color: #aaaaaa; line-height: 1.8; margin: 0;
+}
+
+.about-highlight-box p strong { color: #ffffff; font-weight: 500; }
+
+.about-quick-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px; }
+
+.about-fact {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 16px 18px; transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.about-fact:hover { border-color: var(--border2); box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+
+.about-fact-label {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted2); margin-bottom: 6px;
+}
+
+.about-fact-value { font-size: 15px; font-weight: 700; color: var(--ink); }
+.about-fact-value span { color: var(--muted); }
+
+/* Stats row */
+.stats-row {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.stat-box {
+  padding: 48px 40px; border-right: 1px solid var(--border); transition: background 0.2s;
+}
+
+.stat-box:last-child { border-right: none; }
+.stat-box:hover { background: #ffffff; }
+
+.stat-num { font-size: 40px; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); margin-bottom: 6px; }
+.stat-label { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+/* Values */
+.values-section { padding: 100px 48px; max-width: 1200px; margin: 0 auto; }
+
+.values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 56px; }
+
+.value-card {
+  background: var(--card2); border: 1px solid var(--border);
+  padding: 40px; transition: all 0.3s; position: relative; overflow: hidden;
+}
+
+.value-card::after {
+  content: attr(data-n);
+  position: absolute; bottom: -10px; right: 16px;
+  font-size: 80px; font-weight: 800;
+  color: rgba(0,0,0,0.03); pointer-events: none;
+}
+
+.value-card:hover { border-color: var(--border2); background: #ffffff; box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+.value-card:first-child { border-radius: 16px 0 0 16px; }
+.value-card:last-child  { border-radius: 0 16px 16px 0; }
+
+.value-icon-wrap {
+  width: 48px; height: 48px;
+  background: var(--ink); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 20px;
+}
+
+.value-card h4 { font-size: 18px; font-weight: 700; margin-bottom: 12px; color: var(--ink); }
+.value-card p { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); line-height: 1.9; }
+
+/* Story & Timeline */
+.story-section {
+  background: var(--ink);
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  padding: 100px 48px;
+}
+
+.story-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1.6fr; gap: 80px;
+}
+
+.story-left { position: sticky; top: 88px; height: fit-content; }
+
+.story-left h3 { font-size: 34px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 16px; line-height: 1.1; color: #fff; }
+.story-left h3 span { color: #888; }
+.story-left p { font-family: 'DM Mono', monospace; font-size: 12px; color: #666; line-height: 1.9; margin-bottom: 20px; }
+.story-left .section-kicker { color: #666; }
+.story-left .section-kicker::before { background: #444; }
+
+/* Timeline */
+.timeline { position: relative; padding-left: 32px; }
+
+.timeline::before {
+  content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px;
+  width: 1px; background: linear-gradient(to bottom, #ffffff, #333, transparent);
+}
+
+.tl-item { position: relative; margin-bottom: 44px; padding-top: 4px; }
+
+.tl-item::before {
+  content: ''; position: absolute; left: -28px; top: 8px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #222; border: 2px solid #333; transition: border-color 0.3s;
+}
+
+.tl-item.active::before { border-color: #fff; background: #fff; }
+
+.tl-date { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #6b7fa0; margin-bottom: 8px; }
+.tl-title { font-size: 17px; font-weight: 700; color: #ffffff; margin-bottom: 8px; }
+.tl-body { font-family: 'DM Mono', monospace; font-size: 12px; color: #8898b8; line-height: 1.8; }
+
+/* Philosophy */
+.philosophy-section { padding: 100px 48px; max-width: 1200px; margin: 0 auto; }
+
+.philosophy-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 56px; }
+
+.phil-card {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 36px; transition: all 0.3s;
+  position: relative; overflow: hidden;
+}
+
+.phil-card::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 3px; bottom: 0;
+  background: var(--ink); opacity: 0; transition: opacity 0.3s;
+}
+
+.phil-card:hover { border-color: var(--border2); box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+.phil-card:hover::before { opacity: 1; }
+
+.phil-card h4 { font-size: 17px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; color: var(--ink); }
+.phil-card h4 span { font-size: 20px; }
+.phil-card p { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); line-height: 1.9; }
+
+/* Tech band */
+.tech-band {
+  background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  padding: 80px 48px;
+}
+
+.tech-inner { max-width: 1200px; margin: 0 auto; }
+
+.tech-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 40px; }
+
+.tech-tag {
+  font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.06em;
+  padding: 9px 18px; border-radius: 3px;
+  border: 1px solid var(--border2); color: var(--text2);
+  background: #ffffff; transition: all 0.2s; cursor: default;
+}
+
+.tech-tag:hover { border-color: var(--ink); color: var(--ink); background: var(--accent-dim); }
+
+/* ═══════════════════════════════════════════════════════
+   DOKSHIELD PAGE
+═══════════════════════════════════════════════════════ */
+.dok-hero { padding: 100px 48px 80px; max-width: 1200px; margin: 0 auto; position: relative; }
+
+.dok-hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+
+.dok-logo {
+  width: 80px; height: 80px; border: 2px solid var(--ink); border-radius: 16px;
+  display: flex; align-items: center; justify-content: center; font-size: 40px;
+  margin-bottom: 28px; background: var(--ink);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+  animation: logoPulse 4s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+  0%,100% { box-shadow: 0 8px 32px rgba(37,99,235,0.20); }
+  50%      { box-shadow: 0 16px 56px rgba(37,99,235,0.36); }
+}
+
+.dok-product-of {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.dok-product-of::before { content: '←'; color: var(--ink); }
+
+.dok-hero h2 { font-size: clamp(48px, 7vw, 76px); font-weight: 800; letter-spacing: -0.04em; line-height: 0.9; margin-bottom: 18px; color: var(--ink); }
+.dok-hero h2 span { color: var(--muted); }
+.dok-hero .tagline { font-family: 'DM Mono', monospace; font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 32px; }
+
+/* Features */
+.features-section { padding: 0 48px 100px; max-width: 1200px; margin: 0 auto; }
+.features-header { margin-bottom: 48px; }
+
+.features-big-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+.feat-card {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 32px; transition: all 0.3s;
+}
+
+.feat-card:hover { border-color: var(--border2); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); background: #fff; }
+
+/* ═══════════════════════════════════════════════════════
+   FEAT ICON — updated for SVG
+═══════════════════════════════════════════════════════ */
+.feat-icon {
+  width: 48px; height: 48px; background: var(--ink); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 18px; flex-shrink: 0;
+}
+.feat-icon svg { color: #ffffff; stroke: #ffffff; }
+
+/* ═══════════════════════════════════════════════════════
+   COMPLIANCE BANNER
+═══════════════════════════════════════════════════════ */
+.compliance-banner {
+  margin-top: 48px; margin-bottom: 4px;
+}
+.compliance-banner-inner {
+  background: linear-gradient(135deg, #0a0f1e 0%, #0d1525 50%, #0a1020 100%);
+  border: 1px solid rgba(37,99,235,0.3);
+  border-radius: 20px; padding: 44px 48px;
+  position: relative; overflow: hidden;
+}
+.compliance-banner-inner::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, #2563eb, #60a5fa, #2563eb, transparent);
+}
+.compliance-banner-inner::after {
+  content: '';
+  position: absolute; top: -80px; right: -80px;
+  width: 300px; height: 300px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(37,99,235,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.compliance-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: #60a5fa; margin-bottom: 16px;
+}
+.compliance-headline {
+  font-size: clamp(20px, 2.4vw, 28px);
+  font-weight: 800; letter-spacing: -0.02em; line-height: 1.25;
+  color: #ffffff; margin-bottom: 36px; max-width: 720px;
+}
+.compliance-frameworks {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 16px; margin-bottom: 32px;
+}
+.compliance-framework {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 28px 22px;
+  transition: border-color 0.3s, background 0.3s, box-shadow 0.3s, transform 0.3s;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+.compliance-framework:hover { transform: translateY(-3px); }
+
+.compliance-framework.cf-frame-soc2:hover {
+  border-color: rgba(37,99,235,0.6);
+  background: rgba(37,99,235,0.08);
+  box-shadow: 0 0 28px rgba(37,99,235,0.25), 0 0 60px rgba(37,99,235,0.1);
+}
+.compliance-framework.cf-frame-iso:hover {
+  border-color: rgba(16,185,129,0.6);
+  background: rgba(16,185,129,0.07);
+  box-shadow: 0 0 28px rgba(16,185,129,0.22), 0 0 60px rgba(16,185,129,0.09);
+}
+.compliance-framework.cf-frame-gdpr:hover {
+  border-color: rgba(139,92,246,0.6);
+  background: rgba(139,92,246,0.07);
+  box-shadow: 0 0 28px rgba(139,92,246,0.22), 0 0 60px rgba(139,92,246,0.09);
+}
+.compliance-framework.cf-frame-apa:hover {
+  border-color: rgba(245,158,11,0.6);
+  background: rgba(245,158,11,0.07);
+  box-shadow: 0 0 28px rgba(245,158,11,0.22), 0 0 60px rgba(245,158,11,0.09);
+}
+
+/* ── Toggle / expanded state ── */
+.compliance-framework { cursor: pointer; }
+
+.compliance-framework.cf-active.cf-frame-soc2 {
+  border-color: rgba(37,99,235,0.7);
+  background: rgba(37,99,235,0.11);
+  box-shadow: 0 0 36px rgba(37,99,235,0.3), 0 0 80px rgba(37,99,235,0.12);
+  transform: translateY(-3px);
+}
+.compliance-framework.cf-active.cf-frame-iso {
+  border-color: rgba(16,185,129,0.7);
+  background: rgba(16,185,129,0.10);
+  box-shadow: 0 0 36px rgba(16,185,129,0.28), 0 0 80px rgba(16,185,129,0.11);
+  transform: translateY(-3px);
+}
+.compliance-framework.cf-active.cf-frame-gdpr {
+  border-color: rgba(139,92,246,0.7);
+  background: rgba(139,92,246,0.10);
+  box-shadow: 0 0 36px rgba(139,92,246,0.28), 0 0 80px rgba(139,92,246,0.11);
+  transform: translateY(-3px);
+}
+.compliance-framework.cf-active.cf-frame-apa {
+  border-color: rgba(245,158,11,0.7);
+  background: rgba(245,158,11,0.10);
+  box-shadow: 0 0 36px rgba(245,158,11,0.28), 0 0 80px rgba(245,158,11,0.11);
+  transform: translateY(-3px);
+}
+
+.cf-desc-panel {
+  font-family: 'DM Mono', monospace;
+  font-size: 12.5px; line-height: 1.85; text-align: left;
+  overflow: hidden; max-height: 0;
+  transition: max-height 0.42s cubic-bezier(0.22,1,0.36,1),
+              opacity 0.3s ease;
+  opacity: 0;
+}
+.cf-desc-panel.cf-panel-open {
+  max-height: 400px; opacity: 1;
+}
+.cf-panel-what {
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  font-weight: 700; margin-bottom: 9px; display: block;
+}
+.cf-panel-body { color: #a0b4cc; }
+.cf-panel-impl {
+  margin-top: 14px; padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+}
+.cf-panel-impl-label {
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  font-weight: 700; margin-bottom: 7px; display: block; opacity: 0.7;
+}
+.cf-panel-impl-body { color: #7a9abf; }
+
+.cf-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 7px 16px; border-radius: 6px; display: inline-block;
+  margin-bottom: 16px;
+}
+.cf-soc2  { background: rgba(37,99,235,0.18);  color: #93c5fd; border: 1px solid rgba(37,99,235,0.35); }
+.cf-iso   { background: rgba(16,185,129,0.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); }
+.cf-gdpr  { background: rgba(139,92,246,0.15); color: #c4b5fd; border: 1px solid rgba(139,92,246,0.3); }
+.cf-apa   { background: rgba(245,158,11,0.15); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
+.cf-desc {
+  font-family: 'DM Mono', monospace;
+  font-size: 13.5px; color: #8898b8; line-height: 1.85; text-align: center;
+}
+.compliance-footer-row {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 14px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 28px;
+}
+.compliance-footer-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-family: 'DM Mono', monospace; font-size: 13.5px; color: #a0b4cc;
+  line-height: 1.65; font-weight: 500;
+}
+.compliance-footer-item svg { color: #60a5fa; flex-shrink: 0; margin-top: 2px; width: 15px; height: 15px; }
+@media (max-width: 900px) {
+  .compliance-frameworks { grid-template-columns: 1fr 1fr; }
+  .compliance-footer-row { grid-template-columns: 1fr; }
+  .compliance-banner-inner { padding: 28px 24px; }
+}
+
+.feat-card h4 { font-size: 16px; font-weight: 700; margin-bottom: 10px; color: var(--ink); }
+.feat-card p { font-family: 'DM Mono', monospace; font-size: 12px; color: #3a4455; line-height: 1.85; }
+
+/* How it works */
+.how-section { background: var(--ink); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 100px 48px; }
+.how-inner { max-width: 1200px; margin: 0 auto; }
+.how-section .section-kicker { color: #555; }
+.how-section .section-kicker::before { background: #444; }
+.how-section .section-title { color: #fff; }
+.how-section .section-title span { color: #888; }
+
+.steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 56px; position: relative; }
+
+.steps-grid::before {
+  content: ''; position: absolute; top: 36px; left: 13%;
+  width: 74%; height: 1px;
+  background: linear-gradient(90deg, #ffffff 0%, #333 40%); z-index: 0;
+}
+
+.step-card {
+  background: #151515; border: 1px solid #222;
+  border-radius: 12px; padding: 28px 24px; text-align: center;
+  position: relative; z-index: 1; transition: all 0.3s;
+}
+
+.step-card:hover { border-color: #444; transform: translateY(-3px); }
+
+.step-num {
+  width: 56px; height: 56px; border-radius: 50%; border: 2px solid #2a2a2a;
+  background: #111; display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace; font-size: 14px; color: #6b7fa0;
+  margin: 0 auto 20px;
+}
+
+.step-card:first-child .step-num { border-color: #2563eb; color: #7aa8f8; box-shadow: 0 0 18px rgba(37,99,235,0.18); }
+.step-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 10px; color: #f0f4ff; }
+.step-card p { font-family: 'DM Mono', monospace; font-size: 11px; color: #8898b8; line-height: 1.8; }
+
+/* Pricing */
+.pricing-section { padding: 100px 48px; max-width: 1200px; margin: 0 auto; }
+
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 56px; }
+
+.price-card {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 16px; padding: 40px; transition: all 0.3s; position: relative; overflow: hidden;
+}
+
+.price-card.featured {
+  background: var(--ink); border-color: var(--ink);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+}
+
+.price-card.featured::before {
+  content: 'MOST POPULAR';
+  position: absolute; top: 16px; right: -28px;
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  letter-spacing: 0.1em; background: #ffffff; color: #111;
+  padding: 5px 44px; transform: rotate(45deg);
+}
+
+.price-card:hover:not(.featured) { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); border-color: var(--border2); }
+
+.price-plan { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.price-card.featured .price-plan { color: #666; }
+
+.price-amount { font-size: 40px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4px; color: var(--ink); }
+.price-card.featured .price-amount { color: #fff; }
+.price-amount span { font-size: 16px; color: var(--muted); font-weight: 400; }
+.price-card.featured .price-amount span { color: #555; }
+
+.price-desc { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); margin-bottom: 24px; }
+.price-card.featured .price-desc { color: #666; }
+
+.price-divider { height: 1px; background: var(--border); margin-bottom: 20px; }
+.price-card.featured .price-divider { background: #2a2a2a; }
+
+.price-feature { display: flex; align-items: center; gap: 10px; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text2); margin-bottom: 12px; }
+.price-feature::before { content: '✓'; color: var(--green); font-size: 13px; }
+.price-card.featured .price-feature { color: #999; }
+.price-card.featured .price-feature::before { color: #5adb5a; }
+
+.price-note { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted2); text-align: center; margin-top: 32px; }
+
+/* ═══════════════════════════════════════════════════════
+   CONTACT PAGE
+═══════════════════════════════════════════════════════ */
+.contact-hero {
+  padding: 100px 48px 80px; max-width: 1200px; margin: 0 auto;
+  border-bottom: 1px solid var(--border);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+}
+
+.contact-hero h2 { font-size: clamp(44px, 6vw, 72px); font-weight: 800; letter-spacing: -0.04em; line-height: 0.95; margin-bottom: 24px; margin-top: 16px; color: var(--ink); }
+.contact-hero h2 span { color: var(--muted); }
+.contact-hero p { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--muted); line-height: 1.9; }
+
+.contact-details-card {
+  background: var(--ink); border-radius: 16px; padding: 40px;
+  display: flex; flex-direction: column; gap: 0;
+}
+
+.contact-detail-item {
+  display: flex; gap: 16px; align-items: flex-start;
+  padding: 18px 0; border-bottom: 1px solid #1e1e1e;
+}
+
+.contact-detail-item:last-child { border-bottom: none; }
+
+.contact-detail-icon {
+  width: 40px; height: 40px; border-radius: 8px;
+  background: rgba(255,255,255,0.06); border: 1px solid #2a2a2a;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+
+.contact-detail-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #555; margin-bottom: 4px; }
+.contact-detail-value { font-size: 15px; font-weight: 600; color: #ffffff; }
+.contact-detail-value a { color: #aaaaaa; text-decoration: none; transition: color 0.2s; }
+.contact-detail-value a:hover { color: #ffffff; }
+
+/* Contact form */
+.contact-form-section { padding: 80px 48px; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.4fr 1fr; gap: 80px; }
+
+.form-title { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; color: var(--ink); }
+.form-sub { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); margin-bottom: 36px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+.form-group.full { grid-column: 1 / -1; }
+
+.form-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+
+.form-input, .form-select, .form-textarea {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 6px; padding: 13px 15px;
+  font-family: 'DM Mono', monospace; font-size: 13px;
+  color: var(--text); outline: none; transition: border-color 0.2s, box-shadow 0.2s; width: 100%;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(0,0,0,0.07); }
+.form-input::placeholder, .form-textarea::placeholder { color: var(--muted2); }
+.form-select { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+.form-textarea { min-height: 140px; resize: vertical; line-height: 1.7; }
+
+.form-submit { margin-top: 22px; width: 100%; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; background: var(--ink); color: #fff; border: none; padding: 18px; border-radius: 6px; cursor: pointer; transition: all 0.25s; font-weight: 500; }
+.form-submit:hover { opacity: 0.85; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
+.form-note { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted2); text-align: center; margin-top: 12px; }
+
+/* FAQ */
+.faq-title { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 28px; color: var(--ink); }
+
+.faq-item { border-bottom: 1px solid var(--border); padding: 20px 0; cursor: pointer; }
+.faq-item:first-of-type { border-top: 1px solid var(--border); }
+
+.faq-q { font-size: 14px; font-weight: 600; color: var(--ink); display: flex; justify-content: space-between; align-items: center; gap: 12px; transition: color 0.2s; }
+.faq-q:hover { color: var(--muted); }
+.faq-arrow { color: var(--muted2); font-size: 20px; flex-shrink: 0; transition: transform 0.3s; font-weight: 300; }
+.faq-a { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); line-height: 1.8; max-height: 0; overflow: hidden; transition: max-height 0.35s ease, margin-top 0.2s; }
+.faq-item.open .faq-a { max-height: 200px; margin-top: 12px; }
+.faq-item.open .faq-arrow { transform: rotate(45deg); color: var(--ink); }
+
+/* Social */
+.social-band { background: var(--surface); border-top: 1px solid var(--border); padding: 60px 48px; }
+.social-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+.social-text h4 { font-size: 22px; font-weight: 800; margin-bottom: 4px; color: var(--ink); }
+.social-text p { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); }
+.social-links { display: flex; gap: 12px; }
+
+.social-link {
+  width: 48px; height: 48px; border-radius: 10px;
+  background: #ffffff; border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; cursor: pointer; text-decoration: none;
+  transition: all 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.social-link:hover { border-color: var(--ink); transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
+
+/* ═══════════════════════════════════════════════════════
+   CTA BAND (shared)
+═══════════════════════════════════════════════════════ */
+.cta-band { padding: 120px 48px; text-align: center; background: var(--surface); border-top: 1px solid var(--border); }
+
+.cta-band h3 { font-size: clamp(32px, 5vw, 52px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 16px; color: var(--ink); }
+.cta-band h3 span { color: var(--muted); }
+.cta-band p { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--muted); margin-bottom: 40px; }
+.cta-btn-group { display: flex; gap: 16px; justify-content: center; }
+
+/* ═══════════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════════ */
+footer { border-top: 1px solid var(--border); background: var(--ink); padding: 60px 48px 40px; position: relative; z-index: 2; }
+
+.footer-top { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 60px; }
+
+.footer-brand-col .footer-logo { font-size: 18px; font-weight: 800; letter-spacing: -0.01em; display: flex; align-items: center; gap: 10px; margin-bottom: 16px; color: #fff; }
+
+.footer-brand-col .footer-logo-icon { width: 28px; height: 28px; border: 2px solid #fff; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+
+.footer-logo span { color: #666; }
+.footer-brand-col p { font-family: 'DM Mono', monospace; font-size: 12px; color: #666; line-height: 1.8; max-width: 240px; }
+
+.footer-col h5 { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #444; margin-bottom: 20px; }
+
+.footer-col a { display: block; font-family: 'DM Mono', monospace; font-size: 12px; color: #888; text-decoration: none; cursor: pointer; margin-bottom: 12px; transition: color 0.2s; }
+.footer-col a:hover { color: #ffffff; }
+
+.footer-bottom { max-width: 1200px; margin: 0 auto; border-top: 1px solid #1a1a1a; padding-top: 28px; display: flex; align-items: center; justify-content: space-between; }
+.footer-bottom p { font-family: 'DM Mono', monospace; font-size: 11px; color: #444; }
+.footer-bottom a { font-family: 'DM Mono', monospace; font-size: 11px; color: #444; text-decoration: none; transition: color 0.2s; }
+.footer-bottom a:hover { color: #888; }
+
+/* ═══════════════════════════════════════════════════════
+   REVEALS & DELAYS
+═══════════════════════════════════════════════════════ */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.delay-1 { transition-delay: 0.12s; }
+.delay-2 { transition-delay: 0.24s; }
+.delay-3 { transition-delay: 0.36s; }
+.delay-4 { transition-delay: 0.48s; }
+
+/* ═══════════════════════════════════════════════════════
+   BLUE ACCENT OVERRIDES (applied after base styles)
+═══════════════════════════════════════════════════════ */
+
+/* Buttons — blue primary */
+.btn-primary {
+  background: #2563eb !important; color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(37,99,235,0.25) !important;
+  border-radius: 5px !important;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.18s !important;
+}
+.btn-primary:hover {
+  background: #1d4ed8 !important;
+  box-shadow: 0 8px 28px rgba(37,99,235,0.38) !important;
+  transform: translateY(-2px) !important; opacity: 1 !important;
+}
+
+/* Nav CTA — blue */
+.nav-cta-btn {
+  background: #2563eb !important; color: #fff !important;
+  box-shadow: 0 2px 10px rgba(37,99,235,0.28) !important;
+}
+.nav-cta-btn:hover { background: #1d4ed8 !important; opacity: 1 !important; transform: none; }
+
+/* Section kicker — blue bar + blue text */
+.section-kicker { color: #2563eb !important; gap: 10px !important; margin-bottom: 16px !important; }
+.section-kicker::before { width: 20px !important; height: 2px !important; background: linear-gradient(90deg,#2563eb,#93c5fd) !important; }
+
+/* Dark-section kicker overrides */
+.story-left .section-kicker { color: #4a7cdc !important; }
+.story-left .section-kicker::before { background: #2a50a0 !important; }
+.how-section .section-kicker { color: #4a7cdc !important; }
+.how-section .section-kicker::before { background: #2a50a0 !important; }
+
+/* story-left body text — readable on dark */
+.story-left p { color: #8898b8 !important; }
+
+/* Feat-card hover — blue accent bottom line */
+.feat-card { position: relative; overflow: hidden; }
+.feat-card::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, #2563eb, #60a5fa);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+}
+.feat-card:hover::after { transform: scaleX(1); }
+.feat-card:hover { border-color: #bdd0f8 !important; box-shadow: 0 8px 32px rgba(37,99,235,0.12) !important; transform: translateY(-4px) !important; }
+
+/* Phil-card left accent bar — blue */
+.phil-card::before { background: linear-gradient(to bottom, #2563eb, #60a5fa) !important; }
+.phil-card:hover { border-color: #bdd0f8 !important; box-shadow: 0 4px 24px rgba(37,99,235,0.1) !important; }
+
+/* Step-card hover blue */
+.step-card:hover { border-color: #2563eb !important; box-shadow: 0 4px 24px rgba(37,99,235,0.18) !important; transform: translateY(-4px) !important; }
+.step-card:hover .step-num { border-color: #2563eb !important; color: #7aa8f8 !important; }
+
+/* Price checkmarks — blue */
+.price-feature::before { color: #2563eb !important; }
+.price-card.featured .price-feature::before { color: #93c5fd !important; }
+.price-card:hover:not(.featured) { border-color: #bdd0f8 !important; box-shadow: 0 12px 36px rgba(37,99,235,0.10) !important; }
+
+/* Stat hover — blue number */
+.stat-box:hover .stat-num { color: #2563eb; transition: color 0.2s; }
+
+/* Marquee dots */
+.marquee-item span { color: #2563eb !important; }
+
+/* Tech tag hover */
+.tech-tag:hover { border-color: #2563eb !important; color: #2563eb !important; background: rgba(37,99,235,0.06) !important; }
+
+/* Product card top border — blue */
+.product-big-card::before { background: linear-gradient(90deg, #2563eb, #60a5fa) !important; }
+
+/* Page transition */
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page.active { display: block; animation: pageFadeIn 0.42s cubic-bezier(0.22,1,0.36,1) both; }
+
+/* Logo pulse — blue glow */
+@keyframes logoPulse {
+  0%,100% { box-shadow: 0 8px 32px rgba(37,99,235,0.20); }
+  50%      { box-shadow: 0 16px 56px rgba(37,99,235,0.36); }
+}
+
+@media (max-width: 900px) {
+  nav { padding: 0 20px; }
+  .nav-center { display: none; }
+  .hero, .section, .product-showcase { padding-left: 24px; padding-right: 24px; }
+  .hero-float { display: none; }
+  .hero-headline { font-size: clamp(48px, 12vw, 80px); }
+  .product-big-card { grid-template-columns: 1fr; gap: 36px; padding: 32px; }
+  .mission-inner { grid-template-columns: 1fr; gap: 48px; }
+  .about-hero { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px 48px; }
+  .about-quick-facts { grid-template-columns: 1fr 1fr; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .stat-box:nth-child(2) { border-right: none; }
+  .values-grid { grid-template-columns: 1fr; gap: 16px; }
+  .value-card:first-child, .value-card:last-child { border-radius: 12px; }
+  .story-inner { grid-template-columns: 1fr; gap: 40px; }
+  .story-left { position: static; }
+  .philosophy-grid { grid-template-columns: 1fr; }
+  .features-big-grid { grid-template-columns: 1fr 1fr; }
+  .dok-hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  .dok-hero, .features-section, .how-section .how-inner, .pricing-section { padding-left: 24px; padding-right: 24px; }
+  .steps-grid { grid-template-columns: 1fr 1fr; }
+  .steps-grid::before { display: none; }
+  .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+  .contact-hero, .contact-form-section { grid-template-columns: 1fr; gap: 40px; padding-left: 24px; padding-right: 24px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .social-inner { flex-direction: column; gap: 24px; text-align: center; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+  .story-section, .values-section, .philosophy-section, .tech-band { padding-left: 24px; padding-right: 24px; }
+  .mission-band, .cta-band, .social-band, .how-section { padding-left: 24px; padding-right: 24px; }
+}
+/* ═══════════════════════════════════════════════════════
+   EARLY ACCESS FORM PAGE
+═══════════════════════════════════════════════════════ */
+.ea-hero {
+  padding: 80px 48px 60px; max-width: 1200px; margin: 0 auto;
+  border-bottom: 1px solid var(--border);
+}
+.ea-hero-kicker {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 18px;
+}
+.ea-hero h2 {
+  font-size: clamp(38px, 5.5vw, 64px); font-weight: 800;
+  letter-spacing: -0.04em; line-height: 0.96;
+  margin-bottom: 20px; color: var(--ink);
+}
+.ea-hero h2 span { color: var(--muted); }
+.ea-hero p {
+  font-family: 'DM Mono', monospace; font-size: 13px;
+  color: var(--muted); line-height: 1.9; max-width: 560px;
+}
+.ea-form-wrap {
+  max-width: 1200px; margin: 0 auto;
+  padding: 64px 48px 100px;
+  display: grid; grid-template-columns: 1.55fr 1fr; gap: 80px;
+}
+.ea-form-card {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 20px; padding: 48px;
+  position: relative; overflow: hidden;
+}
+.ea-form-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, #2563eb, #60a5fa);
+}
+.ea-form-title { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 6px; color: var(--ink); }
+.ea-form-sub { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); margin-bottom: 36px; line-height: 1.7; }
+.ea-section-label {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent); margin: 28px 0 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.ea-section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.ea-section-label:first-of-type { margin-top: 0; }
+.ea-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.ea-group { display: flex; flex-direction: column; gap: 6px; }
+.ea-group.full { grid-column: 1 / -1; }
+.ea-label {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+}
+.ea-required { color: #e24b4a; margin-left: 3px; }
+.ea-input, .ea-select, .ea-textarea {
+  background: #ffffff; border: 1.5px solid var(--border);
+  border-radius: 6px; padding: 12px 14px;
+  font-family: 'DM Mono', monospace; font-size: 13px;
+  color: var(--text); outline: none; width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.ea-input:focus, .ea-select:focus, .ea-textarea:focus {
+  border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+.ea-input::placeholder, .ea-textarea::placeholder { color: var(--muted2); }
+.ea-select {
+  appearance: none; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+  background-color: #ffffff;
+}
+.ea-textarea { min-height: 110px; resize: vertical; line-height: 1.7; }
+.ea-modules-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 8px; margin-top: 4px;
+}
+.ea-module-check {
+  display: flex; align-items: center; gap: 9px;
+  font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text2);
+  padding: 9px 12px; border-radius: 6px; border: 1px solid var(--border);
+  background: #ffffff; cursor: pointer; transition: all 0.18s;
+  user-select: none;
+}
+.ea-module-check input { accent-color: #2563eb; width: 14px; height: 14px; cursor: pointer; }
+.ea-module-check:has(input:checked) {
+  border-color: #2563eb; background: rgba(37,99,235,0.05); color: #1e40af;
+}
+.ea-submit {
+  margin-top: 32px; width: 100%;
+  font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+  background: #2563eb; color: #fff; border: none; padding: 18px;
+  border-radius: 6px; cursor: pointer; font-weight: 500;
+  transition: all 0.25s; box-shadow: 0 4px 16px rgba(37,99,235,0.3);
+}
+.ea-submit:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(37,99,235,0.4); }
+.ea-submit:disabled { opacity: 0.65; transform: none; cursor: default; }
+.ea-note {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  color: var(--muted2); text-align: center; margin-top: 14px; line-height: 1.7;
+}
+/* Sidebar */
+.ea-sidebar { display: flex; flex-direction: column; gap: 20px; padding-top: 8px; }
+.ea-info-card {
+  background: var(--ink); border-radius: 14px; padding: 28px;
+}
+.ea-info-card-title {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: #4a6da0; margin-bottom: 18px;
+}
+.ea-info-item {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 12px 0; border-bottom: 1px solid #1a1a1a;
+}
+.ea-info-item:last-child { border-bottom: none; padding-bottom: 0; }
+.ea-info-icon {
+  width: 34px; height: 34px; border-radius: 8px; flex-shrink: 0;
+  background: rgba(255,255,255,0.05); border: 1px solid #2a2a2a;
+  display: flex; align-items: center; justify-content: center;
+}
+.ea-info-icon svg { color: #60a5fa; }
+.ea-info-label {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase; color: #4a5568; margin-bottom: 3px;
+}
+.ea-info-val { font-size: 13px; font-weight: 600; color: #d0d8e8; }
+.ea-promise-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 24px;
+}
+.ea-promise-card h5 { font-size: 14px; font-weight: 700; margin-bottom: 14px; color: var(--ink); }
+.ea-promise-item {
+  display: flex; gap: 10px; align-items: flex-start;
+  font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted);
+  margin-bottom: 10px; line-height: 1.6;
+}
+.ea-promise-item::before {
+  content: ''; width: 16px; height: 16px; border-radius: 50%;
+  background: rgba(37,99,235,0.1); border: 1.5px solid #2563eb;
+  flex-shrink: 0; margin-top: 1px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8L6.5 11L12.5 5' stroke='%232563eb' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+}
+@media (max-width: 900px) {
+  .ea-form-wrap { grid-template-columns: 1fr; gap: 40px; padding: 40px 24px 60px; }
+  .ea-hero { padding: 60px 24px 40px; }
+  .ea-grid { grid-template-columns: 1fr; }
+  .ea-modules-grid { grid-template-columns: 1fr; }
+  .ea-form-card { padding: 28px 22px; }
+}
+
+/* EA page animations — trigger on page.active, not IntersectionObserver */
+@keyframes eaFadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page.active .ea-animate {
+  animation: eaFadeUp 0.6s cubic-bezier(0.22,1,0.36,1) both;
+}
+.page.active .ea-delay-1 { animation-delay: 0.1s; }
+.page.active .ea-delay-2 { animation-delay: 0.2s; }
+.page.active .ea-delay-3 { animation-delay: 0.3s; }
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ═══ NAV ═══ -->
+<nav id="navbar">
+  <a class="nav-logo" onclick="showPage('home')">
+    <div class="nav-logo-icon">⬡</div>
+    Obnet
+  </a>
+  <div class="nav-center">
+    <a id="nav-home" class="active" onclick="showPage('home')">Home</a>
+    <a id="nav-about" onclick="showPage('about')">About</a>
+    <a id="nav-products" onclick="showPage('products')">Products</a>
+    <a id="nav-dokshield" onclick="showPage('dokshield')">DokShield</a>
+    <a id="nav-earlyaccess" onclick="showPage('earlyaccess')">Early Access</a>
+    <a id="nav-contact" onclick="showPage('contact')">Contact</a>
+  </div>
+  <div class="nav-right">
+    <button class="nav-contact-btn" onclick="showPage('contact')">Get in Touch</button>
+    <button class="nav-cta-btn" onclick="showPage('dokshield')" style="display:flex;align-items:center;gap:8px;"><img src="data:image/png;base64," alt="DokShield" style="height:20px;vertical-align:middle;filter:brightness(1.1);"> <span style="font-size:13px;">→</span></button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════
+     HOME PAGE
+══════════════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <div class="hero">
+    <div class="hero-eyebrow">Est. 2024 — Independent Software</div>
+    <h1 class="hero-headline">
+      <span class="word1">Precision</span>
+      <span class="word2">Software.</span>
+      <span class="word3">Built.</span>
+    </h1>
+    <p class="hero-sub">Obnet builds focused, reliable software for industries where security and compliance are not optional. No bloat. No shortcuts. No compromise.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="showPage('dokshield')">Explore DokShield</button>
+      <button class="btn-outline" onclick="showPage('about')">Our Story →</button>
+    </div>
+
+    <!-- Floating cards -->
+    <div class="hero-float">
+      <div class="float-card">
+        <div class="float-card-label">Status</div>
+        <div class="float-card-value green">Actively Building</div>
+      </div>
+      <div class="float-card">
+        <div class="float-card-label">Founded</div>
+        <div class="float-card-value cyan">2024</div>
+      </div>
+      <div class="float-card">
+        <div class="float-card-label">First Product</div>
+        <div class="float-card-value amber">DokShield 🛡</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marquee -->
+  <div class="marquee-strip">
+    <div class="marquee-track">
+      <div class="marquee-item">Security Operations <span>✦</span></div>
+      <div class="marquee-item">18 Modules <span>✦</span></div>
+      <div class="marquee-item">Shift Activity Reports <span>✦</span></div>
+      <div class="marquee-item">Patrol Management <span>✦</span></div>
+      <div class="marquee-item">Incident Tracking <span>✦</span></div>
+      <div class="marquee-item">Visitor Control <span>✦</span></div>
+      <div class="marquee-item">Audit & Compliance <span>✦</span></div>
+      <div class="marquee-item">Multi-Tenant SaaS <span>✦</span></div>
+      <div class="marquee-item">Security Operations <span>✦</span></div>
+      <div class="marquee-item">18 Modules <span>✦</span></div>
+      <div class="marquee-item">Shift Activity Reports <span>✦</span></div>
+      <div class="marquee-item">Patrol Management <span>✦</span></div>
+      <div class="marquee-item">Incident Tracking <span>✦</span></div>
+      <div class="marquee-item">Visitor Control <span>✦</span></div>
+      <div class="marquee-item">Audit & Compliance <span>✦</span></div>
+      <div class="marquee-item">Multi-Tenant SaaS <span>✦</span></div>
+    </div>
+  </div>
+
+  <!-- Products -->
+  <div class="product-showcase">
+    <div class="section-kicker reveal">Our Products</div>
+    <div class="section-title reveal delay-1" style="margin-bottom:48px;">What We <span>Build</span></div>
+
+    <div class="product-big-card reveal">
+      <div>
+        <div class="product-kicker">
+          <span class="product-num">Product 01</span>
+          <span class="live-badge">Live</span>
+        </div>
+        <img src="data:image/png;base64," alt="DokShield" style="height:36px;display:block;margin-bottom:12px;">
+        <p class="product-sub">The complete security operations management platform for data centres. DokShield covers the full operational lifecycle across 18 deeply integrated modules — from shift activity reporting and patrol management, to incident tracking, visitor control, contractor management, and compliance auditing. One platform. Every shift. Every officer. Every data centre.</p>
+        <div class="feature-pills">
+          <span class="feature-pill">18 Operational Modules</span>
+          <span class="feature-pill">Multi-Tenant SaaS</span>
+          <span class="feature-pill">Shift Activity Reports</span>
+          <span class="feature-pill">Incident Management</span>
+          <span class="feature-pill">Patrol Tracking</span>
+          <span class="feature-pill">Visitor Control</span>
+        </div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;">
+          <button class="btn-primary" onclick="showPage('dokshield')">View DokShield →</button>
+          <button class="btn-outline" onclick="showPage('earlyaccess')">Request Early Access</button>
+        </div>
+      </div>
+      <div class="terminal-wrap">
+        <div class="terminal-top">
+          <div class="t-btn" style="background:#ff5f57"></div>
+          <div class="t-btn" style="background:#ffbd2e"></div>
+          <div class="t-btn" style="background:#28c840"></div>
+          <span>dokshield — cli v1.0</span>
+        </div>
+        <div class="terminal-body">
+          <div class="t-c"># Protect a document instantly</div>
+          <div class="t-p">~/projects</div><div class="t-cmd"> $ dokshield protect ./contract.pdf</div>
+          <div class="t-ok">✓ Encrypted (AES-256-GCM)</div>
+          <div class="t-ok">✓ Access policy applied</div>
+          <div class="t-info">→ dok://7f3a9c2b...</div>
+          <div>&nbsp;</div>
+          <div class="t-c"># Check audit log</div>
+          <div class="t-p">~/projects</div><div class="t-cmd"> $ dokshield audit --last 24h</div>
+          <div class="t-warn">⚠ 2 access events detected</div>
+          <div class="t-info">  <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1574797c767055617074783b767a78">[email&#160;protected]</a> — viewed 14:32</div>
+          <div class="t-info">  <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="60020f02201405010d4e030f0d">[email&#160;protected]</a> &nbsp;— viewed 16:01</div>
+          <div>&nbsp;</div>
+          <div class="t-p">~/projects</div><div class="t-cmd"> $ <span class="t-blink">_</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="coming-card reveal delay-1">
+      <div class="coming-text">
+        <h4>Next Product</h4>
+        <p>Something new is taking shape. Stay tuned — we'll announce when it's ready.</p>
+      </div>
+      <div class="coming-num">02</div>
+    </div>
+  </div>
+
+  <!-- Mission -->
+  <div class="mission-band">
+    <div class="mission-inner">
+      <div class="mission-quote reveal">
+        "We build software that <em>respects</em> the people who use it — and the data they trust it with."
+      </div>
+      <div class="mission-right">
+        <div class="mission-body reveal">
+          <p>At Obnet, we believe great software should be precise, reliable, and built with integrity. We don't chase trends at the expense of quality, and we don't cut corners on security.</p>
+          <p>We're an independent organization — no venture capital pressure, no growth-at-all-costs. Every product starts with a real problem and ends with a careful, considered solution.</p>
+        </div>
+        <div class="principle-row reveal delay-2">
+          <div class="principle-item">
+            <div class="principle-icon">🎯</div>
+            <div class="principle-text">
+              <h5>Precision Over Speed</h5>
+              <p>We ship when it's right, not when it's rushed.</p>
+            </div>
+          </div>
+          <div class="principle-item">
+            <div class="principle-icon">🔐</div>
+            <div class="principle-text">
+              <h5>Security by Default</h5>
+              <p>Not a feature — a foundational principle in everything we build.</p>
+            </div>
+          </div>
+          <div class="principle-item">
+            <div class="principle-icon">🌱</div>
+            <div class="principle-text">
+              <h5>Built to Last</h5>
+              <p>Software that grows with you, not software you grow out of.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-band">
+    <h3 class="reveal">Ready to get <span>started?</span></h3>
+    <p class="reveal delay-1">Join the early access list for DokShield or reach out to learn more.</p>
+    <div class="cta-btn-group reveal delay-2">
+      <button class="btn-primary" onclick="showPage('dokshield')">Explore DokShield</button>
+      <button class="btn-outline" onclick="showPage('contact')">Contact Us</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     ABOUT PAGE
+══════════════════════════════════════════════════ -->
+<div class="page" id="page-about">
+
+  <!-- HERO -->
+  <div class="about-hero-wrap">
+    <div class="about-hero">
+      <div class="about-hero-left">
+        <div class="section-kicker">About Obnet</div>
+        <h2>We Build<br>Software That<br><span>Matters.</span></h2>
+        <p class="about-hero-intro">Obnet is an independent software company founded on a simple principle — software should solve real problems, respect the people who use it, and be built to last. No shortcuts. No compromise.</p>
+        <div style="margin-top:32px;display:flex;gap:14px;flex-wrap:wrap;">
+          <button class="btn-primary" onclick="showPage('products')">Our Products →</button>
+          <button class="btn-outline" onclick="showPage('contact')">Get in Touch</button>
+        </div>
+      </div>
+      <div class="about-hero-right">
+        <p>Obnet was founded in 2024 with a clear and focused mission: to build software tools that are precise, reliable, and built with integrity. We're an independent organization — fully self-funded — which means our only obligation is to the people who use our products.</p>
+        <p>Our name, Obnet, is short for <em>Object Network</em> — a reflection of our technical philosophy that software is best understood as a suite of networked objects in continuous process loops. It's not just a name. It's how we think about every system we build.</p>
+        <p>We operate without venture capital pressure, without growth-at-all-costs mandates. Every product starts with a real problem, undergoes a careful and considered design process, and ships only when it meets our own high bar for quality.</p>
+        <div class="about-highlight-box">
+          <p><strong>Our commitment:</strong> We build for the long term. That means clean architectures, documented systems, and software that grows with its users — not software they grow out of.</p>
+        </div>
+        <div class="about-quick-facts">
+          <div class="about-fact">
+            <div class="about-fact-label">Founded</div>
+            <div class="about-fact-value">2024</div>
+          </div>
+          <div class="about-fact">
+            <div class="about-fact-label">Structure</div>
+            <div class="about-fact-value">Independent</div>
+          </div>
+          <div class="about-fact">
+            <div class="about-fact-label">First Product</div>
+            <div class="about-fact-value"><span>DokShield</span></div>
+          </div>
+          <div class="about-fact">
+            <div class="about-fact-label">Domain</div>
+            <div class="about-fact-value">obnet.org</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-box reveal">
+      <div class="stat-num">2024</div>
+      <div class="stat-label">Year Founded</div>
+    </div>
+    <div class="stat-box reveal delay-1">
+      <div class="stat-num">1</div>
+      <div class="stat-label">Product in Development</div>
+    </div>
+    <div class="stat-box reveal delay-2">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Self-Funded & Independent</div>
+    </div>
+    <div class="stat-box reveal delay-3">
+      <div class="stat-num">18</div>
+      <div class="stat-label">Modules in DokShield</div>
+    </div>
+  </div>
+
+  <!-- MISSION STATEMENT -->
+  <div class="mission-band">
+    <div class="mission-inner">
+      <div class="mission-quote reveal">
+        "Software is a suite of networked objects in continuous process loops — and every object deserves to be built <em>right.</em>"
+      </div>
+      <div class="mission-right">
+        <div class="mission-body reveal">
+          <p>This is the philosophy behind the Obnet name — Object Network. It's not just a brand. It's how we think about software architecture, system design, and the responsibility that comes with building tools that real people depend on every day.</p>
+          <p>We believe precision is not a luxury. Security is not an afterthought. And software that genuinely helps people is always worth the extra effort to get right.</p>
+        </div>
+        <div class="principle-row reveal delay-2">
+          <div class="principle-item">
+            <div class="principle-icon">🎯</div>
+            <div class="principle-text">
+              <h5>Precision Over Speed</h5>
+              <p>We ship when it's right — not when it's rushed.</p>
+            </div>
+          </div>
+          <div class="principle-item">
+            <div class="principle-icon">🔐</div>
+            <div class="principle-text">
+              <h5>Security by Default</h5>
+              <p>Not a feature — a foundational principle in everything we build.</p>
+            </div>
+          </div>
+          <div class="principle-item">
+            <div class="principle-icon">🌱</div>
+            <div class="principle-text">
+              <h5>Built to Last</h5>
+              <p>Software that grows with you — not software you grow out of.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CORE VALUES -->
+  <div class="values-section">
+    <div class="section-kicker reveal">What We Stand For</div>
+    <div class="section-title reveal delay-1">Our Core <span>Values</span></div>
+    <div class="values-grid" style="margin-top:48px;">
+      <div class="value-card reveal delay-1" data-n="01">
+        <div class="value-icon-wrap">🎯</div>
+        <h4>Precision First</h4>
+        <p>Every feature we ship is deliberate. We'd rather do fewer things exceptionally well than scatter our focus across a dozen half-finished ideas. Quality is never negotiable at Obnet.</p>
+      </div>
+      <div class="value-card reveal delay-2" data-n="02">
+        <div class="value-icon-wrap">🔐</div>
+        <h4>Security by Default</h4>
+        <p>Security isn't something we bolt on at the end. It's woven into every architectural decision, every API design, every interface. Your data deserves the highest standard of care.</p>
+      </div>
+      <div class="value-card reveal delay-3" data-n="03">
+        <div class="value-icon-wrap">⚡</div>
+        <h4>Built to Scale</h4>
+        <p>We design systems that grow with our users — from a single operator to an enterprise deployment — without requiring painful migrations or costly rewrites. Good foundations matter.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STORY & TIMELINE -->
+  <div class="story-section">
+    <div class="story-inner">
+      <div class="story-left reveal">
+        <div class="section-kicker">Our Journey</div>
+        <h3>How We Got <span>Here</span></h3>
+        <p>Obnet began with a simple observation: the most critical operational environments — data centres, security operations, compliance-heavy industries — were still being managed with tools that weren't built for them.</p>
+        <p>We decided to change that. One product at a time.</p>
+      </div>
+      <div class="timeline reveal delay-2">
+        <div class="tl-item active">
+          <div class="tl-date">Q4 2024 — Foundation</div>
+          <div class="tl-title">Obnet is Born</div>
+          <div class="tl-body">The company is founded with a clear mission: build precise, reliable, security-first software for teams who can't afford to take risks with their operations. Domain acquired, infrastructure planned, architecture defined.</div>
+        </div>
+        <div class="tl-item active">
+          <div class="tl-date">Q4 2024 — Research & Design</div>
+          <div class="tl-title">DokShield Concept & Design</div>
+          <div class="tl-body">After deep research into data centre security operations management — speaking with operators, security officers, and compliance teams — the DokShield concept is defined. A 73-table, 18-module platform designed from the ground up for real operations environments.</div>
+        </div>
+        <div class="tl-item active">
+          <div class="tl-date">Q1 2026 — Development</div>
+          <div class="tl-title">DokShield Active Development</div>
+          <div class="tl-body">Full-stack development underway. React + TypeScript frontend, Node.js + Express backend, SQL Server database. The platform is being built module by module, with the Auth and Dashboard foundations in place.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Q3 2026 — Target</div>
+          <div class="tl-title">DokShield MVP Launch</div>
+          <div class="tl-body">DokShield targets its first production deployment, initially with Securitas as the pilot client. Early access partners will be first to onboard and will receive founding pricing as a thank-you for their support.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">2027 — Growth</div>
+          <div class="tl-title">Second Product & Expansion</div>
+          <div class="tl-body">With DokShield stable and growing, Obnet turns its attention to the next problem worth solving in the operational software space. Details to be announced.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHILOSOPHY -->
+  <div class="philosophy-section">
+    <div class="section-kicker reveal">How We Think</div>
+    <div class="section-title reveal delay-1">Our <span>Philosophy</span></div>
+    <div class="philosophy-grid">
+      <div class="phil-card reveal delay-1">
+        <h4><span>🧱</span> Start With the Problem</h4>
+        <p>We don't build features for the sake of features. Every line of code traces back to a real pain point that real people actually have. If we can't articulate the problem clearly, we don't build the solution.</p>
+      </div>
+      <div class="phil-card reveal delay-2">
+        <h4><span>🔍</span> Obsess Over Details</h4>
+        <p>The difference between good software and great software lives in the details — the error messages, the edge cases, the loading states. We sweat the small stuff because our users notice it even when they don't say so.</p>
+      </div>
+      <div class="phil-card reveal delay-3">
+        <h4><span>🤝</span> Users Over Metrics</h4>
+        <p>We're not chasing a user count or a growth rate. We're trying to build tools that genuinely help people do their work better and safer. A hundred satisfied users is worth more to us than a thousand indifferent ones.</p>
+      </div>
+      <div class="phil-card reveal delay-4">
+        <h4><span>🏗️</span> Long-Term Architecture</h4>
+        <p>We make choices that make sense in five years, not just five months. Clean APIs, documented codebases, systems designed to be maintained and extended — not just shipped and forgotten.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TECH STACK -->
+  <div class="tech-band">
+    <div class="tech-inner">
+      <div class="section-kicker reveal">Technology</div>
+      <div class="section-title reveal delay-1" style="font-size:28px;margin-top:8px;">How We <span>Build</span></div>
+      <p style="font-family:'DM Mono',monospace;font-size:13px;color:var(--muted);margin-top:16px;max-width:600px;" class="reveal delay-2">Our stack is chosen for reliability, security, and longevity — not trends. Every technology choice has a reason behind it.</p>
+      <div class="tech-grid reveal delay-3" style="margin-top:32px;">
+        <span class="tech-tag">React + TypeScript</span>
+        <span class="tech-tag">Node.js + Express</span>
+        <span class="tech-tag">SQL Server (MSSQL)</span>
+        <span class="tech-tag">JWT Authentication</span>
+        <span class="tech-tag">REST API First</span>
+        <span class="tech-tag">Role-Based Access Control</span>
+        <span class="tech-tag">Zero Trust Security</span>
+        <span class="tech-tag">Immutable Audit Logs</span>
+        <span class="tech-tag">Multi-Tenant Architecture</span>
+        <span class="tech-tag">AES-256 Encryption</span>
+        <span class="tech-tag">SAML 2.0 / OAuth2</span>
+        <span class="tech-tag">Tailwind CSS</span>
+        <span class="tech-tag">Vite</span>
+        <span class="tech-tag">CI/CD Pipelines</span>
+        <span class="tech-tag">Jest Testing</span>
+        <span class="tech-tag">SOC 2 Aligned</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-band">
+    <h3 class="reveal">Want to work <span>together?</span></h3>
+    <p class="reveal delay-1">Whether you're a potential client, a partner, or just want to follow our journey — we'd love to hear from you.</p>
+    <div class="cta-btn-group reveal delay-2">
+      <button class="btn-primary" onclick="showPage('contact')">Get in Touch</button>
+      <button class="btn-outline" onclick="showPage('products')">See Our Products</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     PRODUCTS PAGE
+══════════════════════════════════════════════════ -->
+<div class="page" id="page-products">
+
+  <!-- HERO -->
+  <div class="hero" style="min-height:auto;padding-bottom:60px;">
+    <div class="hero-eyebrow">Obnet Product Suite</div>
+    <h1 class="hero-headline" style="font-size:clamp(48px,7vw,90px);">
+      <span class="word1">What We</span>
+      <span class="word2">Build.</span>
+    </h1>
+    <p class="hero-sub">We build focused, opinionated software for industries where reliability and security are not optional. Each product solves one problem — and solves it completely.</p>
+  </div>
+
+  <!-- PRODUCTS LIST -->
+  <div class="product-showcase" style="padding-top:0;">
+
+    <!-- DokShield -->
+    <div class="product-big-card reveal" style="margin-bottom:24px;">
+      <div>
+        <div class="product-kicker">
+          <span class="product-num">Product 01</span>
+          <span class="live-badge">In Development</span>
+        </div>
+        <img src="data:image/png;base64," alt="DokShield" style="height:36px;display:block;margin-bottom:12px;">
+        <p class="product-sub">A comprehensive, multi-tenant security operations management platform built specifically for data centres. DokShield covers the full operational lifecycle — from shift activity reporting and patrol management to incident tracking, visitor control, and compliance auditing — across 18 deeply integrated modules.</p>
+        <p class="product-sub" style="margin-top:-12px;">Designed for enterprise-grade security operations teams, DokShield replaces fragmented spreadsheets, paper logs, and generic tools with a single, purpose-built platform that speaks the language of data centre security.</p>
+        <div class="feature-pills">
+          <span class="feature-pill">18 Operational Modules</span>
+          <span class="feature-pill">Multi-Tenant SaaS</span>
+          <span class="feature-pill">JWT Authentication</span>
+          <span class="feature-pill">Real-Time Dashboards</span>
+          <span class="feature-pill">Shift Activity Reports</span>
+          <span class="feature-pill">Incident Management</span>
+          <span class="feature-pill">Patrol Tracking</span>
+          <span class="feature-pill">Visitor Control</span>
+          <span class="feature-pill">Audit & Compliance</span>
+          <span class="feature-pill">RBAC Access Control</span>
+        </div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;">
+          <button class="btn-primary" onclick="showPage('dokshield');setTimeout(()=>{document.getElementById('dok-modules').scrollIntoView({behavior:'smooth'})},120)">Full Product Details →</button>
+          <button class="btn-outline" onclick="showPage('earlyaccess')">Request Early Access</button>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="background:var(--ink);border-radius:14px;padding:32px;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#555;margin-bottom:20px;">Module Coverage</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">🛡 Security SAR</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">🏢 Data Hall</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">🚶 Patrols</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">⚠️ Incidents</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">👤 Visitors</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">📊 Dashboard</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">🎫 Ticketing</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">🔑 IAM</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">📋 Audit Logs</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#888;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #1e1e1e;">🔄 Handover</div>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:#444;margin-top:16px;text-align:center;">+ 8 more modules</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted2);margin-bottom:12px;">Target Launch</div>
+          <div style="font-size:22px;font-weight:800;color:var(--ink);">Q3 2026</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-top:4px;">Early access available now</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coming Soon -->
+    <div class="coming-card reveal delay-1">
+      <div class="coming-text">
+        <h4>Product 02 — Coming Soon</h4>
+        <p>Something new is taking shape in the Obnet lab. We're applying the same precision and security-first approach to the next problem worth solving. Announcement coming when it's ready.</p>
+      </div>
+      <div class="coming-num">02</div>
+    </div>
+  </div>
+
+  <div class="cta-band">
+    <h3 class="reveal">Interested in <span>DokShield?</span></h3>
+    <p class="reveal delay-1">Join the early access list and be among the first to deploy DokShield in your data centre operations.</p>
+    <div class="cta-btn-group reveal delay-2">
+      <button class="btn-primary" onclick="showPage('dokshield');setTimeout(()=>{document.getElementById('dok-modules').scrollIntoView({behavior:'smooth'})},120)">Full Product Details</button>
+      <button class="btn-outline" onclick="showPage('earlyaccess')">Request Early Access</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     DOKSHIELD PAGE
+══════════════════════════════════════════════════ -->
+<div class="page" id="page-dokshield">
+
+  <!-- HERO -->
+  <div class="dok-hero">
+    <div class="dok-hero-grid">
+      <div>
+        <div class="dok-logo" style="width:auto;height:auto;padding:12px 20px;background:transparent;border:none;box-shadow:none;"><img src="data:image/png;base64," alt="DokShield" style="height:64px;display:block;"></div>
+        <div class="dok-product-of">A product by Obnet</div>
+        <img src="data:image/png;base64," alt="DokShield" style="height:52px;display:block;margin-bottom:20px;">
+        <p class="tagline">The complete security operations management platform for data centres. Built for the teams who guard the world's most critical infrastructure — 24 hours a day, 7 days a week.</p>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="showPage('earlyaccess')">Request Early Access</button>
+          <button class="btn-outline" onclick="document.getElementById('dok-how').scrollIntoView({behavior:'smooth'})">How it Works ↓</button>
+        </div>
+        <div style="margin-top:20px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted2);">
+          Targeting Q3 2026 launch · Early access available now
+        </div>
+      </div>
+      <div class="terminal-wrap">
+        <div class="terminal-top">
+          <div class="t-btn" style="background:#ff5f57"></div>
+          <div class="t-btn" style="background:#ffbd2e"></div>
+          <div class="t-btn" style="background:#28c840"></div>
+          <span>dokshield — operations dashboard</span>
+        </div>
+        <div class="terminal-body">
+          <div class="t-c"># Officer shift login</div>
+          <div class="t-cmd">$ dokshield login --dc MEL-20 --colo F01C04</div>
+          <div class="t-ok">✓ Identity verified — AUS125431 / G. Liam</div>
+          <div class="t-ok">✓ Shift session started — SID-88219</div>
+          <div>&nbsp;</div>
+          <div class="t-c"># Log a patrol checkpoint</div>
+          <div class="t-cmd">$ dokshield patrol --zone B2 --status clear</div>
+          <div class="t-ok">✓ Checkpoint logged — 14:32 AEST</div>
+          <div class="t-info">→ TKT-00041 auto-generated for anomaly</div>
+          <div>&nbsp;</div>
+          <div class="t-c"># Handover intelligence summary</div>
+          <div class="t-cmd">$ dokshield handover --generate</div>
+          <div class="t-ok">✓ Shift summary compiled</div>
+          <div class="t-cmd">$ <span class="t-blink">_</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE PROBLEM -->
+  <div style="background:var(--ink);border-top:1px solid #1a1a1a;border-bottom:1px solid #1a1a1a;padding:80px 48px;">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div class="section-kicker reveal" style="color:#555;">The Problem</div>
+      <div class="section-title reveal delay-1" style="color:#fff;margin-bottom:40px;">Data Centre Security Operations<br><span style="color:#555;">Are Still Running on Paper.</span></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="reveal delay-2">
+        <div style="background:#111;border:1px solid #222;border-radius:12px;padding:28px;">
+          <div style="font-size:28px;margin-bottom:16px;">📋</div>
+          <h4 style="color:#f0f4ff;font-size:15px;font-weight:700;margin-bottom:10px;">Fragmented Tools</h4>
+          <p style="font-family:'DM Mono',monospace;font-size:12px;color:#8ca0bf;line-height:1.8;">Shift reports in Word, incidents in email, patrol logs on paper, visitor records in Excel. No single source of truth. No real-time visibility.</p>
+        </div>
+        <div style="background:#111;border:1px solid #222;border-radius:12px;padding:28px;">
+          <div style="font-size:28px;margin-bottom:16px;">⚠️</div>
+          <h4 style="color:#f0f4ff;font-size:15px;font-weight:700;margin-bottom:10px;">Compliance Risk</h4>
+          <p style="font-family:'DM Mono',monospace;font-size:12px;color:#8ca0bf;line-height:1.8;">Manual logs are error-prone, incomplete, and difficult to audit. When something goes wrong, the paper trail rarely tells the full story.</p>
+        </div>
+        <div style="background:#111;border:1px solid #222;border-radius:12px;padding:28px;">
+          <div style="font-size:28px;margin-bottom:16px;">🔄</div>
+          <h4 style="color:#f0f4ff;font-size:15px;font-weight:700;margin-bottom:10px;">Broken Handovers</h4>
+          <p style="font-family:'DM Mono',monospace;font-size:12px;color:#8ca0bf;line-height:1.8;">Critical information is lost between shifts. The incoming team starts blind. Issues from the previous shift go unresolved for hours.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE SOLUTION — 18 MODULES -->
+  <div class="features-section" id="dok-modules" style="padding-top:100px;padding-bottom:80px;">
+    <div class="features-header">
+      <div class="section-kicker reveal">The Solution</div>
+      <div class="section-title reveal delay-1">Build Your Platform <span>from 18 Modules.</span></div>
+      <p style="font-family:'DM Mono',monospace;font-size:13px;color:var(--muted);margin-top:16px;max-width:680px;line-height:1.9;" class="reveal delay-2">DokShield is a modular platform — choose only the modules your operation needs and pay only for what you use. Every module is purpose-built, deeply integrated, and designed to be used by real security teams on real shifts. Start with the essentials, expand as you grow.</p>
+      <div class="compliance-banner reveal delay-3">
+        <div class="compliance-banner-inner">
+          <div class="compliance-eyebrow">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1L8.854 4.756L13 5.382L10 8.306L10.708 12.5L7 10.527L3.292 12.5L4 8.306L1 5.382L5.146 4.756L7 1Z" fill="currentColor"/></svg>
+            Enterprise Compliance — Built In, Not Bolted On
+          </div>
+          <div class="compliance-headline">DokShield is designed from the ground up to meet the world's most demanding security and privacy frameworks.</div>
+          <div class="compliance-frameworks">
+
+            <div class="compliance-framework cf-frame-soc2"
+              onclick="toggleCF(this)"
+              data-label="SOC 2 Type II"
+              data-color="#93c5fd"
+              data-what="SOC 2 Type II is an independent audit standard by the AICPA that evaluates whether a service organisation's security controls operate effectively over a sustained period — typically 12 months. It covers five Trust Service Criteria: Security, Availability, Processing Integrity, Confidentiality, and Privacy."
+              data-impl="DokShield maps every SOC 2 control to immutable audit logs, role-based access, continuous monitoring, and automated evidence collection — ready for your annual audit without manual preparation.">
+              <div class="cf-badge cf-soc2">SOC 2 Type II</div>
+              <div class="cf-desc cf-short">Immutable audit trails, role-based access control, continuous monitoring, and evidence collection — every control mapped and ready for your annual audit.</div>
+              <div class="cf-desc-panel"></div>
+            </div>
+
+            <div class="compliance-framework cf-frame-iso"
+              onclick="toggleCF(this)"
+              data-label="ISO 27001:2022"
+              data-color="#6ee7b7"
+              data-what="ISO 27001 is the internationally recognised standard for Information Security Management Systems (ISMS). The 2022 edition defines 93 controls across four domains — Organisational, People, Physical, and Technological — and requires an independent audit by an accredited body."
+              data-impl="DokShield's architecture is built around a documented ISMS with risk-based controls, Annex A alignment across all 93 categories, and the change management and access control evidence required for certification and ongoing surveillance audits.">
+              <div class="cf-badge cf-iso">ISO 27001:2022</div>
+              <div class="cf-desc cf-short">Information security management built into the architecture. Risk-based controls, documented ISMS, and Annex A alignment across all 93 control categories.</div>
+              <div class="cf-desc-panel"></div>
+            </div>
+
+            <div class="compliance-framework cf-frame-gdpr"
+              onclick="toggleCF(this)"
+              data-label="GDPR"
+              data-color="#c4b5fd"
+              data-what="The General Data Protection Regulation applies to any organisation processing personal data of EU residents — regardless of where the organisation is based. Violations can result in fines of up to €20 million or 4% of global annual turnover."
+              data-impl="DokShield implements privacy by design, lawful basis tracking, right to erasure, data subject request (DSR) handling within 30 days, consent management, and 72-hour breach notification workflows — all built into the platform, not added later.">
+              <div class="cf-badge cf-gdpr">GDPR</div>
+              <div class="cf-desc cf-short">Privacy by design, right to erasure, data subject request handling, consent management, and cross-border data transfer controls — all built in.</div>
+              <div class="cf-desc-panel"></div>
+            </div>
+
+            <div class="compliance-framework cf-frame-apa"
+              onclick="toggleCF(this)"
+              data-label="AU Privacy Act"
+              data-color="#fcd34d"
+              data-what="The Privacy Act 1988 (Cth), strengthened by the Privacy and Other Legislation Amendment Act 2024, governs how Australian organisations collect, use, and store personal information through 13 Australian Privacy Principles. Penalties reach AUD 3.3 million per company."
+              data-impl="DokShield uses a one-database-per-country architecture that satisfies APP 8 data sovereignty by design. Technical and organisational measures, OAIC-ready breach response, and automated retention enforcement are built in from day one.">
+              <div class="cf-badge cf-apa">AU Privacy Act</div>
+              <div class="cf-desc cf-short">Aligned with the Privacy and Other Legislation Amendment Act 2024. Technical and organisational measures, APP 8 data sovereignty, and OAIC-ready breach response.</div>
+              <div class="cf-desc-panel"></div>
+            </div>
+
+          </div>
+          <div class="compliance-footer-row">
+            <div class="compliance-footer-item">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M4.5 7L6.5 9L9.5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Data sovereignty by architecture — your data never leaves its country
+            </div>
+            <div class="compliance-footer-item">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M4.5 7L6.5 9L9.5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              One dedicated database per country — no shared infrastructure
+            </div>
+            <div class="compliance-footer-item">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M4.5 7L6.5 9L9.5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              AES-256-GCM encryption at rest · TLS 1.2+ in transit
+            </div>
+            <div class="compliance-footer-item">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M4.5 7L6.5 9L9.5 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Audit logs immutable by design — not just by policy
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="features-big-grid">
+      <div class="feat-card reveal delay-1">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h7M7 16h5"/></svg></div>
+        <h4>Shift Activity Reports (SAR)</h4>
+        <p>Structured digital shift reports for both Security Officers and Screening Supervisors. Every shift captured, timestamped, and searchable. No more lost handover notes.</p>
+      </div>
+      <div class="feat-card reveal delay-2">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <h4>Data Hall Occupancy</h4>
+        <p>Real-time occupancy management for data halls and colos. Track who is present, when they entered, and when they left — with full audit history.</p>
+      </div>
+      <div class="feat-card reveal delay-3">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg></div>
+        <h4>Patrols Management</h4>
+        <p>Schedule, track, and verify patrol routes across the facility. Checkpoint logging with timestamp and officer ID. Deviation alerts for missed checkpoints.</p>
+      </div>
+      <div class="feat-card reveal delay-1">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <h4>Incidents Management</h4>
+        <p>Log, escalate, and resolve incidents with a full audit trail. Severity classification, response tracking, and compliance-ready incident reports at the click of a button.</p>
+      </div>
+      <div class="feat-card reveal delay-2">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <h4>Visitor Management</h4>
+        <p>Complete visitor lifecycle management — pre-registration, arrival, escort assignment, access zone control, and departure logging. Full compliance trail for every visit.</p>
+      </div>
+      <div class="feat-card reveal delay-3">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 110-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 100-5C13 2 12 7 12 7z"/></svg></div>
+        <h4>Issue Resolution &amp; Ticketing</h4>
+        <p>A built-in ticketing system (IRTS) for managing operational issues from creation to resolution. Auto-generated ticket numbers, assignment, priority, and status tracking.</p>
+      </div>
+      <div class="feat-card reveal delay-1">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+        <h4>Identity &amp; Access Management</h4>
+        <p>Role-based access control across all modules. Define permissions by role, assign officers to data centres and colos, and maintain a full access history.</p>
+      </div>
+      <div class="feat-card reveal delay-2">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h4>Access Control &amp; DCAT</h4>
+        <p>Manage physical access control and DCAT compliance across the facility. Integrated with the visitor and occupancy modules for a unified access picture.</p>
+      </div>
+      <div class="feat-card reveal delay-3">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <h4>Dashboard &amp; Reports</h4>
+        <p>Real-time operational dashboards for managers and supervisors. Customisable reports for compliance, shift performance, incident trends, and occupancy analytics.</p>
+      </div>
+      <div class="feat-card reveal delay-1">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <h4>Audit &amp; System Logs</h4>
+        <p>Immutable system-wide audit logs capturing every action taken within DokShield. WHO did WHAT, WHEN, and from WHERE — always available for compliance review.</p>
+      </div>
+      <div class="feat-card reveal delay-2">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+        <h4>Supervisor Audit &amp; QA</h4>
+        <p>Quality assurance tools for supervisors to review officer activity, validate patrol completions, and assess shift performance against defined standards.</p>
+      </div>
+      <div class="feat-card reveal delay-3">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>
+        <h4>Shift Handover Intelligence</h4>
+        <p>Intelligent shift handover summaries that automatically compile open incidents, unresolved tickets, patrol status, and critical notes for the incoming team.</p>
+      </div>
+      <div class="feat-card reveal delay-1">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></div>
+        <h4>Contractor &amp; Vendor Management</h4>
+        <p>Complete lifecycle management for contractors and vendors — onboarding, access approval, work permit tracking, and departure verification.</p>
+      </div>
+      <div class="feat-card reveal delay-2">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2.2"/></svg></div>
+        <h4>Emergency &amp; Drill Management</h4>
+        <p>Plan, execute, and document emergency drills and real emergency responses. Evacuation tracking, response time logging, and post-event compliance reporting.</p>
+      </div>
+      <div class="feat-card reveal delay-3">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+        <h4>Training &amp; Evaluation</h4>
+        <p>Track officer training records, certifications, and competency evaluations. Ensure your team meets compliance requirements at all times with automated alerts for expiring certifications.</p>
+      </div>
+      <div class="feat-card reveal delay-1">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/><rect x="10" y="3" width="4" height="4" rx="1"/></svg></div>
+        <h4>Data Centre Management</h4>
+        <p>Central configuration and management of all data centre assets, zones, colos, and facilities within the platform. The master record for all operational data.</p>
+      </div>
+      <div class="feat-card reveal delay-2">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <h4>Billing Access</h4>
+        <p>Manage client billing access and subscription tiers across the multi-tenant platform. Role-restricted billing visibility with full audit trail.</p>
+      </div>
+      <div class="feat-card reveal delay-3">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h6"/><circle cx="16" cy="15" r="2"/><path d="M18 15h2"/></svg></div>
+        <h4>Screening Supervisor SAR</h4>
+        <p>Dedicated shift activity reporting for Screening Supervisors — structured, compliant, and integrated with the broader shift handover and audit modules.</p>
+      </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how-section" id="dok-how">
+    <div class="how-inner">
+      <div class="section-kicker reveal">How It Works</div>
+      <div class="section-title reveal delay-1">Designed for Real <span>Operational Environments</span></div>
+      <div class="steps-grid">
+        <div class="step-card reveal delay-1">
+          <div class="step-num">01</div>
+          <h4>Authenticate</h4>
+          <p>Officers log in by selecting their data centre and colo, then authenticating with their S/O ID. Every session is tied to a specific location and shift.</p>
+        </div>
+        <div class="step-card reveal delay-2">
+          <div class="step-num">02</div>
+          <h4>Operate</h4>
+          <p>Access any of the 18 modules from a clean, unified dashboard. Log patrols, manage visitors, raise incidents, and submit shift reports — all in one place.</p>
+        </div>
+        <div class="step-card reveal delay-3">
+          <div class="step-num">03</div>
+          <h4>Review</h4>
+          <p>Supervisors and managers get real-time visibility into all operational activity. Dashboards, reports, and audit logs are always current and always accessible.</p>
+        </div>
+        <div class="step-card reveal delay-4">
+          <div class="step-num">04</div>
+          <h4>Hand Over</h4>
+          <p>At shift end, DokShield compiles an intelligent handover summary. The incoming team starts fully informed. Nothing is lost between shifts ever again.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <div class="pricing-section">
+    <div class="section-kicker reveal">Pricing</div>
+    <div class="section-title reveal delay-1">Simple, <span>Transparent</span> Plans</div>
+    <p class="section-body reveal delay-2" style="margin-top:12px;max-width:560px;">Pricing is indicative and will be confirmed at launch. Early access partners receive founding member pricing as a thank-you for supporting us early.</p>
+    <div class="pricing-grid">
+      <div class="price-card reveal delay-1">
+        <div class="price-plan">Starter</div>
+        <div class="price-amount">Free <span>/ forever</span></div>
+        <div class="price-desc">For small teams evaluating the platform.</div>
+        <div class="price-divider"></div>
+        <div class="price-feature">1 Data Centre</div>
+        <div class="price-feature">Up to 5 Officers</div>
+        <div class="price-feature">Core modules only</div>
+        <div class="price-feature">30-day audit log</div>
+        <div class="price-feature">REST API access</div>
+        <button class="btn-outline" style="width:100%;margin-top:28px;" onclick="showPage('earlyaccess')">Get Started Free</button>
+      </div>
+      <div class="price-card featured reveal delay-2">
+        <div class="price-plan">Professional</div>
+        <div class="price-amount">$49 <span>/ month</span></div>
+        <div class="price-desc">For operational security teams with full compliance needs.</div>
+        <div class="price-divider"></div>
+        <div class="price-feature">Up to 3 Data Centres</div>
+        <div class="price-feature">Unlimited Officers</div>
+        <div class="price-feature">All 18 Modules</div>
+        <div class="price-feature">Full RBAC controls</div>
+        <div class="price-feature">90-day audit log</div>
+        <div class="price-feature">Priority support</div>
+        <button class="btn-primary" style="width:100%;margin-top:28px;" onclick="showPage('earlyaccess')">Request Early Access</button>
+      </div>
+      <div class="price-card reveal delay-3">
+        <div class="price-plan">Enterprise</div>
+        <div class="price-amount">Custom</div>
+        <div class="price-desc">For large organisations with complex multi-site requirements.</div>
+        <div class="price-divider"></div>
+        <div class="price-feature">Unlimited Data Centres</div>
+        <div class="price-feature">Unlimited Officers</div>
+        <div class="price-feature">All 18 Modules</div>
+        <div class="price-feature">Custom SLA</div>
+        <div class="price-feature">Dedicated support</div>
+        <div class="price-feature">On-premise option</div>
+        <button class="btn-outline" style="width:100%;margin-top:28px;" onclick="showPage('earlyaccess')">Contact Sales</button>
+      </div>
+    </div>
+    <p class="price-note reveal">Pricing is indicative — exact plans confirmed at launch. Early access partners receive founding member pricing.</p>
+  </div>
+
+  <div class="cta-band">
+    <h3 class="reveal">Ready to modernise your <span>security operations?</span></h3>
+    <p class="reveal delay-1">DokShield is in active development and targeting Q3 2026 launch. Join the early access list today.</p>
+    <div class="cta-btn-group reveal delay-2">
+      <button class="btn-primary" onclick="showPage('earlyaccess')">Join the Waitlist</button>
+      <button class="btn-outline" onclick="showPage('about')">About Obnet</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     CONTACT PAGE
+══════════════════════════════════════════════════ -->
+<div class="page" id="page-contact">
+
+  <div class="contact-hero">
+    <div>
+      <div class="section-kicker">Contact</div>
+      <h2>Let's <span>Talk.</span></h2>
+      <p>Whether you're interested in DokShield, want to explore a partnership, or just have a question — we're a real team who reads every message.</p>
+      <p style="margin-top:16px;">We typically respond within one business day.</p>
+    </div>
+    <div class="contact-details-card">
+      <div class="contact-detail-item">
+        <div class="contact-detail-icon">✉️</div>
+        <div>
+          <div class="contact-detail-label">General Enquiries</div>
+          <div class="contact-detail-value"><a href="/cdn-cgi/l/email-protection#0d65686161624d626f67686e7962636879236e6260"><span class="__cf_email__" data-cfemail="264e434a4a496649444c434552494843520845494b">[email&#160;protected]</span></a></div>
+        </div>
+      </div>
+      <div class="contact-detail-item">
+        <div class="contact-detail-icon">🛡</div>
+        <div>
+          <div class="contact-detail-label">DokShield Support</div>
+          <div class="contact-detail-value"><a href="/cdn-cgi/l/email-protection#0d7e787d7d627f794d626f67686e7962636879236e6260"><span class="__cf_email__" data-cfemail="33404643435c4147735c51595650475c5d56471d505c5e">[email&#160;protected]</span></a></div>
+        </div>
+      </div>
+      <div class="contact-detail-item">
+        <div class="contact-detail-icon">🤝</div>
+        <div>
+          <div class="contact-detail-label">Partnerships</div>
+          <div class="contact-detail-value"><a href="/cdn-cgi/l/email-protection#50203122243e352223103f323a3533243f3e35247e333f3d"><span class="__cf_email__" data-cfemail="9bebfae9eff5fee9e8dbf4f9f1fef8eff4f5feefb5f8f4f6">[email&#160;protected]</span></a></div>
+        </div>
+      </div>
+      <div class="contact-detail-item">
+        <div class="contact-detail-icon">🌐</div>
+        <div>
+          <div class="contact-detail-label">Website</div>
+          <div class="contact-detail-value"><a href="#">www.obnet.org</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-form-section">
+    <div class="form-wrap reveal">
+      <div class="form-title">Send Us a Message</div>
+      <div class="form-sub">Fill in the form and we'll get back to you within one business day.</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input class="form-input" type="text" placeholder="John">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input class="form-input" type="text" placeholder="Smith">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input class="form-input" type="email" placeholder="john@company.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Company (Optional)</label>
+          <input class="form-input" type="text" placeholder="Acme Corp">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Subject</label>
+          <select class="form-select">
+            <option value="">Select a topic...</option>
+            <option>DokShield Early Access</option>
+            <option>DokShield Support</option>
+            <option>Partnership Enquiry</option>
+            <option>General Question</option>
+            <option>Press / Media</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Message</label>
+          <textarea class="form-textarea" placeholder="Tell us what's on your mind..."></textarea>
+        </div>
+      </div>
+      <button class="form-submit" onclick="handleFormSubmit(this)">Send Message →</button>
+      <div class="form-note">We respect your privacy. Your information is never shared with third parties.</div>
+    </div>
+
+    <div class="faq-wrap reveal delay-2">
+      <div class="faq-title">Common Questions</div>
+      <div class="faq-item open" onclick="toggleFaq(this)">
+        <div class="faq-q">When will DokShield launch? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">DokShield is currently in active development with early access available now. We're targeting a full public launch in Q3 2026. Early access users will be first to know — and will receive founding member pricing.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Is Obnet VC-funded? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">No — Obnet is fully independent and self-funded. This means we answer only to our users, not investors. Our roadmap is shaped entirely by real user feedback.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Can I integrate DokShield with my existing tools? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Yes. DokShield is built API-first, making integration straightforward. It supports SAML 2.0 and OAuth2 for SSO, and provides webhooks for real-time event notifications into your existing systems.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Do you offer an on-premise option? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">On-premise deployment is available on the Enterprise plan. If you have specific infrastructure requirements, get in touch and we'll discuss what's possible for your organization.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">How is pricing structured? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">DokShield will offer a free Starter tier, a Professional plan at ~$29/month, and custom Enterprise pricing. Early access users will receive a permanent discount as a thank-you for supporting us early.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Are you open to partnerships? <span class="faq-arrow">+</span></div>
+        <div class="faq-a">Absolutely. If you're a technology provider, consultant, or reseller who sees a fit with our products, we'd love to hear from you. Email us at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6616071412080314152609040c030512090803124805090b">[email&#160;protected]</a>.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Social -->
+  <div class="social-band">
+    <div class="social-inner">
+      <div class="social-text">
+        <h4>Follow Our Journey</h4>
+        <p>We share updates, insights, and progress as we build in the open.</p>
+      </div>
+      <div class="social-links">
+        <a class="social-link" href="https://linkedin.com/company/obnet" title="LinkedIn" target="_blank" rel="noopener">💼</a>
+        <a class="social-link" href="https://x.com/obnet_org" title="X / Twitter" target="_blank" rel="noopener">𝕏</a>
+        <a class="social-link" href="https://github.com/mrrehangh" title="GitHub" target="_blank" rel="noopener">⌥</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     EARLY ACCESS PAGE
+══════════════════════════════════════════════════ -->
+<div class="page" id="page-earlyaccess">
+
+  <div class="ea-hero">
+    <div class="ea-hero-kicker">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L8.854 4.756L13 5.382L10 8.306L10.708 12.5L7 10.527L3.292 12.5L4 8.306L1 5.382L5.146 4.756L7 1Z" fill="currentColor"/></svg>
+      DokShield Early Access
+    </div>
+    <h2>Join the<br><span>Founding Circle.</span></h2>
+    <p>Tell us about your operation. Early access partners shape the product roadmap and receive founding member pricing permanently — as a thank-you for building DokShield with us.</p>
+  </div>
+
+  <div class="ea-form-wrap">
+
+    <!-- ── FORM ── -->
+    <div class="ea-form-card ea-animate">
+      <div class="ea-form-title">Early Access Application</div>
+      <div class="ea-form-sub">All fields marked <span style="color:#e24b4a;">*</span> are required. We review every application personally and respond within two business days.</div>
+
+      <!-- Personal Details -->
+      <div class="ea-section-label">Your details</div>
+      <div class="ea-grid">
+        <div class="ea-group">
+          <label class="ea-label">First Name <span class="ea-required">*</span></label>
+          <input class="ea-input" id="ea-firstname" type="text" placeholder="John">
+        </div>
+        <div class="ea-group">
+          <label class="ea-label">Last Name <span class="ea-required">*</span></label>
+          <input class="ea-input" id="ea-lastname" type="text" placeholder="Smith">
+        </div>
+        <div class="ea-group">
+          <label class="ea-label">Work Email <span class="ea-required">*</span></label>
+          <input class="ea-input" id="ea-email" type="email" placeholder="john@company.com">
+        </div>
+        <div class="ea-group">
+          <label class="ea-label">Phone Number</label>
+          <input class="ea-input" id="ea-phone" type="tel" placeholder="+61 4xx xxx xxx">
+        </div>
+        <div class="ea-group">
+          <label class="ea-label">Job Title <span class="ea-required">*</span></label>
+          <input class="ea-input" id="ea-jobtitle" type="text" placeholder="Head of Security Operations">
+        </div>
+        <div class="ea-group">
+          <label class="ea-label">LinkedIn Profile</label>
+          <input class="ea-input" id="ea-linkedin" type="url" placeholder="linkedin.com/in/yourname">
+        </div>
+      </div>
+
+      <!-- Organisation Details -->
+      <div class="ea-section-label">Your organisation</div>
+      <div class="ea-grid">
+        <div class="ea-group full">
+          <label class="ea-label">Company / Organisation Name <span class="ea-required">*</span></label>
+          <input class="ea-input" id="ea-company" type="text" placeholder="Acme Data Centre Group">
+        </div>
+        <div class="ea-group">
+          <label class="ea-label">Industry <span class="ea-required">*</span></label>
+          <select class="ea-select" id="ea-industry">
+            <option value="">Select industry...</option>
+            <option>Data Centre Operations</option>
+            <option>Colocation Services</option>
+            <option>Security Services Provider</option>
+            <option>Financial Services</option>
+            <option>Government / Defence</option>
+            <option>Healthcare</option>
+            <option>Telecommunications</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="ea-group">
+          <label class="ea-label">Country <span class="ea-required">*</span></label>
+          <select class="ea-select" id="ea-country">
+            <option value="">Select country...</option>
+            <option>Australia</option>
+            <option>Singapore</option>
+            <option>United Kingdom</option>
+            <option>United States</option>
+            <option>Germany</option>
+            <option>Japan</option>
+            <option>New Zealand</option>
+            <option>Canada</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="ea-group">
+          <label class="ea-label">Number of Data Centres</label>
+          <select class="ea-select" id="ea-dccount">
+            <option value="">Select...</option>
+            <option>1</option>
+            <option>2–5</option>
+            <option>6–15</option>
+            <option>16–50</option>
+            <option>50+</option>
+          </select>
+        </div>
+        <div class="ea-group">
+          <label class="ea-label">Security Officers on Team</label>
+          <select class="ea-select" id="ea-officers">
+            <option value="">Select...</option>
+            <option>1–5</option>
+            <option>6–20</option>
+            <option>21–50</option>
+            <option>51–100</option>
+            <option>100+</option>
+          </select>
+        </div>
+        <div class="ea-group full">
+          <label class="ea-label">Company Website</label>
+          <input class="ea-input" id="ea-website" type="url" placeholder="https://yourcompany.com">
+        </div>
+      </div>
+
+      <!-- Current Setup -->
+      <div class="ea-section-label">Your current setup</div>
+      <div class="ea-grid">
+        <div class="ea-group full">
+          <label class="ea-label">How do you currently manage security operations? <span class="ea-required">*</span></label>
+          <select class="ea-select" id="ea-current">
+            <option value="">Select...</option>
+            <option>Paper / manual logs</option>
+            <option>Spreadsheets (Excel / Google Sheets)</option>
+            <option>Generic software not built for this</option>
+            <option>A mix of the above</option>
+            <option>Existing specialist software</option>
+          </select>
+        </div>
+        <div class="ea-group full">
+          <label class="ea-label">What is your biggest operational pain point today?</label>
+          <textarea class="ea-textarea" id="ea-painpoint" placeholder="e.g. shift handovers are unreliable, incidents are tracked in email, compliance audits take weeks to prepare for..."></textarea>
+        </div>
+      </div>
+
+      <!-- Modules of interest -->
+      <div class="ea-section-label">Modules of interest</div>
+      <p style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.7;">Select the modules most relevant to your operation. You choose and pay only for what you need.</p>
+      <div class="ea-modules-grid">
+        <label class="ea-module-check"><input type="checkbox" value="SAR"> Shift Activity Reports</label>
+        <label class="ea-module-check"><input type="checkbox" value="Occupancy"> Data Hall Occupancy</label>
+        <label class="ea-module-check"><input type="checkbox" value="Patrols"> Patrol Management</label>
+        <label class="ea-module-check"><input type="checkbox" value="Incidents"> Incident Management</label>
+        <label class="ea-module-check"><input type="checkbox" value="Visitors"> Visitor Management</label>
+        <label class="ea-module-check"><input type="checkbox" value="Ticketing"> Issue &amp; Ticketing (IRTS)</label>
+        <label class="ea-module-check"><input type="checkbox" value="IAM"> Identity &amp; Access Management</label>
+        <label class="ea-module-check"><input type="checkbox" value="DCAT"> Access Control &amp; DCAT</label>
+        <label class="ea-module-check"><input type="checkbox" value="Dashboard"> Dashboard &amp; Reports</label>
+        <label class="ea-module-check"><input type="checkbox" value="Audit"> Audit &amp; System Logs</label>
+        <label class="ea-module-check"><input type="checkbox" value="QA"> Supervisor Audit &amp; QA</label>
+        <label class="ea-module-check"><input type="checkbox" value="Handover"> Shift Handover Intelligence</label>
+        <label class="ea-module-check"><input type="checkbox" value="Contractor"> Contractor &amp; Vendor Mgmt</label>
+        <label class="ea-module-check"><input type="checkbox" value="Emergency"> Emergency &amp; Drill Mgmt</label>
+        <label class="ea-module-check"><input type="checkbox" value="Training"> Training &amp; Evaluation</label>
+        <label class="ea-module-check"><input type="checkbox" value="DC"> Data Centre Management</label>
+      </div>
+
+      <!-- Plan interest -->
+      <div class="ea-section-label">Plan &amp; timeline</div>
+      <div class="ea-grid">
+        <div class="ea-group">
+          <label class="ea-label">Plan Interest</label>
+          <select class="ea-select" id="ea-plan">
+            <option value="">Select...</option>
+            <option>Starter (Free)</option>
+            <option>Professional (~$49/month)</option>
+            <option>Enterprise (Custom)</option>
+            <option>Not sure yet</option>
+          </select>
+        </div>
+        <div class="ea-group">
+          <label class="ea-label">Deployment Timeline</label>
+          <select class="ea-select" id="ea-timeline">
+            <option value="">Select...</option>
+            <option>As soon as possible</option>
+            <option>Within 3 months</option>
+            <option>Within 6 months</option>
+            <option>Evaluating for future</option>
+          </select>
+        </div>
+        <div class="ea-group full">
+          <label class="ea-label">Anything else you'd like us to know?</label>
+          <textarea class="ea-textarea" id="ea-notes" placeholder="Compliance requirements, integration needs, specific questions about DokShield..."></textarea>
+        </div>
+      </div>
+
+      <button class="ea-submit" id="ea-submit-btn" onclick="handleEarlyAccessSubmit(this)">
+        Submit Early Access Application →
+      </button>
+      <div class="ea-note">
+        By submitting you agree to our <a href="#" onclick="showPrivacy()" style="color:var(--accent);text-decoration:none;">Privacy Policy</a>. Your details are sent securely to services@obnet.org and never shared with third parties.
+      </div>
+    </div>
+
+    <!-- ── SIDEBAR ── -->
+    <div class="ea-sidebar">
+
+      <div class="ea-info-card ea-animate ea-delay-1">
+        <div class="ea-info-card-title">What you get</div>
+        <div class="ea-info-item">
+          <div class="ea-info-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5L10 5.5L14.5 6.2L11.25 9.3L12.06 14L8 11.8L3.94 14L4.75 9.3L1.5 6.2L6 5.5L8 1.5Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div class="ea-info-label">Founding Pricing</div>
+            <div class="ea-info-val">Permanent early-adopter discount</div>
+          </div>
+        </div>
+        <div class="ea-info-item">
+          <div class="ea-info-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 2H3a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V3a1 1 0 00-1-1z" stroke="currentColor" stroke-width="1.3"/><path d="M5 8h6M5 5h6M5 11h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="ea-info-label">Roadmap Input</div>
+            <div class="ea-info-val">Shape features before launch</div>
+          </div>
+        </div>
+        <div class="ea-info-item">
+          <div class="ea-info-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 5v4l2.5 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="ea-info-label">Priority Onboarding</div>
+            <div class="ea-info-val">Dedicated setup &amp; support</div>
+          </div>
+        </div>
+        <div class="ea-info-item">
+          <div class="ea-info-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M14 10c0 2.2-2.7 4-6 4s-6-1.8-6-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><ellipse cx="8" cy="6" rx="6" ry="4" stroke="currentColor" stroke-width="1.3"/></svg>
+          </div>
+          <div>
+            <div class="ea-info-label">Q3 2026 Target</div>
+            <div class="ea-info-val">First production deployments</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ea-promise-card ea-animate ea-delay-2">
+        <h5>Our commitment to you</h5>
+        <div class="ea-promise-item">We personally review every application — no auto-responses, no sales pipeline.</div>
+        <div class="ea-promise-item">We respond within two business days.</div>
+        <div class="ea-promise-item">Your data is sent directly to services@obnet.org and never stored in third-party CRMs.</div>
+        <div class="ea-promise-item">Early access is under NDA by default — your operational details stay private.</div>
+        <div class="ea-promise-item">No commitment required to join early access.</div>
+      </div>
+
+      <div style="background:var(--ink);border-radius:14px;padding:24px;" class="ea-animate ea-delay-3">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#4a6da0;margin-bottom:14px;">Contact directly</div>
+        <div style="font-family:'DM Mono',monospace;font-size:13px;color:#8898b8;line-height:1.8;">
+          Prefer to reach out directly?<br>
+          <a href="mailto:services@obnet.org" style="color:#60a5fa;text-decoration:none;font-weight:600;">services@obnet.org</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand-col">
+      <div class="footer-logo">
+        <div class="footer-logo-icon">⬡</div>
+        Obnet
+      </div>
+      <p>Building precise, reliable software tools for developers and businesses who take their data seriously.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <a onclick="showPage('home')">Home</a>
+      <a onclick="showPage('about')">About</a>
+      <a onclick="showPage('contact')">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h5>Products</h5>
+      <a onclick="showPage('products')">All Products</a>
+      <a onclick="showPage('dokshield')"><img src="data:image/png;base64," alt="DokShield" style="height:20px;vertical-align:middle;opacity:0.85;"></a>
+      <a onclick="showPage('dokshield')">Features</a>
+      <a onclick="showPage('dokshield')">Pricing</a>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <a href="/cdn-cgi/l/email-protection#9bf3fef7f7f4dbf4f9f1fef8eff4f5feefb5f8f4f6"><span class="__cf_email__" data-cfemail="2048454c4c4f604f424a4543544f4e45540e434f4d">[email&#160;protected]</span></a>
+      <a href="/cdn-cgi/l/email-protection#3f4c4a4f4f504d4b7f505d555a5c4b50515a4b115c5052"><span class="__cf_email__" data-cfemail="f2818782829d8086b29d90989791869d9c9786dc919d9f">[email&#160;protected]</span></a>
+      <a href="/cdn-cgi/l/email-protection#a8d8c9dadcc6cddadbe8c7cac2cdcbdcc7c6cddc86cbc7c5"><span class="__cf_email__" data-cfemail="bbcbdac9cfd5dec9c8fbd4d9d1ded8cfd4d5decf95d8d4d6">[email&#160;protected]</span></a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Obnet. All rights reserved.</p>
+    <div style="display:flex;gap:20px;">
+      <a href="#" onclick="showPrivacy()">Privacy Policy</a>
+      <a href="#" onclick="showTerms()">Terms of Service</a>
+    </div>
+    <p>Built with precision. <span style="color:var(--accent);">✦</span></p>
+  </div>
+</footer>
+
+<!-- Privacy Policy Modal -->
+<div id="modal-privacy" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9000;overflow-y:auto;">
+  <div style="background:#fff;max-width:700px;margin:60px auto;border-radius:16px;padding:48px;position:relative;">
+    <button onclick="document.getElementById('modal-privacy').style.display='none'" style="position:absolute;top:20px;right:24px;background:none;border:none;font-size:22px;cursor:pointer;color:#888;">✕</button>
+    <h2 style="font-size:28px;font-weight:800;margin-bottom:24px;">Privacy Policy</h2>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Last updated: March 2026</strong></p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;">Obnet ("we", "us", or "our") operates obnet.org and the DokShield platform. This policy explains how we collect, use, and protect your information.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Information We Collect:</strong> We collect information you provide directly to us, such as your name, email address, and company when you contact us or request access to DokShield.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>How We Use It:</strong> We use your information solely to respond to your enquiries and provide access to our products. We do not sell or share your data with third parties.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Data Security:</strong> We implement industry-standard security measures to protect your personal information.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Contact:</strong> For privacy-related enquiries, contact us at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="85ede0e9e9eac5eae7ebe0f1abeaf7e2">[email&#160;protected]</a></p>
+    <p style="font-family:'DM Mono',monospace;font-size:11px;color:#aaa;margin-top:24px;">This policy will be updated as the platform develops. We will notify users of material changes.</p>
+  </div>
+</div>
+
+<!-- Terms of Service Modal -->
+<div id="modal-terms" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9000;overflow-y:auto;">
+  <div style="background:#fff;max-width:700px;margin:60px auto;border-radius:16px;padding:48px;position:relative;">
+    <button onclick="document.getElementById('modal-terms').style.display='none'" style="position:absolute;top:20px;right:24px;background:none;border:none;font-size:22px;cursor:pointer;color:#888;">✕</button>
+    <h2 style="font-size:28px;font-weight:800;margin-bottom:24px;">Terms of Service</h2>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Last updated: March 2026</strong></p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;">By accessing obnet.org or using DokShield, you agree to these terms. If you do not agree, please do not use our services.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Use of Services:</strong> You agree to use our services only for lawful purposes and in accordance with these terms.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Intellectual Property:</strong> All content, branding, and software on this site is the property of Obnet and may not be reproduced without permission.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Disclaimer:</strong> DokShield is currently in development. Features and pricing are subject to change. We are not liable for any damages arising from use of early access versions.</p>
+    <p style="font-family:'DM Mono',monospace;font-size:13px;color:#555;line-height:1.9;margin-bottom:16px;"><strong>Contact:</strong> For terms-related enquiries, contact us at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7f171a1313103f101d111a0b51100d18">[email&#160;protected]</a></p>
+    <p style="font-family:'DM Mono',monospace;font-size:11px;color:#aaa;margin-top:24px;">These terms will be updated as the platform develops. Continued use of the service constitutes acceptance of updated terms.</p>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── Privacy & Terms modals
+function showPrivacy() { document.getElementById('modal-privacy').style.display='block'; }
+function showTerms()   { document.getElementById('modal-terms').style.display='block'; }
+
+// Close modals on background click
+['modal-privacy','modal-terms'].forEach(id => {
+  document.getElementById(id).addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+  });
+});
+
+// ── Compliance tile toggle
+function toggleCF(tile) {
+  const badge  = tile.querySelector('.cf-badge');
+  const short  = tile.querySelector('.cf-short');
+  const panel  = tile.querySelector('.cf-desc-panel');
+  const label  = tile.dataset.label;
+  const color  = tile.dataset.color;
+  const what   = tile.dataset.what;
+  const impl   = tile.dataset.impl;
+  const isOpen = tile.classList.contains('cf-active');
+
+  // Close all tiles first
+  document.querySelectorAll('.compliance-framework').forEach(t => {
+    t.classList.remove('cf-active');
+    t.querySelector('.cf-badge').textContent = t.dataset.label;
+    t.querySelector('.cf-short').style.display = '';
+    const p = t.querySelector('.cf-desc-panel');
+    p.classList.remove('cf-panel-open');
+    p.innerHTML = '';
+  });
+
+  // If it was closed, open it
+  if (!isOpen) {
+    tile.classList.add('cf-active');
+    badge.textContent = 'DokShield Implementation';
+    short.style.display = 'none';
+    panel.innerHTML =
+      '<span class="cf-panel-what" style="color:' + color + '">What is ' + label + '?</span>' +
+      '<span class="cf-panel-body">' + what + '</span>' +
+      '<div class="cf-panel-impl">' +
+        '<span class="cf-panel-impl-label" style="color:' + color + '">DokShield implementation</span>' +
+        '<span class="cf-panel-impl-body">' + impl + '</span>' +
+      '</div>';
+    // Trigger transition on next frame
+    requestAnimationFrame(() => panel.classList.add('cf-panel-open'));
+  }
+}
+
+// ── Early Access form handler
+function handleEarlyAccessSubmit(btn) {
+  const firstName = document.getElementById('ea-firstname').value.trim();
+  const lastName  = document.getElementById('ea-lastname').value.trim();
+  const email     = document.getElementById('ea-email').value.trim();
+  const jobTitle  = document.getElementById('ea-jobtitle').value.trim();
+  const company   = document.getElementById('ea-company').value.trim();
+  const industry  = document.getElementById('ea-industry').value;
+  const country   = document.getElementById('ea-country').value;
+  const current   = document.getElementById('ea-current').value;
+
+  // Validation — required fields
+  if (!firstName || !lastName || !email || !jobTitle || !company || !industry || !country || !current) {
+    btn.textContent = '⚠ Please fill in all required fields';
+    btn.style.background = '#b45309';
+    setTimeout(() => {
+      btn.textContent = 'Submit Early Access Application →';
+      btn.style.background = '';
+    }, 3500);
+    return;
+  }
+
+  // Collect selected modules
+  const modules = [...document.querySelectorAll('.ea-module-check input:checked')]
+    .map(cb => cb.value).join(', ') || 'None selected';
+
+  // Build email body
+  const subject = encodeURIComponent('DokShield Early Access Application — ' + firstName + ' ' + lastName);
+  const body = encodeURIComponent(
+    'EARLY ACCESS APPLICATION — DokShield\n' +
+    '=====================================\n\n' +
+    'PERSONAL DETAILS\n' +
+    'Name:        ' + firstName + ' ' + lastName + '\n' +
+    'Email:       ' + email + '\n' +
+    'Phone:       ' + (document.getElementById('ea-phone').value.trim() || 'Not provided') + '\n' +
+    'Job Title:   ' + jobTitle + '\n' +
+    'LinkedIn:    ' + (document.getElementById('ea-linkedin').value.trim() || 'Not provided') + '\n\n' +
+    'ORGANISATION\n' +
+    'Company:     ' + company + '\n' +
+    'Industry:    ' + industry + '\n' +
+    'Country:     ' + country + '\n' +
+    'Website:     ' + (document.getElementById('ea-website').value.trim() || 'Not provided') + '\n' +
+    'Data Centres: ' + (document.getElementById('ea-dccount').value || 'Not provided') + '\n' +
+    'Officers:    ' + (document.getElementById('ea-officers').value || 'Not provided') + '\n\n' +
+    'CURRENT SETUP\n' +
+    'Current tools: ' + current + '\n' +
+    'Pain point:    ' + (document.getElementById('ea-painpoint').value.trim() || 'Not provided') + '\n\n' +
+    'MODULES OF INTEREST\n' + modules + '\n\n' +
+    'PLAN & TIMELINE\n' +
+    'Plan interest: ' + (document.getElementById('ea-plan').value || 'Not provided') + '\n' +
+    'Timeline:      ' + (document.getElementById('ea-timeline').value || 'Not provided') + '\n\n' +
+    'ADDITIONAL NOTES\n' + (document.getElementById('ea-notes').value.trim() || 'None') + '\n\n' +
+    '— Submitted via obnet.org early access form'
+  );
+
+  btn.textContent = 'Opening email client...';
+  btn.disabled = true;
+
+  // Open mailto — sends to services@obnet.org
+  window.location.href = 'mailto:services@obnet.org?subject=' + subject + '&body=' + body;
+
+  // After a short delay, show success state
+  setTimeout(() => {
+    btn.textContent = '✓ Application ready — check your email client';
+    btn.style.background = '#16a34a';
+    btn.style.boxShadow = '0 4px 16px rgba(22,163,74,0.3)';
+  }, 1200);
+}
+
+// ── Contact form handler
+function handleFormSubmit(btn) {
+  const form = btn.closest('.form-wrap');
+  const firstName = form.querySelector('input[type="text"]').value.trim();
+  const email     = form.querySelector('input[type="email"]').value.trim();
+  const message   = form.querySelector('textarea').value.trim();
+
+  if (!firstName || !email || !message) {
+    btn.textContent = '⚠ Please fill in all required fields';
+    btn.style.background = '#b45309';
+    setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; }, 3000);
+    return;
+  }
+
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  // Send via Formspree (replace YOUR_FORM_ID with real ID when ready)
+  fetch('https://formspree.io/f/YOUR_FORM_ID', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({
+      name: firstName,
+      email: email,
+      message: message
+    })
+  })
+  .then(r => {
+    if (r.ok) {
+      btn.textContent = '✓ Message Sent — We\'ll be in touch!';
+      btn.style.background = '#16a34a';
+    } else {
+      throw new Error();
+    }
+  })
+  .catch(() => {
+    // Fallback: open mail client
+    const subject = encodeURIComponent('Enquiry from obnet.org');
+    const body    = encodeURIComponent(`Name: ${firstName}\nEmail: ${email}\n\n${message}`);
+    window.location.href = `mailto:hello@obnet.org?subject=${subject}&body=${body}`;
+    btn.textContent = 'Send Message →';
+    btn.disabled = false;
+  });
+}
+
+// ── Custom cursor
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top  = my + 'px';
+});
+
+(function animRing() {
+  rx += (mx - rx) * 0.10;
+  ry += (my - ry) * 0.10;
+  ring.style.left = rx + 'px';
+  ring.style.top  = ry + 'px';
+  requestAnimationFrame(animRing);
+})();
+
+document.querySelectorAll('button, a, .faq-item, .feat-card, .phil-card, .value-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width  = '20px';
+    cursor.style.height = '20px';
+    ring.style.width  = '56px';
+    ring.style.height = '56px';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width  = '12px';
+    cursor.style.height = '12px';
+    ring.style.width  = '38px';
+    ring.style.height = '38px';
+  });
+});
+
+// ── Scroll navbar
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
+});
+
+// ── Page navigation
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-center a').forEach(a => a.classList.remove('active'));
+  const navLink = document.getElementById('nav-' + id);
+  if (navLink) navLink.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  setTimeout(observeReveal, 60);
+}
+
+// ── Scroll reveal
+function observeReveal() {
+  const els = document.querySelectorAll('.page.active .reveal');
+  if (!els.length) return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  els.forEach(el => { el.classList.remove('visible'); obs.observe(el); });
+}
+
+// ── FAQ toggle
+function toggleFaq(el) {
+  el.classList.toggle('open');
+}
+
+// Run reveal on first load
+observeReveal();
+</script>
+</body>
+</html>
