@@ -708,24 +708,79 @@ nav.scrolled {
 .features-section { padding: 0 48px 100px; max-width: 1200px; margin: 0 auto; }
 .features-header { margin-bottom: 48px; }
 
-.features-big-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.features-big-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 
 .feat-card {
-  background: var(--card2); border: 1px solid var(--border);
-  border-radius: 12px; padding: 32px; transition: all 0.3s;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 36px 32px 32px;
+  transition: all 0.38s cubic-bezier(0.22,1,0.36,1);
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
 }
 
-.feat-card:hover { border-color: var(--border2); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); background: #fff; }
+/* Top gradient accent — reveals on hover */
+.feat-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, #2563eb, #60a5fa, #93c5fd);
+  opacity: 0;
+  transition: opacity 0.38s ease;
+  border-radius: 16px 16px 0 0;
+}
+.feat-card:hover::before { opacity: 1; }
+
+/* Module number watermark */
+.feat-card::after {
+  content: attr(data-num);
+  position: absolute; top: 18px; right: 22px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+  color: var(--border2);
+  transition: color 0.3s;
+}
+.feat-card:hover::after { color: rgba(37,99,235,0.45); }
+
+.feat-card:hover {
+  border-color: rgba(37,99,235,0.22);
+  box-shadow: 0 20px 52px rgba(37,99,235,0.1), 0 4px 14px rgba(0,0,0,0.05);
+  transform: translateY(-6px);
+  background: #fafbff;
+}
 
 /* ═══════════════════════════════════════════════════════
-   FEAT ICON — updated for SVG
+   FEAT ICON
 ═══════════════════════════════════════════════════════ */
 .feat-icon {
-  width: 48px; height: 48px; background: var(--ink); border-radius: 10px;
+  width: 52px; height: 52px;
+  background: linear-gradient(135deg, #0f1117 0%, #1a2035 100%);
+  border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
-  margin-bottom: 18px; flex-shrink: 0;
+  margin-bottom: 20px; flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  transition: all 0.38s cubic-bezier(0.22,1,0.36,1);
+  position: relative; overflow: hidden;
 }
-.feat-icon svg { color: #ffffff; stroke: #ffffff; }
+.feat-icon::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(37,99,235,0.35), rgba(96,165,250,0.12));
+  opacity: 0;
+  transition: opacity 0.38s ease;
+}
+.feat-card:hover .feat-icon { box-shadow: 0 6px 24px rgba(37,99,235,0.32); transform: scale(1.06); }
+.feat-card:hover .feat-icon::after { opacity: 1; }
+.feat-icon svg { color: #ffffff; stroke: #ffffff; position: relative; z-index: 1; }
+
+/* Module category tag */
+.feat-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--muted2); margin-bottom: 8px;
+  transition: color 0.3s;
+}
+.feat-card:hover .feat-tag { color: #2563eb; }
 
 /* ═══════════════════════════════════════════════════════
    COMPLIANCE BANNER
@@ -880,8 +935,8 @@ nav.scrolled {
   .compliance-banner-inner { padding: 28px 24px; }
 }
 
-.feat-card h4 { font-size: 16px; font-weight: 700; margin-bottom: 10px; color: var(--ink); }
-.feat-card p { font-family: 'DM Mono', monospace; font-size: 12px; color: #3a4455; line-height: 1.85; }
+.feat-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 10px; color: var(--ink); letter-spacing: -0.01em; line-height: 1.25; }
+.feat-card p { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); line-height: 1.9; flex: 1; }
 
 /* How it works */
 .how-section { background: var(--ink); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 100px 48px; }
@@ -1139,16 +1194,8 @@ footer { border-top: 1px solid var(--border); background: var(--ink); padding: 6
 /* story-left body text — readable on dark */
 .story-left p { color: #8898b8 !important; }
 
-/* Feat-card hover — blue accent bottom line */
-.feat-card { position: relative; overflow: hidden; }
-.feat-card::after {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, #2563eb, #60a5fa);
-  transform: scaleX(0); transform-origin: left;
-  transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
-}
-.feat-card:hover::after { transform: scaleX(1); }
-.feat-card:hover { border-color: #bdd0f8 !important; box-shadow: 0 8px 32px rgba(37,99,235,0.12) !important; transform: translateY(-4px) !important; }
+/* Feat-card hover — handled in base styles above */
+.feat-card:hover { border-color: rgba(37,99,235,0.22) !important; box-shadow: 0 20px 52px rgba(37,99,235,0.1), 0 4px 14px rgba(0,0,0,0.05) !important; transform: translateY(-6px) !important; }
 
 /* Phil-card left accent bar — blue */
 .phil-card::before { background: linear-gradient(to bottom, #2563eb, #60a5fa) !important; }
