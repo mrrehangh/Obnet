@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DokShield — Security Ops Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   TOKENS
+══════════════════════════════════════════ */
+:root {
+  --bg:          #0a1628;
+  --bg2:         #0f1e35;
+  --bg3:         #152540;
+  --surface:     #1a2d4a;
+  --surface2:    #203456;
+  --surface3:    #263d62;
+  --border:      rgba(255,255,255,0.07);
+  --border-acc:  rgba(255,255,255,0.13);
+
+  --blue:        #3b82f6;
+  --blue-bright: #60a5fa;
+  --blue-dim:    rgba(59,130,246,0.12);
+  --blue-border: rgba(59,130,246,0.28);
+
+  --teal:        #2dd4bf;
+  --teal-dim:    rgba(45,212,191,0.10);
+  --teal-border: rgba(45,212,191,0.28);
+
+  --green:       #4ade80;
+  --green-dim:   rgba(74,222,128,0.10);
+  --green-border:rgba(74,222,128,0.28);
+
+  --amber:       #fbbf24;
+  --amber-dim:   rgba(251,191,36,0.10);
+  --amber-border:rgba(251,191,36,0.28);
+
+  --violet:      #a78bfa;
+  --violet-dim:  rgba(167,139,250,0.10);
+  --violet-border:rgba(167,139,250,0.28);
+
+  --rose:        #fb7185;
+  --rose-dim:    rgba(251,113,133,0.10);
+  --rose-border: rgba(251,113,133,0.28);
+
+  --text-primary:   #f0f6ff;
+  --text-secondary: #8ea3c0;
+  --text-tertiary:  #5a7599;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Noise overlay */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0; opacity: 0.5;
+}
+
+/* Top gradient bar */
+body::after {
+  content: '';
+  position: fixed; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--teal) 0%, var(--blue) 40%, var(--violet) 75%, var(--teal) 100%);
+  z-index: 200;
+}
+
+/* ══════════════════════════════════════════
+   NAV
+══════════════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px;
+  background: rgba(10,22,40,0.88);
+  backdrop-filter: blur(24px) saturate(1.3);
+  border-bottom: 1px solid var(--border-acc);
+}
+
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none; color: var(--text-primary);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px; font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.nav-logo-icon {
+  width: 32px; height: 32px;
+  background: var(--blue-dim);
+  border: 1px solid var(--blue-border);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--blue-bright);
+}
+
+.nav-links {
+  display: flex; align-items: center; gap: 32px;
+}
+.nav-links a {
+  color: var(--text-secondary); text-decoration: none;
+  font-size: 13.5px; font-weight: 500;
+  transition: color 0.2s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--text-primary); }
+
+.nav-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--blue-dim);
+  border: 1px solid var(--blue-border);
+  border-radius: 99px;
+  padding: 6px 14px;
+  font-size: 12px; font-weight: 600;
+  color: var(--blue-bright);
+  letter-spacing: 0.04em;
+}
+
+/* ══════════════════════════════════════════
+   PAGE WRAPPER
+══════════════════════════════════════════ */
+.page {
+  position: relative; z-index: 1;
+  max-width: 1340px; margin: 0 auto;
+  padding: 104px 36px 100px;
+}
+
+/* ══════════════════════════════════════════
+   MASTHEAD
+══════════════════════════════════════════ */
+.masthead {
+  margin-bottom: 60px;
+  animation: fadeUp 0.7s ease both;
+}
+
+.masthead-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 18px;
+}
+.masthead-eyebrow::before {
+  content: '';
+  display: block; width: 24px; height: 2px;
+  background: var(--teal);
+  border-radius: 2px;
+}
+
+.masthead-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(32px, 4.5vw, 58px);
+  font-weight: 700;
+  line-height: 1.08; letter-spacing: -0.03em;
+  color: var(--text-primary);
+  margin-bottom: 18px;
+}
+.masthead-title em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--blue-bright), var(--teal));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.masthead-sub {
+  font-size: 15px; color: var(--text-secondary);
+  max-width: 620px; line-height: 1.7;
+}
+
+/* ══════════════════════════════════════════
+   STAT STRIP
+══════════════════════════════════════════ */
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  margin-bottom: 72px;
+  animation: fadeUp 0.7s 0.1s ease both;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 16px 16px;
+  text-align: center;
+  position: relative; overflow: hidden;
+  cursor: default;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+.stat-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+.stat-card.c-blue::before   { background: var(--blue); }
+.stat-card.c-teal::before   { background: var(--teal); }
+.stat-card.c-green::before  { background: var(--green); }
+.stat-card.c-amber::before  { background: var(--amber); }
+.stat-card.c-violet::before { background: var(--violet); }
+.stat-card.c-rose::before   { background: var(--rose); }
+
+.stat-card:hover {
+  border-color: var(--border-acc);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+}
+
+.stat-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(26px, 2.8vw, 34px);
+  font-weight: 700; line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+  display: block;
+}
+.c-blue   .stat-num { color: var(--blue-bright); }
+.c-teal   .stat-num { color: var(--teal); }
+.c-green  .stat-num { color: var(--green); }
+.c-amber  .stat-num { color: var(--amber); }
+.c-violet .stat-num { color: var(--violet); }
+.c-rose   .stat-num { color: var(--rose); }
+
+.stat-lbl {
+  font-size: 10.5px; font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  line-height: 1.3;
+}
+
+/* ══════════════════════════════════════════
+   SECTION DIVIDER
+══════════════════════════════════════════ */
+.sec-divider {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 36px;
+}
+.sec-divider-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, var(--border-acc), transparent);
+}
+.sec-divider-text {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+.sec-divider-badge {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 99px;
+  white-space: nowrap;
+}
+.sec-divider-badge.b-blue   { color: var(--blue-bright); background: var(--blue-dim); border: 1px solid var(--blue-border); }
+.sec-divider-badge.b-teal   { color: var(--teal); background: var(--teal-dim); border: 1px solid var(--teal-border); }
+.sec-divider-badge.b-violet { color: var(--violet); background: var(--violet-dim); border: 1px solid var(--violet-border); }
+
+/* ══════════════════════════════════════════
+   COMPRESSION SECTION
+══════════════════════════════════════════ */
+.compression-section {
+  margin-bottom: 80px;
+  animation: fadeUp 0.7s 0.15s ease both;
+}
+
+.compression-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 48px 48px 40px;
+  position: relative; overflow: hidden;
+}
+.compression-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 30% 50%, rgba(59,130,246,0.06) 0%, transparent 70%),
+              radial-gradient(ellipse 40% 60% at 80% 30%, rgba(45,212,191,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.compression-header {
+  text-align: center; margin-bottom: 48px;
+}
+.compression-tag {
+  display: inline-block;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--blue-bright);
+  background: var(--blue-dim);
+  border: 1px solid var(--blue-border);
+  padding: 5px 14px; border-radius: 99px;
+  margin-bottom: 14px;
+}
+.compression-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(22px, 2.5vw, 32px);
+  font-weight: 700; color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+.compression-title span { color: var(--blue-bright); }
+
+/* Visual compression diagram */
+.compress-diagram {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.compress-side {
+  text-align: center;
+}
+.compress-grid {
+  display: grid;
+  gap: 4px;
+  margin: 0 auto 20px;
+  width: fit-content;
+}
+.compress-grid-left {
+  grid-template-columns: repeat(13, 14px);
+  grid-template-rows: repeat(12, 14px);
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.compress-grid-right {
+  grid-template-columns: repeat(9, 14px);
+  grid-template-rows: repeat(7, 14px);
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.8s 0.4s ease, transform 0.8s 0.4s ease;
+}
+.compress-grid.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+.compress-cell {
+  border-radius: 2px;
+  transition: background 0.3s;
+}
+.compress-cell.active {
+  background: var(--surface2);
+  border: 1px solid rgba(59,130,246,0.2);
+}
+.compress-cell.active-right {
+  background: var(--surface2);
+  border: 1px solid rgba(45,212,191,0.25);
+}
+
+.compress-label-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 700; line-height: 1;
+  letter-spacing: -0.04em;
+}
+.compress-label-num.left  { color: var(--blue-bright); }
+.compress-label-num.right { color: var(--teal); }
+
+.compress-label-text {
+  font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  margin-top: 6px;
+}
+
+/* Arrow */
+.compress-arrow {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.compress-arrow-icon {
+  width: 80px; height: 80px;
+  background: linear-gradient(135deg, var(--blue-dim), var(--teal-dim));
+  border: 1px solid var(--border-acc);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px;
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+.compress-arrow-label {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--teal);
+}
+
+@keyframes pulse-glow {
+  0%,100% { box-shadow: 0 0 0 0 rgba(45,212,191,0); }
+  50%      { box-shadow: 0 0 0 12px rgba(45,212,191,0.08); }
+}
+
+/* Logic cards */
+.logic-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+.logic-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 22px 22px 18px;
+  position: relative;
+  transition: border-color 0.25s, transform 0.25s;
+}
+.logic-card:hover {
+  border-color: var(--border-acc);
+  transform: translateY(-2px);
+}
+.logic-card-icon {
+  width: 40px; height: 40px;
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; margin-bottom: 14px;
+}
+.logic-card.lc-blue  .logic-card-icon { background: var(--blue-dim); border: 1px solid var(--blue-border); }
+.logic-card.lc-teal  .logic-card-icon { background: var(--teal-dim); border: 1px solid var(--teal-border); }
+.logic-card.lc-amber .logic-card-icon { background: var(--amber-dim); border: 1px solid var(--amber-border); }
+
+.logic-card-title {
+  font-size: 13px; font-weight: 700;
+  color: var(--text-primary); margin-bottom: 8px;
+}
+.logic-card-body {
+  font-size: 12.5px; color: var(--text-secondary);
+  line-height: 1.6;
+}
+.logic-card-body li {
+  list-style: none; padding-left: 14px; position: relative;
+  margin-bottom: 4px;
+}
+.logic-card-body li::before {
+  content: '·'; position: absolute; left: 0;
+  color: var(--text-tertiary);
+}
+.logic-card-tag {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 10px; font-weight: 700;
+  padding: 3px 10px; border-radius: 99px;
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.lc-blue  .logic-card-tag { color: var(--blue-bright); background: var(--blue-dim); border: 1px solid var(--blue-border); }
+.lc-teal  .logic-card-tag { color: var(--teal); background: var(--teal-dim); border: 1px solid var(--teal-border); }
+.lc-amber .logic-card-tag { color: var(--amber); background: var(--amber-dim); border: 1px solid var(--amber-border); }
+
+/* ══════════════════════════════════════════
+   SPRINT ROADMAP
+══════════════════════════════════════════ */
+.roadmap-section {
+  margin-bottom: 80px;
+  animation: fadeUp 0.7s 0.2s ease both;
+}
+
+/* Sprint grid */
+.sprint-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.sprint-grid-wide {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.sprint-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 28px 28px 24px;
+  position: relative; overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+.sprint-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.sprint-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.45);
+}
+
+.sprint-card.mvp {
+  border-color: var(--blue-border);
+  background: linear-gradient(135deg, var(--surface), rgba(59,130,246,0.05));
+}
+.sprint-card.mvp::before {
+  background: radial-gradient(ellipse 70% 60% at 20% 50%, rgba(59,130,246,0.08), transparent);
+  opacity: 1;
+}
+.sprint-card.mvp:hover {
+  border-color: rgba(59,130,246,0.5);
+  box-shadow: 0 16px 48px rgba(59,130,246,0.15);
+}
+
+.sprint-card.mvp-core {
+  border-color: var(--teal-border);
+  background: linear-gradient(135deg, var(--surface), rgba(45,212,191,0.05));
+}
+.sprint-card.mvp-core::before {
+  background: radial-gradient(ellipse 70% 60% at 20% 50%, rgba(45,212,191,0.08), transparent);
+  opacity: 1;
+}
+.sprint-card.mvp-core:hover {
+  border-color: rgba(45,212,191,0.5);
+  box-shadow: 0 16px 48px rgba(45,212,191,0.15);
+}
+
+/* Sprint number badge */
+.sprint-number {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-bottom: 14px;
+}
+.sprint-num-badge {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; font-weight: 700;
+}
+.sc-blue  .sprint-num-badge { background: var(--blue-dim); border: 1px solid var(--blue-border); color: var(--blue-bright); }
+.sc-teal  .sprint-num-badge { background: var(--teal-dim); border: 1px solid var(--teal-border); color: var(--teal); }
+.sc-green .sprint-num-badge { background: var(--green-dim); border: 1px solid var(--green-border); color: var(--green); }
+.sc-amber .sprint-num-badge { background: var(--amber-dim); border: 1px solid var(--amber-border); color: var(--amber); }
+.sc-violet.sprint-num-badge { background: var(--violet-dim); border: 1px solid var(--violet-border); color: var(--violet); }
+
+.sprint-label {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* MVP badge */
+.mvp-badge {
+  position: absolute; top: 20px; right: 20px;
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px;
+  border-radius: 99px;
+  font-size: 9.5px; font-weight: 800;
+  letter-spacing: 0.15em; text-transform: uppercase;
+}
+.mvp-badge.b-blue {
+  color: var(--blue-bright);
+  background: var(--blue-dim);
+  border: 1px solid var(--blue-border);
+  box-shadow: 0 0 16px rgba(59,130,246,0.2);
+  animation: badge-pulse-blue 2.5s ease-in-out infinite;
+}
+.mvp-badge.b-teal {
+  color: var(--teal);
+  background: var(--teal-dim);
+  border: 1px solid var(--teal-border);
+  box-shadow: 0 0 16px rgba(45,212,191,0.2);
+  animation: badge-pulse-teal 2.5s ease-in-out infinite;
+}
+@keyframes badge-pulse-blue {
+  0%,100% { box-shadow: 0 0 8px rgba(59,130,246,0.15); }
+  50%      { box-shadow: 0 0 20px rgba(59,130,246,0.35); }
+}
+@keyframes badge-pulse-teal {
+  0%,100% { box-shadow: 0 0 8px rgba(45,212,191,0.15); }
+  50%      { box-shadow: 0 0 20px rgba(45,212,191,0.35); }
+}
+
+.sprint-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(16px, 1.5vw, 20px);
+  font-weight: 700; line-height: 1.2;
+  color: var(--text-primary); margin-bottom: 6px;
+}
+.sprint-subtitle {
+  font-size: 12.5px; color: var(--text-secondary);
+  line-height: 1.5; margin-bottom: 16px;
+}
+
+.sprint-desc {
+  font-size: 12px; color: var(--text-tertiary);
+  line-height: 1.6; font-style: italic;
+  margin-bottom: 16px;
+}
+
+/* Sprint chips */
+.sprint-chips {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.chip {
+  font-size: 10.5px; font-weight: 600;
+  padding: 4px 10px; border-radius: 99px;
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.chip-blue   { color: var(--blue-bright); background: var(--blue-dim); border: 1px solid var(--blue-border); }
+.chip-teal   { color: var(--teal); background: var(--teal-dim); border: 1px solid var(--teal-border); }
+.chip-green  { color: var(--green); background: var(--green-dim); border: 1px solid var(--green-border); }
+.chip-amber  { color: var(--amber); background: var(--amber-dim); border: 1px solid var(--amber-border); }
+.chip-violet { color: var(--violet); background: var(--violet-dim); border: 1px solid var(--violet-border); }
+.chip-rose   { color: var(--rose); background: var(--rose-dim); border: 1px solid var(--rose-border); }
+
+/* Sprint connector */
+.sprint-connector {
+  display: flex; align-items: center; justify-content: center;
+  height: 28px; margin: -6px 0;
+  position: relative; z-index: 2;
+}
+.sprint-connector-line {
+  width: 2px; height: 28px;
+  background: linear-gradient(to bottom, var(--blue-border), var(--teal-border));
+  border-radius: 2px;
+}
+.sprint-connector-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--surface3);
+  border: 2px solid var(--teal-border);
+  position: absolute;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+}
+
+/* Sprint expandable detail */
+.sprint-detail {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+  opacity: 0;
+}
+.sprint-detail.open {
+  max-height: 400px;
+  opacity: 1;
+}
+.sprint-detail-inner {
+  border-top: 1px solid var(--border);
+  padding-top: 16px; margin-top: 16px;
+}
+.sprint-detail-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.sprint-detail-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 12px; color: var(--text-secondary);
+}
+.sprint-detail-item::before {
+  content: '→';
+  color: var(--teal); flex-shrink: 0; margin-top: 1px;
+}
+
+/* Expand indicator */
+.sprint-expand-hint {
+  position: absolute; bottom: 16px; right: 20px;
+  font-size: 10px; color: var(--text-tertiary);
+  display: flex; align-items: center; gap: 5px;
+  transition: color 0.2s;
+}
+.sprint-card:hover .sprint-expand-hint { color: var(--text-secondary); }
+.expand-icon {
+  display: inline-block;
+  transition: transform 0.3s;
+}
+.sprint-card.expanded .expand-icon { transform: rotate(180deg); }
+
+/* ══════════════════════════════════════════
+   ROADMAP FLOW (visual path between sprint rows)
+══════════════════════════════════════════ */
+.roadmap-flow {
+  display: flex; align-items: center; justify-content: center;
+  margin: 8px 0;
+  gap: 12px;
+}
+.flow-node {
+  width: 12px; height: 12px; border-radius: 50%;
+  border: 2px solid;
+  flex-shrink: 0;
+}
+.flow-line {
+  flex: 1; height: 2px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--border-acc), var(--border));
+}
+.flow-arrow { color: var(--text-tertiary); font-size: 14px; }
+
+/* ══════════════════════════════════════════
+   MODULES SECTION
+══════════════════════════════════════════ */
+.modules-section {
+  animation: fadeUp 0.7s 0.25s ease both;
+}
+
+.module-groups {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.module-group {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+.module-group:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+}
+
+.module-group.mg-blue:hover  { border-color: var(--blue-border); }
+.module-group.mg-teal:hover  { border-color: var(--teal-border); }
+.module-group.mg-violet:hover{ border-color: var(--violet-border); }
+
+.module-group-header {
+  padding: 24px 24px 20px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.module-group-header::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.mg-blue  .module-group-header::before { background: var(--blue); }
+.mg-teal  .module-group-header::before { background: var(--teal); }
+.mg-violet.module-group-header::before { background: var(--violet); }
+
+.module-group-icon {
+  width: 44px; height: 44px;
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; margin-bottom: 14px;
+}
+.mg-blue   .module-group-icon { background: var(--blue-dim); border: 1px solid var(--blue-border); }
+.mg-teal   .module-group-icon { background: var(--teal-dim); border: 1px solid var(--teal-border); }
+.mg-violet .module-group-icon { background: var(--violet-dim); border: 1px solid var(--violet-border); }
+
+.module-group-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px; font-weight: 700;
+  color: var(--text-primary); margin-bottom: 4px;
+}
+.module-group-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; color: var(--text-secondary);
+}
+.mg-blue   .module-group-count em { color: var(--blue-bright); font-style: normal; }
+.mg-teal   .module-group-count em { color: var(--teal); font-style: normal; }
+.mg-violet .module-group-count em { color: var(--violet); font-style: normal; }
+
+/* Screen count ring */
+.module-screen-ring {
+  position: absolute; top: 20px; right: 20px;
+  width: 56px; height: 56px;
+}
+.module-screen-ring svg { transform: rotate(-90deg); }
+.ring-track { fill: none; stroke: var(--border); stroke-width: 4; }
+.ring-fill  { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 1.2s ease; }
+.mg-blue   .ring-fill { stroke: var(--blue-bright); }
+.mg-teal   .ring-fill { stroke: var(--teal); }
+.mg-violet .ring-fill { stroke: var(--violet); }
+.ring-center-text {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.ring-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px; font-weight: 700; line-height: 1;
+}
+.mg-blue   .ring-num { color: var(--blue-bright); }
+.mg-teal   .ring-num { color: var(--teal); }
+.mg-violet .ring-num { color: var(--violet); }
+.ring-unit {
+  font-size: 8px; color: var(--text-tertiary);
+  font-weight: 600; letter-spacing: 0.06em;
+}
+
+/* Module list */
+.module-list {
+  padding: 16px 24px 20px;
+  display: flex; flex-direction: column; gap: 0;
+}
+.module-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12.5px; color: var(--text-secondary);
+  transition: color 0.2s;
+  cursor: default;
+}
+.module-item:last-child { border-bottom: none; }
+.module-item:hover { color: var(--text-primary); }
+.module-dot {
+  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+}
+.mg-blue   .module-dot { background: var(--blue-bright); }
+.mg-teal   .module-dot { background: var(--teal); }
+.mg-violet .module-dot { background: var(--violet); }
+
+/* ══════════════════════════════════════════
+   FOOTER STRIP
+══════════════════════════════════════════ */
+.footer-strip {
+  margin-top: 72px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 20px;
+}
+.footer-brand {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px; font-weight: 600;
+  color: var(--text-secondary);
+}
+.footer-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--text-tertiary);
+}
+.footer-links {
+  display: flex; gap: 24px;
+}
+.footer-links a {
+  font-size: 12px; color: var(--text-tertiary);
+  text-decoration: none; transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--text-secondary); }
+
+/* ══════════════════════════════════════════
+   ANIMATIONS
+══════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media (max-width: 1100px) {
+  .stat-strip { grid-template-columns: repeat(3, 1fr); }
+  .logic-grid { grid-template-columns: 1fr 1fr; }
+  .module-groups { grid-template-columns: 1fr; }
+  .compress-diagram { grid-template-columns: 1fr; gap: 32px; }
+  .compress-arrow-icon { display: none; }
+}
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .page { padding: 84px 20px 80px; }
+  .sprint-grid { grid-template-columns: 1fr; }
+  .stat-strip { grid-template-columns: repeat(2, 1fr); }
+  .logic-grid { grid-template-columns: 1fr; }
+  .compression-card { padding: 28px 20px; }
+  .sprint-detail-grid { grid-template-columns: 1fr; }
+  .footer-strip { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-icon">⬡</div>
+    Obnet
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="products.html">Products</a>
+    <a href="dokshield.html" class="active">DokShield</a>
+    <a href="earlyaccess.html">Early Access</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="nav-badge">
+    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 1l1.854 3.756L14 5.382l-3 2.924.708 4.194L8 10.527l-3.708 1.973L5 8.306 2 5.382l4.146-.626L8 1z" fill="currentColor"/></svg>
+    Security Ops Blueprint
+  </div>
+</nav>
+
+<!-- PAGE WRAPPER -->
+<div class="page">
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <div class="masthead-eyebrow">DokShield SaaS — Architecture</div>
+    <h1 class="masthead-title">The Blueprint for<br><em>Efficient Security Ops</em></h1>
+    <p class="masthead-sub">A structured 9-sprint delivery plan compressing 156 active database tables into 63 intuitive user-facing screens — purpose-built for data centre security operations.</p>
+  </div>
+
+  <!-- STAT STRIP -->
+  <div class="stat-strip" id="statStrip">
+    <div class="stat-card c-blue">
+      <span class="stat-num" data-target="156">0</span>
+      <div class="stat-lbl">Active Tables</div>
+    </div>
+    <div class="stat-card c-teal">
+      <span class="stat-num" data-target="63">0</span>
+      <div class="stat-lbl">User Screens</div>
+    </div>
+    <div class="stat-card c-amber">
+      <span class="stat-num" data-target="44">0</span>
+      <div class="stat-lbl">System-Managed</div>
+    </div>
+    <div class="stat-card c-green">
+      <span class="stat-num" data-target="9">0</span>
+      <div class="stat-lbl">Sprint Count</div>
+    </div>
+    <div class="stat-card c-violet">
+      <span class="stat-num" data-target="18">0</span>
+      <div class="stat-lbl">Func. Modules</div>
+    </div>
+    <div class="stat-card c-rose">
+      <span class="stat-num" data-target="53">0</span>
+      <div class="stat-lbl">Total Screens</div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 1: ARCHITECTURAL EFFICIENCY ── -->
+  <div class="sec-divider">
+    <div class="sec-divider-line"></div>
+    <span class="sec-divider-text">Part I</span>
+    <span class="sec-divider-badge b-blue">Architectural Efficiency</span>
+    <div class="sec-divider-line" style="background:linear-gradient(90deg,transparent,var(--border-acc));"></div>
+  </div>
+
+  <div class="compression-section">
+    <div class="compression-card">
+
+      <div class="compression-header">
+        <div class="compression-tag">The Great Compression</div>
+        <h2 class="compression-title">
+          <span id="compressLeft">156</span> Tables Streamlined into <span id="compressRight">63</span> Screens
+        </h2>
+      </div>
+
+      <!-- Diagram -->
+      <div class="compress-diagram">
+
+        <!-- LEFT: 156 tables -->
+        <div class="compress-side">
+          <div class="compress-grid compress-grid-left" id="gridLeft">
+            <!-- 156 cells generated by JS -->
+          </div>
+          <div class="compress-label-num left" id="cntLeft">156</div>
+          <div class="compress-label-text">Active Tables</div>
+        </div>
+
+        <!-- Arrow -->
+        <div class="compress-arrow">
+          <div class="compress-arrow-icon">→</div>
+          <div class="compress-arrow-label">Compression</div>
+        </div>
+
+        <!-- RIGHT: 63 screens -->
+        <div class="compress-side">
+          <div class="compress-grid compress-grid-right" id="gridRight">
+            <!-- 63 cells generated by JS -->
+          </div>
+          <div class="compress-label-num right" id="cntRight">63</div>
+          <div class="compress-label-text">User-Facing Screens</div>
+        </div>
+
+      </div>
+
+      <!-- Logic of Reduction -->
+      <div class="logic-grid">
+        <div class="logic-card lc-blue">
+          <div class="logic-card-icon">⊞</div>
+          <div class="logic-card-title">Header/Detail Grouping</div>
+          <ul class="logic-card-body">
+            <li>Collapsing parent/child table pairs into single workflow screens</li>
+            <li>Unified data entry with inline detail management</li>
+            <li>Reduces cognitive load for security operators</li>
+          </ul>
+          <span class="logic-card-tag">Pattern Merging</span>
+        </div>
+        <div class="logic-card lc-teal">
+          <div class="logic-card-icon">⊟</div>
+          <div class="logic-card-title">Reference Lookup Consolidation</div>
+          <ul class="logic-card-body">
+            <li>39 reference/lookup tables collapsed into one Admin screen</li>
+            <li>Single configuration hub for system-wide values</li>
+            <li>Administrator-only access — no end-user exposure</li>
+          </ul>
+          <span class="logic-card-tag">39 → 1 Admin Screen</span>
+        </div>
+        <div class="logic-card lc-amber">
+          <div class="logic-card-icon">⚙</div>
+          <div class="logic-card-title">Zero-Interaction Tables</div>
+          <ul class="logic-card-body">
+            <li>Audit Logs — backend-written automatically</li>
+            <li>Temporal History — system-generated versioning</li>
+            <li>Security Events — machine-populated, never by humans</li>
+          </ul>
+          <span class="logic-card-tag">44 System-Managed</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 2: SPRINT ROADMAP ── -->
+  <div class="sec-divider">
+    <div class="sec-divider-line"></div>
+    <span class="sec-divider-text">Part II</span>
+    <span class="sec-divider-badge b-teal">The 9-Sprint Visual Roadmap</span>
+    <div class="sec-divider-line" style="background:linear-gradient(90deg,transparent,var(--border-acc));"></div>
+  </div>
+
+  <div class="roadmap-section">
+
+    <!-- Sprints 1 & 2 -->
+    <div class="sprint-grid">
+
+      <!-- Sprint 1 -->
+      <div class="sprint-card sc-blue mvp" onclick="toggleSprint(this)" id="sp1">
+        <div class="mvp-badge b-blue">
+          <svg width="9" height="9" viewBox="0 0 16 16" fill="none"><path d="M8 1l1.854 3.756L14 5.382l-3 2.924.708 4.194L8 10.527l-3.708 1.973L5 8.306 2 5.382l4.146-.626L8 1z" fill="currentColor"/></svg>
+          MVP Focus
+        </div>
+        <div class="sprint-number">
+          <div class="sprint-num-badge">1</div>
+          <div class="sprint-label">Foundation Sprint</div>
+        </div>
+        <div class="sprint-title">Auth &amp; IAM</div>
+        <div class="sprint-subtitle">User creation and role assignment</div>
+        <div class="sprint-desc">All subsequent modules depend on this layer — the security foundation everything else is built upon.</div>
+        <div class="sprint-chips">
+          <span class="chip chip-blue">🔐 Authentication</span>
+          <span class="chip chip-blue">👥 Role Management</span>
+          <span class="chip chip-blue">🎫 Permissions</span>
+          <span class="chip chip-blue">🔑 Session Control</span>
+        </div>
+        <div class="sprint-detail" id="sp1-detail">
+          <div class="sprint-detail-inner">
+            <div class="sprint-detail-grid">
+              <div class="sprint-detail-item">User Registration &amp; onboarding flows</div>
+              <div class="sprint-detail-item">Role-based access control (RBAC)</div>
+              <div class="sprint-detail-item">Multi-tenant user isolation</div>
+              <div class="sprint-detail-item">Password policies &amp; 2FA hooks</div>
+              <div class="sprint-detail-item">Session token management</div>
+              <div class="sprint-detail-item">Audit trail for all auth events</div>
+            </div>
+          </div>
+        </div>
+        <div class="sprint-expand-hint">Details <span class="expand-icon">↓</span></div>
+      </div>
+
+      <!-- Sprint 2 -->
+      <div class="sprint-card sc-teal" onclick="toggleSprint(this)" id="sp2">
+        <div class="sprint-number">
+          <div class="sprint-num-badge" style="background:var(--teal-dim);border:1px solid var(--teal-border);color:var(--teal);">2</div>
+          <div class="sprint-label">Infrastructure Sprint</div>
+        </div>
+        <div class="sprint-title">Infrastructure: Data Center &amp; Tenant Management</div>
+        <div class="sprint-subtitle">Building required operational logic screens</div>
+        <div class="sprint-desc">Establishes the physical and logical structure all operations run within — data halls, floors, and client tenants.</div>
+        <div class="sprint-chips">
+          <span class="chip chip-teal">🏢 Data Centers</span>
+          <span class="chip chip-teal">🗂 Tenant Mgmt</span>
+          <span class="chip chip-teal">🏛 Floor Plans</span>
+          <span class="chip chip-teal">📍 Zone Config</span>
+        </div>
+        <div class="sprint-detail" id="sp2-detail">
+          <div class="sprint-detail-inner">
+            <div class="sprint-detail-grid">
+              <div class="sprint-detail-item">Data center registration &amp; hierarchy</div>
+              <div class="sprint-detail-item">Tenant onboarding &amp; SLA tiers</div>
+              <div class="sprint-detail-item">Floor &amp; zone definition screens</div>
+              <div class="sprint-detail-item">Cage/rack assignment matrix</div>
+              <div class="sprint-detail-item">Access point mapping</div>
+              <div class="sprint-detail-item">Operational schedule config</div>
+            </div>
+          </div>
+        </div>
+        <div class="sprint-expand-hint">Details <span class="expand-icon">↓</span></div>
+      </div>
+
+    </div>
+
+    <!-- Roadmap flow connector -->
+    <div class="roadmap-flow">
+      <div class="flow-node" style="border-color:var(--blue-border);"></div>
+      <div class="flow-line"></div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-line"></div>
+      <div class="flow-node" style="border-color:var(--teal-border);"></div>
+    </div>
+
+    <!-- Sprints 3 & 4 -->
+    <div class="sprint-grid">
+
+      <!-- Sprint 3 — MVP CORE (highlighted) -->
+      <div class="sprint-card sc-teal mvp-core" onclick="toggleSprint(this)" id="sp3" style="border-width:2px;">
+        <div class="mvp-badge b-teal">
+          <svg width="9" height="9" viewBox="0 0 16 16" fill="none"><path d="M8 1l1.854 3.756L14 5.382l-3 2.924.708 4.194L8 10.527l-3.708 1.973L5 8.306 2 5.382l4.146-.626L8 1z" fill="currentColor"/></svg>
+          MVP Core
+        </div>
+        <div class="sprint-number">
+          <div class="sprint-num-badge" style="background:var(--teal-dim);border:2px solid var(--teal);color:var(--teal);width:36px;height:36px;font-size:15px;">3</div>
+          <div class="sprint-label" style="color:var(--teal);">Primary Daily Workflow</div>
+        </div>
+        <div class="sprint-title">Core Operations</div>
+        <div class="sprint-subtitle">9 Security Officer SAR Screens, Data Hall Occupancy, &amp; Patrols</div>
+        <div class="sprint-desc">Launching the primary daily workflow — the central hub officers use on every shift, every day.</div>
+        <div class="sprint-chips">
+          <span class="chip chip-teal">📋 9 SAR Screens</span>
+          <span class="chip chip-teal">🚶 Patrol Routes</span>
+          <span class="chip chip-teal">🏢 Occupancy</span>
+          <span class="chip chip-green">📊 Shift Reports</span>
+          <span class="chip chip-green">🔔 Incidents</span>
+        </div>
+        <div class="sprint-detail" id="sp3-detail">
+          <div class="sprint-detail-inner">
+            <div class="sprint-detail-grid">
+              <div class="sprint-detail-item">Security Activity Report (SAR) creation</div>
+              <div class="sprint-detail-item">Data hall occupancy tracking</div>
+              <div class="sprint-detail-item">Patrol route logging &amp; timestamps</div>
+              <div class="sprint-detail-item">Contractor access management</div>
+              <div class="sprint-detail-item">Visitor escort records</div>
+              <div class="sprint-detail-item">Real-time incident flagging</div>
+              <div class="sprint-detail-item">Shift handover notes</div>
+              <div class="sprint-detail-item">Key &amp; token issuance log</div>
+            </div>
+          </div>
+        </div>
+        <div class="sprint-expand-hint">Details <span class="expand-icon">↓</span></div>
+      </div>
+
+      <!-- Sprint 4 -->
+      <div class="sprint-card sc-green" onclick="toggleSprint(this)" id="sp4">
+        <div class="sprint-number">
+          <div class="sprint-num-badge" style="background:var(--green-dim);border:1px solid var(--green-border);color:var(--green);">4</div>
+          <div class="sprint-label">Supervisor Sprint</div>
+        </div>
+        <div class="sprint-title">Supervisor Oversight</div>
+        <div class="sprint-subtitle">9 Screening Supervisor SAR Screens</div>
+        <div class="sprint-desc">Implementation for shift record reviews — enables supervisors to validate, annotate, and approve officer submissions.</div>
+        <div class="sprint-chips">
+          <span class="chip chip-green">🔍 SAR Review</span>
+          <span class="chip chip-green">✅ Approvals</span>
+          <span class="chip chip-green">📈 Oversight</span>
+          <span class="chip chip-amber">⚠ Escalations</span>
+        </div>
+        <div class="sprint-detail" id="sp4-detail">
+          <div class="sprint-detail-inner">
+            <div class="sprint-detail-grid">
+              <div class="sprint-detail-item">Supervisor SAR review queue</div>
+              <div class="sprint-detail-item">Shift completion verification</div>
+              <div class="sprint-detail-item">Annotation &amp; feedback tools</div>
+              <div class="sprint-detail-item">Approval workflow engine</div>
+              <div class="sprint-detail-item">Escalation flagging system</div>
+              <div class="sprint-detail-item">Cross-shift comparison views</div>
+            </div>
+          </div>
+        </div>
+        <div class="sprint-expand-hint">Details <span class="expand-icon">↓</span></div>
+      </div>
+
+    </div>
+
+    <!-- Flow connector -->
+    <div class="roadmap-flow">
+      <div class="flow-node" style="border-color:var(--teal-border);"></div>
+      <div class="flow-line"></div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-line"></div>
+      <div class="flow-node" style="border-color:var(--green-border);"></div>
+    </div>
+
+    <!-- Sprints 5 & 6 (implied) -->
+    <div class="sprint-grid">
+      <div class="sprint-card sc-amber" onclick="toggleSprint(this)" id="sp5">
+        <div class="sprint-number">
+          <div class="sprint-num-badge" style="background:var(--amber-dim);border:1px solid var(--amber-border);color:var(--amber);">5</div>
+          <div class="sprint-label">Compliance Sprint</div>
+        </div>
+        <div class="sprint-title">Compliance &amp; Reporting</div>
+        <div class="sprint-subtitle">Regulatory compliance mapping &amp; audit exports</div>
+        <div class="sprint-desc">Connecting operational data to compliance frameworks — ISO 27001, SOC 2, GDPR, and local regulations.</div>
+        <div class="sprint-chips">
+          <span class="chip chip-amber">📜 SOC 2</span>
+          <span class="chip chip-amber">🌐 ISO 27001</span>
+          <span class="chip chip-amber">📊 Audit Exports</span>
+          <span class="chip chip-amber">🔏 GDPR</span>
+        </div>
+        <div class="sprint-detail" id="sp5-detail">
+          <div class="sprint-detail-inner">
+            <div class="sprint-detail-grid">
+              <div class="sprint-detail-item">Compliance framework mapping UI</div>
+              <div class="sprint-detail-item">Control evidence collection</div>
+              <div class="sprint-detail-item">Automated audit report generation</div>
+              <div class="sprint-detail-item">Gap analysis dashboard</div>
+              <div class="sprint-detail-item">Regulatory calendar &amp; alerts</div>
+              <div class="sprint-detail-item">Third-party assessor portal</div>
+            </div>
+          </div>
+        </div>
+        <div class="sprint-expand-hint">Details <span class="expand-icon">↓</span></div>
+      </div>
+
+      <div class="sprint-card sc-blue" onclick="toggleSprint(this)" id="sp6">
+        <div class="sprint-number">
+          <div class="sprint-num-badge">6</div>
+          <div class="sprint-label">Analytics Sprint</div>
+        </div>
+        <div class="sprint-title">Analytics &amp; Intelligence</div>
+        <div class="sprint-subtitle">Operations dashboards &amp; trend analysis</div>
+        <div class="sprint-desc">Surfacing patterns across shifts, incidents, and patrols to help security managers make data-driven decisions.</div>
+        <div class="sprint-chips">
+          <span class="chip chip-blue">📊 Dashboards</span>
+          <span class="chip chip-blue">📈 Trends</span>
+          <span class="chip chip-blue">🗺 Heat Maps</span>
+          <span class="chip chip-violet">🤖 Insights</span>
+        </div>
+        <div class="sprint-detail" id="sp6-detail">
+          <div class="sprint-detail-inner">
+            <div class="sprint-detail-grid">
+              <div class="sprint-detail-item">Ops command centre dashboard</div>
+              <div class="sprint-detail-item">Incident frequency heat maps</div>
+              <div class="sprint-detail-item">Patrol coverage visualisation</div>
+              <div class="sprint-detail-item">Officer performance analytics</div>
+              <div class="sprint-detail-item">Tenant activity summaries</div>
+              <div class="sprint-detail-item">Anomaly detection alerts</div>
+            </div>
+          </div>
+        </div>
+        <div class="sprint-expand-hint">Details <span class="expand-icon">↓</span></div>
+      </div>
+    </div>
+
+    <!-- Flow connector -->
+    <div class="roadmap-flow">
+      <div class="flow-node" style="border-color:var(--amber-border);"></div>
+      <div class="flow-line"></div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-line"></div>
+      <div class="flow-node" style="border-color:var(--blue-border);"></div>
+    </div>
+
+    <!-- Sprints 7 & 8 -->
+    <div class="sprint-grid-wide">
+      <div class="sprint-card" onclick="toggleSprint(this)" id="sp78"
+           style="background:linear-gradient(135deg,var(--surface),rgba(167,139,250,0.05));border-color:var(--violet-border);">
+        <div class="sprint-number">
+          <div class="sprint-num-badge" style="background:var(--violet-dim);border:1px solid var(--violet-border);color:var(--violet);">7–8</div>
+          <div class="sprint-label">Evaluation &amp; Admin Sprints</div>
+        </div>
+        <div class="sprint-title">Evaluation &amp; Administration</div>
+        <div class="sprint-subtitle">Training/QA, Drill Management, Billing, Ticketing System</div>
+        <div class="sprint-desc">Deploying access and logistics modules — the operational backbone that keeps the platform running and accountable.</div>
+        <div class="sprint-chips">
+          <span class="chip chip-violet">🎓 Training/QA</span>
+          <span class="chip chip-violet">🚨 Drill Management</span>
+          <span class="chip chip-violet">💳 Billing</span>
+          <span class="chip chip-violet">🎫 Ticketing System</span>
+          <span class="chip chip-violet">📋 Evaluations</span>
+          <span class="chip chip-violet">🔧 Maintenance</span>
+        </div>
+        <div class="sprint-detail" id="sp78-detail">
+          <div class="sprint-detail-inner">
+            <div class="sprint-detail-grid">
+              <div class="sprint-detail-item">Officer training module &amp; assessments</div>
+              <div class="sprint-detail-item">Emergency drill scheduling &amp; debrief</div>
+              <div class="sprint-detail-item">Client billing &amp; invoice generation</div>
+              <div class="sprint-detail-item">Internal ticketing &amp; fault tracking</div>
+              <div class="sprint-detail-item">Competency evaluation scoring</div>
+              <div class="sprint-detail-item">SLA compliance reporting</div>
+              <div class="sprint-detail-item">Equipment maintenance schedules</div>
+              <div class="sprint-detail-item">Third-party vendor access portal</div>
+            </div>
+          </div>
+        </div>
+        <div class="sprint-expand-hint">Details <span class="expand-icon">↓</span></div>
+      </div>
+    </div>
+
+    <!-- Flow connector -->
+    <div class="roadmap-flow" style="margin:12px 0;">
+      <div class="flow-node" style="border-color:var(--violet-border);"></div>
+      <div class="flow-line" style="background:linear-gradient(90deg,var(--violet-border),var(--rose-border));"></div>
+      <div class="flow-arrow" style="color:var(--violet);">↓</div>
+      <div class="flow-line" style="background:linear-gradient(90deg,var(--rose-border),var(--violet-border));"></div>
+      <div class="flow-node" style="border-color:var(--rose-border);"></div>
+    </div>
+
+    <!-- Sprint 9 -->
+    <div class="sprint-grid-wide">
+      <div class="sprint-card" onclick="toggleSprint(this)" id="sp9"
+           style="background:linear-gradient(135deg,var(--surface),rgba(251,113,133,0.04));border-color:var(--rose-border);">
+        <div class="sprint-number">
+          <div class="sprint-num-badge" style="background:var(--rose-dim);border:1px solid var(--rose-border);color:var(--rose);">9</div>
+          <div class="sprint-label">Final Sprint — Platform Hardening</div>
+        </div>
+        <div class="sprint-title">Integration, Security Hardening &amp; Launch Readiness</div>
+        <div class="sprint-subtitle">End-to-end QA, penetration testing, performance optimisation, and client go-live preparation</div>
+        <div class="sprint-desc">The final phase — hardening, integration testing, and preparing the platform for production deployment across all client environments.</div>
+        <div class="sprint-chips">
+          <span class="chip chip-rose">🔐 Pen Testing</span>
+          <span class="chip chip-rose">⚡ Performance</span>
+          <span class="chip chip-rose">🔗 Integrations</span>
+          <span class="chip chip-rose">📦 Go-Live</span>
+          <span class="chip chip-rose">📚 Documentation</span>
+        </div>
+        <div class="sprint-detail" id="sp9-detail">
+          <div class="sprint-detail-inner">
+            <div class="sprint-detail-grid">
+              <div class="sprint-detail-item">Full end-to-end system testing</div>
+              <div class="sprint-detail-item">External penetration testing</div>
+              <div class="sprint-detail-item">API integration with CCTV/access systems</div>
+              <div class="sprint-detail-item">Load &amp; performance benchmarking</div>
+              <div class="sprint-detail-item">Client onboarding migration tools</div>
+              <div class="sprint-detail-item">Operator &amp; admin training delivery</div>
+              <div class="sprint-detail-item">SLA &amp; uptime monitoring setup</div>
+              <div class="sprint-detail-item">Staged production rollout</div>
+            </div>
+          </div>
+        </div>
+        <div class="sprint-expand-hint">Details <span class="expand-icon">↓</span></div>
+      </div>
+    </div>
+
+  </div><!-- /roadmap-section -->
+
+  <!-- ── SECTION 3: 18 FUNCTIONAL MODULES ── -->
+  <div class="sec-divider">
+    <div class="sec-divider-line"></div>
+    <span class="sec-divider-text">Part III</span>
+    <span class="sec-divider-badge b-violet">The 18 Functional Modules</span>
+    <div class="sec-divider-line" style="background:linear-gradient(90deg,transparent,var(--border-acc));"></div>
+  </div>
+
+  <div class="modules-section">
+    <div class="module-groups">
+
+      <!-- Group 1 -->
+      <div class="module-group mg-blue">
+        <div class="module-group-header">
+          <div class="module-screen-ring">
+            <svg viewBox="0 0 56 56" width="56" height="56">
+              <circle class="ring-track" cx="28" cy="28" r="22"/>
+              <circle class="ring-fill" cx="28" cy="28" r="22"
+                stroke-dasharray="138.2"
+                stroke-dashoffset="138.2"
+                data-offset="34"
+                id="ring1"/>
+            </svg>
+            <div class="ring-center-text">
+              <span class="ring-num">17</span>
+              <span class="ring-unit">scr</span>
+            </div>
+          </div>
+          <div class="module-group-icon">⚙</div>
+          <div class="module-group-name">Admin &amp; System Foundation</div>
+          <div class="module-group-count"><em>17 screens</em> · Sprints 1–2, 7–8</div>
+        </div>
+        <div class="module-list">
+          <div class="module-item"><div class="module-dot"></div>Authentication &amp; IAM</div>
+          <div class="module-item"><div class="module-dot"></div>User &amp; Role Management</div>
+          <div class="module-item"><div class="module-dot"></div>Data Center Configuration</div>
+          <div class="module-item"><div class="module-dot"></div>Tenant Management</div>
+          <div class="module-item"><div class="module-dot"></div>Reference Data Admin</div>
+          <div class="module-item"><div class="module-dot"></div>Billing &amp; Invoicing</div>
+          <div class="module-item"><div class="module-dot"></div>System Audit &amp; Logs</div>
+        </div>
+      </div>
+
+      <!-- Group 2 -->
+      <div class="module-group mg-teal">
+        <div class="module-group-header">
+          <div class="module-screen-ring">
+            <svg viewBox="0 0 56 56" width="56" height="56">
+              <circle class="ring-track" cx="28" cy="28" r="22"/>
+              <circle class="ring-fill" cx="28" cy="28" r="22"
+                stroke-dasharray="138.2"
+                stroke-dashoffset="138.2"
+                data-offset="20"
+                id="ring2"/>
+            </svg>
+            <div class="ring-center-text">
+              <span class="ring-num">20</span>
+              <span class="ring-unit">scr</span>
+            </div>
+          </div>
+          <div class="module-group-icon">🛡</div>
+          <div class="module-group-name">Core Security Operations</div>
+          <div class="module-group-count"><em>20 screens</em> · Sprints 3–4</div>
+        </div>
+        <div class="module-list">
+          <div class="module-item"><div class="module-dot"></div>Security Activity Reports (SAR)</div>
+          <div class="module-item"><div class="module-dot"></div>Data Hall Occupancy</div>
+          <div class="module-item"><div class="module-dot"></div>Patrol Management</div>
+          <div class="module-item"><div class="module-dot"></div>Contractor Access Control</div>
+          <div class="module-item"><div class="module-dot"></div>Visitor Management</div>
+          <div class="module-item"><div class="module-dot"></div>Incident Reporting</div>
+          <div class="module-item"><div class="module-dot"></div>Supervisor Review &amp; Sign-Off</div>
+          <div class="module-item"><div class="module-dot"></div>Shift Handover Records</div>
+        </div>
+      </div>
+
+      <!-- Group 3 -->
+      <div class="module-group mg-violet">
+        <div class="module-group-header">
+          <div class="module-screen-ring">
+            <svg viewBox="0 0 56 56" width="56" height="56">
+              <circle class="ring-track" cx="28" cy="28" r="22"/>
+              <circle class="ring-fill" cx="28" cy="28" r="22"
+                stroke-dasharray="138.2"
+                stroke-dashoffset="138.2"
+                data-offset="47"
+                id="ring3"/>
+            </svg>
+            <div class="ring-center-text">
+              <span class="ring-num">16</span>
+              <span class="ring-unit">scr</span>
+            </div>
+          </div>
+          <div class="module-group-icon">🚀</div>
+          <div class="module-group-name">Specialized Lifecycle Modules</div>
+          <div class="module-group-count"><em>16 screens</em> · Sprints 5–6, 9</div>
+        </div>
+        <div class="module-list">
+          <div class="module-item"><div class="module-dot"></div>Compliance &amp; Framework Mapping</div>
+          <div class="module-item"><div class="module-dot"></div>Training &amp; Competency</div>
+          <div class="module-item"><div class="module-dot"></div>Drill &amp; Emergency Mgmt</div>
+          <div class="module-item"><div class="module-dot"></div>Analytics &amp; Dashboards</div>
+          <div class="module-item"><div class="module-dot"></div>Ticketing &amp; Maintenance</div>
+          <div class="module-item"><div class="module-dot"></div>Officer Evaluations</div>
+          <div class="module-item"><div class="module-dot"></div>Integration &amp; API Gateway</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-strip">
+    <div class="footer-brand">
+      <span style="font-size:18px;">⬡</span>
+      Obnet · DokShield
+    </div>
+    <div class="footer-meta">v1.0 · Blueprint · 2026</div>
+    <div class="footer-links">
+      <a href="dokshield.html">← DokShield</a>
+      <a href="DokShield_ComplianceMap.html">Compliance Map</a>
+      <a href="earlyaccess.html">Early Access</a>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+/* ─── Animated counter ─────────────────────── */
+function animateCount(el, target, duration) {
+  const start = performance.now();
+  function step(now) {
+    const t = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - t, 3);
+    el.textContent = Math.round(ease * target);
+    if (t < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  }
+  requestAnimationFrame(step);
+}
+
+/* ─── Compression grid builder ─────────────── */
+function buildGrid(id, count, cls) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  for (let i = 0; i < count; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'compress-cell ' + cls;
+    el.appendChild(cell);
+  }
+}
+buildGrid('gridLeft',  156, 'active');
+buildGrid('gridRight', 63,  'active-right');
+
+/* ─── Ring progress ────────────────────────── */
+function animateRing(id, pct) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const circ = 138.2;
+  const target = circ - (circ * pct / 100);
+  setTimeout(() => { el.style.strokeDashoffset = target; }, 400);
+}
+
+/* ─── IntersectionObserver ─────────────────── */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target;
+
+    if (el.id === 'statStrip') {
+      el.querySelectorAll('[data-target]').forEach((num, i) => {
+        setTimeout(() => animateCount(num, +num.dataset.target, 900), i * 80);
+      });
+    }
+    if (el.id === 'gridLeft')  { el.classList.add('visible'); }
+    if (el.id === 'gridRight') { el.classList.add('visible'); }
+
+    // Rings
+    if (el.id === 'ring1') animateRing('ring1', 32); // 17/53
+    if (el.id === 'ring2') animateRing('ring2', 38); // 20/53
+    if (el.id === 'ring3') animateRing('ring3', 30); // 16/53
+
+    io.unobserve(el);
+  });
+}, { threshold: 0.2 });
+
+document.querySelectorAll('#statStrip, #gridLeft, #gridRight, #ring1, #ring2, #ring3')
+  .forEach(el => io.observe(el));
+
+/* ─── Sprint toggle ────────────────────────── */
+function toggleSprint(card) {
+  const id = card.id;
+  const detail = document.getElementById(id + '-detail');
+  if (!detail) return;
+  const isOpen = detail.classList.contains('open');
+  detail.classList.toggle('open', !isOpen);
+  card.classList.toggle('expanded', !isOpen);
+}
+
+/* ─── Staggered card entrance ──────────────── */
+const cardObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      entry.target.style.animationDelay = (i * 60) + 'ms';
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+      cardObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.sprint-card, .module-group, .logic-card, .stat-card').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(16px)';
+  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  cardObserver.observe(el);
+});
+</script>
+</body>
+</html>
