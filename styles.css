@@ -30,7 +30,7 @@ html { scroll-behavior: smooth; font-size: 16px; }
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Syne', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
   cursor: none;
@@ -1174,12 +1174,15 @@ footer { border-top: 1px solid var(--border); background: var(--ink); padding: 6
   transform: translateY(-2px) !important; opacity: 1 !important;
 }
 
-/* Nav CTA — blue */
+/* Nav CTA — logo only, no background */
 .nav-cta-btn {
-  background: #2563eb !important; color: #fff !important;
-  box-shadow: 0 2px 10px rgba(37,99,235,0.28) !important;
+  background: transparent !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+  border: 1px solid var(--border2) !important;
+  padding: 6px 10px !important;
 }
-.nav-cta-btn:hover { background: #1d4ed8 !important; opacity: 1 !important; transform: none; }
+.nav-cta-btn:hover { background: var(--surface) !important; opacity: 1 !important; transform: none; border-color: var(--ink) !important; }
 
 /* Section kicker — blue bar + blue text */
 .section-kicker { color: #2563eb !important; gap: 10px !important; margin-bottom: 16px !important; }
