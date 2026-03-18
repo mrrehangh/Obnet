@@ -29,7 +29,23 @@
     <button class="nav-contact-btn" onclick="showPage('contact')">Get in Touch</button>
     <button class="nav-cta-btn" onclick="showPage('dokshield')" style="display:flex;align-items:center;gap:8px;"><img src="dokshield-logo.png" alt="DokShield" style="height:20px;vertical-align:middle;filter:brightness(1.1);"> <span style="font-size:13px;">→</span></button>
   </div>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Toggle navigation" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" data-page="home">Home</a>
+  <a href="about.html" data-page="about">About</a>
+  <a href="products.html" data-page="products">Products</a>
+  <a href="dokshield.html" data-page="dokshield">DokShield</a>
+  <a href="earlyaccess.html" data-page="earlyaccess">Early Access</a>
+  <a href="contact.html" data-page="contact">Contact</a>
+  <div class="mobile-menu-divider"></div>
+  <div class="mobile-menu-actions">
+    <button class="nav-contact-btn" onclick="closeMobileMenu();showPage('contact')">Get in Touch</button>
+    <button class="nav-cta-btn" onclick="closeMobileMenu();showPage('dokshield')" style="display:flex;align-items:center;gap:8px;"><img src="dokshield-logo.png" alt="DokShield" style="height:18px;vertical-align:middle;filter:brightness(1.1);"> <span>→</span></button>
+  </div>
+</div>
 
 <!-- PAGE CONTENT -->
 <div class="page active" id="page-products">
