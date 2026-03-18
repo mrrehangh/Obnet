@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc -l \"d:/Data/Folders/My_AI_Projects/Project_Securitas/ObNet Website\"/*.html)"
+    ]
+  }
+}
